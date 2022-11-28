@@ -9,6 +9,6 @@ Si instalaron
 	
 Se creo la PWA, con:
 	ng add @angular/pwa@13	
-	
-	
-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	
+
+Token o Clave de GIT
+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
