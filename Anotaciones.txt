@@ -13,4 +13,5 @@ Se creo la PWA, con:
 	git push -u origin main
 	
 Token o Clave de GIT
-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
+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
+
