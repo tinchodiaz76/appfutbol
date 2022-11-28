@@ -10,3 +10,5 @@ Si instalaron
 Se creo la PWA, con:
 	ng add @angular/pwa@13	
 	
+	
+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	
