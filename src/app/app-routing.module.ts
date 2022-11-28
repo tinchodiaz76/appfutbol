@@ -5,8 +5,8 @@ import { ListadoHabitualesComponent } from './components/listado-habituales/list
 
 const routes: Routes = [
   {path:'agregar/jugador', component:AgregarHabitualesComponent},
-  {path:'sejuega', component:ListadoHabitualesComponent},
-  {path:'**', pathMatch:'full', redirectTo:'sejuega'}
+  {path:'', component:ListadoHabitualesComponent},
+  {path:'**', pathMatch:'full', redirectTo:''}
 ];
 
 @NgModule({
