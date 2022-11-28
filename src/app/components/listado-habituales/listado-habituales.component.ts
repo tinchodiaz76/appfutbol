@@ -50,7 +50,7 @@ export class ListadoHabitualesComponent implements OnInit {
   {
     var d = new Date();
     var nrodia:number= d.getDay();
-/*    console.log(this.sumarDias(d, 6-nrodia));*/
+    this.sumarDias(d, 6-nrodia);
   }
 
   juegan()
