@@ -1,0 +1,122 @@
+
+<div class="container">
+    <div class="animate__animated animate__fadeIn">
+        <h1 class="animate__animated animate__fadeIn">Futbol de Cuarta..</h1>
+    </div>
+
+<!--
+    <div class="uploader-status">
+        <mat-spinner mode="indeterminate" *ngif="loadingJugadores"></mat-spinner>
+    </div>
+-->    
+    <div class="row">
+        <div class="col ">
+            <hr>
+            <button class="btn btn-info" style="float: right;" [routerLink]="['/','agregar','jugador']" routerLinkActive="router-link-active" >Sumate a los de Siempre</button>
+        </div>
+    </div>
+
+    <div *ngIf="listaJuegan.length==0">
+        <br>
+        <p style="color:red;">Para el Sabado <strong>{{fecha}}</strong> no hay nadie anotado</p>
+    </div>
+
+    <!--Los que Juegan-->
+    <div *ngIf="listaJuegan.length>0">
+        <br>
+        <p style="color:blue;">Para el Sabado <strong>{{fecha}}</strong> somos <strong>{{listaJuegan.length}}</strong></p>
+    </div>
+      
+    <div class="row animate__animated animate__fadeIn">
+        <table class="table table-striped" *ngIf="listaJuegan.length > 0">  
+            <thead>
+                <tr>
+                    <th class="text-center" scope="col">Nombre</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr *ngFor="let listado of listaJuegan; let i = index">
+                <td class="text-center">
+                    {{listado.nombre}}          
+                </td>
+            
+                <td class="text-center">
+                    <button class="btn btn-danger" style="width: 50;" (click)="cambiarEstadoJuega(false, i)">Me Bajo</button>
+                </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <br>
+    <hr>
+
+    <!--Lo de Siempre-->
+    <div *ngIf="listaJuegan.length>0">
+        <p style="color:blue;">Los de Siempre</p>
+    </div>
+
+    <div class="row animate__animated animate__fadeIn">
+
+        <table class="table table-striped" *ngIf="listaJugadoresHabituales.length > 0">
+            <thead>
+                <tr>
+                <th class="text-center" scope="col">Nombre
+                </th>
+                <th class="text-center" scope="col">Anotado</th>
+                </tr>
+            </thead>
+            <tbody>
+            
+            <tr *ngFor="let listado of listaJugadoresHabituales; let i = index">
+                <td class="text-center">
+                    {{listado.nombre}}          
+                </td>
+
+                <td class="text-center">
+                    <button *ngIf="listado.activo" class="btn btn-success" style="width: 50;" (click)="cambiarEstado(false, i)" type="submit" [disabled]="listaJuegan.length==10">Voy</button>
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!--Agrega un jugador Individual-->
+    <div class="row">
+        <form novalidate  [formGroup]="useForm">
+            <div class="row animate__animated animate__fadeIn">
+
+                <div class="col-2">
+                    <label for="name">Nombre</label>
+                </div>
+                <div class="col">
+                        <input type="text" id="name" class="form-control" 
+                            formControlName="nombre" [disabled]="listaJuegan.length==10">
+<!--
+                        <div *ngIf="nombre?.invalid && 
+                                        (nombre?.touched && nombre?.dirty)" class="alert">
+                                        <small class="text-danger" *ngIf="nombre?.errors?.['required']">
+                                            El nombre es requerido.
+                                        </small>
+                                        <small class="text-danger" *ngIf="nombre?.errors?.['minlength']">
+                                            El nombre debe tener al menos 3 caracteres.
+                                        </small>
+                        </div>
+-->
+                </div>
+                <div class="col">
+                    <!--useForm.invalid-->
+                    <button class="btn btn-primary mb-2" [disabled]=" this.listaJuegan.length===10"
+                        (click)="anotate()">Guardar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+
+
+

@@ -1,0 +1,21 @@
+.mat-progress-spinner {
+	top: 50%; 
+	left: -50px; 
+  
+	margin-top: 20px; 
+	margin-bottom: 20px;
+  }
+
+#uploader-status{
+    margin-left:50%;
+}
+
+
+.uploader-status ::ng-deep .mat-progress-spinner circle, .mat-spinner circle {
+    stroke: #000000;
+    left: 40%;
+/*    
+    margin-left: 50%;
+    top: 40%;
+    */
+}
