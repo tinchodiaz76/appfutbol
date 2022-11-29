@@ -1,0 +1,16 @@
+En Firebase
+	se activa Realtime Database
+
+Si instalaron 	
+	npm i sweetalert2
+	ng add @angular/material
+	npm i -g http-server para probar la PWA localmente
+	Para levantar la PWA localmente, ejecutar "http-server"
+	
+Se creo la PWA, con:
+	ng add @angular/pwa@13	
+
+	git push -u origin main
+	
+Token o Clave de GIT
+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
