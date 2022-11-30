@@ -19,3 +19,15 @@
     top: 40%;
     */
 }
+
+.uno {
+    position: absolute;
+    background-color: rgba(0, 102, 255, 0.805);
+    opacity: 0.3;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    height: 100%;
+    width: 100%;
+  }

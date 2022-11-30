@@ -23,6 +23,7 @@ export class ListadoHabitualesComponent implements OnInit {
   useForm!: FormGroup;
   fecha: string='';
   loadingJugadores :boolean=true;
+  showDiv: boolean=false;
 
   constructor(private habitualService: HabitualService,
             private jueganService: JueganService
@@ -83,6 +84,9 @@ export class ListadoHabitualesComponent implements OnInit {
     
     this.listaJugadoresHabituales[index].juega= true;
 
+    //Bloque el DIV PRINCIPAL
+    this.showDiv=true;
+
     this.habitualService.actualizarJugadorHabitual(this.listaJugadoresHabituales[index]).subscribe((res:jugadorHabitualModel)=>{
 /*      console.log('actualizarJugadorHabitual--->res=', res);*/
 
@@ -91,8 +95,14 @@ export class ListadoHabitualesComponent implements OnInit {
       this.traerJugadoresHabituales();
 
       this.irArriba();
+
+      //Elimino el bloque el DIV PRINCIPAL
+      this.showDiv=false;
     }, err => {
       this.mostratSwettAlert('Ocurrio un error al grabar, intente mas tarde!!!', 'error');
+
+      //Elimino el bloque el DIV PRINCIPAL
+      this.showDiv=false;
     });
   }
 
@@ -100,14 +110,23 @@ export class ListadoHabitualesComponent implements OnInit {
   {
     this.listaJuegan[index].juega= false;
 
+    //Bloque el DIV PRINCIPAL
+    this.showDiv=true;
+
     this.jueganService.actualizarJugador(this.listaJuegan[index]).subscribe((res:jugadorHabitualModel)=>{
 /*      console.log('actualizarJugadorHabitual--->res=', res);*/
 
       this.traerJugadoresHabituales();
 
       this.irArriba();
+      
+      //Elimino el bloque el DIV PRINCIPAL
+      this.showDiv=false;
     }, err => {
       this.mostratSwettAlert('Ocurrio un error al grabar, intente mas tarde!!!', 'error');
+            
+      //Elimino el bloque el DIV PRINCIPAL
+      this.showDiv=false;
     });
   }
 
@@ -126,6 +145,9 @@ export class ListadoHabitualesComponent implements OnInit {
         activo: true
         };
   
+      //Bloque el DIV PRINCIPAL
+      this.showDiv=true;
+
       this.habitualService.crearJugadorHabitual(this.seAnota).subscribe(res=>{
 /*        console.log('res=', res);*/
         
@@ -136,20 +158,31 @@ export class ListadoHabitualesComponent implements OnInit {
         this.traerJugadoresHabituales();
 
         this.irArriba();
+
+        //Elimino el bloque el DIV PRINCIPAL
+        this.showDiv=false;
       }, err => {
         this.mostratSwettAlert('Ocurrio un error al grabar, intente mas tarde!!!', 'error');
+              
+        //Elimino el bloque el DIV PRINCIPAL
+        this.showDiv=false;
       });
     }
     else
     {
       if (this.useForm.value['nombre']=='')
       {
-        
         this. mostratSwettAlert('Debe ingresar el Nombre.', 'error')
+
+        //Elimino el bloque el DIV PRINCIPAL
+        this.showDiv=false;
       }
       else
       {
         this. mostratSwettAlert('El nombre debe tener al menos 3 caracteres.', 'error')
+
+        //Elimino el bloque el DIV PRINCIPAL
+        this.showDiv=false;
       }
     }
   }

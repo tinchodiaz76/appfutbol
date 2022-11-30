@@ -14,6 +14,7 @@ import 'sweetalert2/src/sweetalert2.scss'
 export class AgregarHabitualesComponent implements OnInit {
 
   jugadorHabitual: jugadorHabitualModel= new jugadorHabitualModel();
+  nombre: string='';
 
   constructor(private habitualesService: HabitualService
               ) { }
@@ -24,8 +25,15 @@ export class AgregarHabitualesComponent implements OnInit {
   guardar(forms: NgForm)
   {
 
-/*    console.log(forms);*/
-/*    console.log(this.jugadorHabitual);*/
+    console.log(forms);
+    console.log(forms.controls['nombre'].value);
+
+    this.nombre= forms.controls['nombre'].value
+//    console.log(this.jugadorHabitual);
+
+    this.nombre= this.nombre[0].toUpperCase() + this.nombre.toLowerCase().substring(1);
+
+    this.jugadorHabitual.nombre= this.nombre;
 
     if (this.jugadorHabitual.id)
     {

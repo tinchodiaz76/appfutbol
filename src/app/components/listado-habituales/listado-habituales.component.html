@@ -1,5 +1,10 @@
+<div class="container" style="  position:relative;">
 
-<div class="container">
+<!--Muestro el DIV que boquea hasta que termine de Grabar-->
+    <div class="container uno" *ngIf="showDiv">    
+    </div>
+<!--Muestro el DIV que boquea hasta que termine de Grabar-->
+
     <div class="animate__animated animate__fadeIn">
         <h1 class="animate__animated animate__fadeIn">Futbol de Cuarta....</h1>
     </div>
@@ -26,7 +31,7 @@
         <br>
         <p style="color:blue;">Para el Sabado <strong>{{fecha}}</strong> somos <strong>{{listaJuegan.length}}</strong></p>
     </div>
-      
+    
     <div class="row animate__animated animate__fadeIn">
         <table class="table table-striped" *ngIf="listaJuegan.length > 0">  
             <thead>
@@ -114,7 +119,6 @@
             </div>
         </form>
     </div>
-
 </div>
 
 
