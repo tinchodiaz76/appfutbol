@@ -1,7 +1,13 @@
-<div class="container" style="  position:relative;">
+<div class="container">
 
-<!--Muestro el DIV que boquea hasta que termine de Grabar-->
-    <div class="container uno" *ngIf="showDiv">    
+    <!--Muestro el DIV que boquea hasta que termine de Grabar-->
+<!--*ngIf="showDiv"-->
+<!--class=" bloqueodiv"-->
+    <div class="container bloqueodiv" *ngIf="showDiv">
+        <mat-progress-spinner [color]="color"
+            [mode]="mode" 
+        >
+        </mat-progress-spinner>
     </div>
 <!--Muestro el DIV que boquea hasta que termine de Grabar-->
 
@@ -9,11 +15,6 @@
         <h1 class="animate__animated animate__fadeIn">Futbol de Cuarta....</h1>
     </div>
 
-<!--
-    <div class="uploader-status">
-        <mat-spinner mode="indeterminate" *ngif="loadingJugadores"></mat-spinner>
-    </div>
--->    
     <div class="row">
         <div class="col ">
             <hr>

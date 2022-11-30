@@ -8,6 +8,11 @@ import { JueganService } from 'src/app/services/juegan.service';
 import Swal from 'sweetalert2'
 import 'sweetalert2/src/sweetalert2.scss'
 
+
+import {ThemePalette} from '@angular/material/core';
+import {ProgressSpinnerMode} from '@angular/material/progress-spinner';
+
+
 @Component({
   selector: 'app-listado-habituales',
   templateUrl: './listado-habituales.component.html',
@@ -24,7 +29,10 @@ export class ListadoHabitualesComponent implements OnInit {
   fecha: string='';
   loadingJugadores :boolean=true;
   showDiv: boolean=false;
-
+  
+  color: ThemePalette = 'primary';
+  mode: ProgressSpinnerMode = 'indeterminate';
+    
   constructor(private habitualService: HabitualService,
             private jueganService: JueganService
               ) { }
@@ -38,7 +46,6 @@ export class ListadoHabitualesComponent implements OnInit {
     this.fechaProximoSabado();
     this.listaJugadoresHabituales=[];    
     this.traerJugadoresHabituales();
-/*    this.juegan();*/
   }
 
   sumarDias(fecha: Date, dias: number){
