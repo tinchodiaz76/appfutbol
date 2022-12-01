@@ -21,6 +21,7 @@ import {ProgressSpinnerMode} from '@angular/material/progress-spinner';
 export class ListadoHabitualesComponent implements OnInit {
 
   listaJugadoresHabituales: jugadorHabitualModel[]=[];
+  jugadoresHabitualesNoJuegan: jugadorHabitualModel[]=[];
 
   listaJuegan: jugadorHabitualModel[]=[];
   seAnota :jugadorHabitualModel | undefined;
@@ -32,7 +33,8 @@ export class ListadoHabitualesComponent implements OnInit {
   
   color: ThemePalette = 'primary';
   mode: ProgressSpinnerMode = 'indeterminate';
-    
+  nombre: string='';
+  
   constructor(private habitualService: HabitualService,
             private jueganService: JueganService
               ) { }
@@ -75,10 +77,26 @@ export class ListadoHabitualesComponent implements OnInit {
       })
   }
 
+  habitualesNoJuegan(jugadoresHabituales: jugadorHabitualModel[]) :any{
+
+    this.listaJugadoresHabituales= this.listaJugadoresHabituales.filter(element=>
+      !element.juega
+    );
+
+    return this.listaJugadoresHabituales;
+  }
+
   traerJugadoresHabituales()
   {
     this.habitualService.traerJugadorHabitual().subscribe((res :jugadorHabitualModel[])=>{
+
+      console.log('res=', res);
       this.listaJugadoresHabituales= res;
+      this.jugadoresHabitualesNoJuegan= this.habitualesNoJuegan(res);
+
+      console.log('this.listaJugadoresHabituales=', this.listaJugadoresHabituales);
+      console.log('this.jugadoresHabitualesNoJuegan=', this.jugadoresHabitualesNoJuegan);
+      //this.listaJugadoresHabituales= res;
 
       this.juegan();
 
@@ -89,12 +107,14 @@ export class ListadoHabitualesComponent implements OnInit {
 
   cambiarEstado(estado: boolean, index: number){
     
-    this.listaJugadoresHabituales[index].juega= true;
+    this.jugadoresHabitualesNoJuegan[index].juega=true
+
+    //this.listaJugadoresHabituales[index].juega= true;
 
     //Bloque el DIV PRINCIPAL
     this.showDiv=true;
 
-    this.habitualService.actualizarJugadorHabitual(this.listaJugadoresHabituales[index]).subscribe((res:jugadorHabitualModel)=>{
+    this.habitualService.actualizarJugadorHabitual(this.jugadoresHabitualesNoJuegan[index]).subscribe((res:jugadorHabitualModel)=>{
 /*      console.log('actualizarJugadorHabitual--->res=', res);*/
 
       this. mostratSwettAlertToast('Jugas!!!', 'success')
@@ -115,7 +135,7 @@ export class ListadoHabitualesComponent implements OnInit {
 
   cambiarEstadoJuega(estado: boolean, index:number)
   {
-    this.listaJuegan[index].juega= false;
+    this.listaJuegan[index].juega= estado;
 
     //Bloque el DIV PRINCIPAL
     this.showDiv=true;
@@ -145,35 +165,50 @@ export class ListadoHabitualesComponent implements OnInit {
 
     if (this.useForm['status']=='VALID')
     {
-      this.seAnota={
-        nombre: this.useForm.value['nombre'],
-        juega: true,
-        habitual: false,
-        activo: true
-        };
-  
-      //Bloque el DIV PRINCIPAL
-      this.showDiv=true;
+      this.nombre='';
 
-      this.habitualService.crearJugadorHabitual(this.seAnota).subscribe(res=>{
-/*        console.log('res=', res);*/
-        
-        this. mostratSwettAlertToast('Jugas!!!', 'success')
+      this.nombre = this.jueganService.casteaNombre(this.useForm.value['nombre']);
 
-        this.useForm.setValue({nombre:''});
+      if ((!this.listaJugadoresHabituales.some(e => e.nombre === this.nombre)) && (
+        !this.listaJuegan.some(p => p.nombre === this.nombre)
+      ))
+        //Si el nombre ingresado ya esta como habitual, no sigas
+      {
+          this.seAnota={
+            nombre: this.nombre,//this.useForm.value['nombre'],
+            juega: true,
+            habitual: false,
+            activo: true
+            };
+      
+          //Bloque el DIV PRINCIPAL
+          this.showDiv=true;
 
-        this.traerJugadoresHabituales();
+          this.habitualService.crearJugadorHabitual(this.seAnota).subscribe(res=>{
+    //        console.log('res=', res);
+            
+            this. mostratSwettAlertToast('Jugas!!!', 'success')
 
-        this.irArriba();
+            this.useForm.setValue({nombre:''});
 
-        //Elimino el bloque el DIV PRINCIPAL
-        this.showDiv=false;
-      }, err => {
-        this.mostratSwettAlert('Ocurrio un error al grabar, intente mas tarde!!!', 'error');
-              
-        //Elimino el bloque el DIV PRINCIPAL
-        this.showDiv=false;
-      });
+            this.traerJugadoresHabituales();
+
+            this.irArriba();
+
+            //Elimino el bloque el DIV PRINCIPAL
+            this.showDiv=false;
+          }, err => {
+            this.mostratSwettAlert('Ocurrio un error al grabar, intente mas tarde!!!', 'error');
+                  
+            //Elimino el bloque el DIV PRINCIPAL
+            this.showDiv=false;
+          });
+      }
+      else
+      {
+            this.mostratSwettAlert('Ya existe un Jugador con ese nombre','error');
+      }
+      
     }
     else
     {
@@ -192,6 +227,7 @@ export class ListadoHabitualesComponent implements OnInit {
         this.showDiv=false;
       }
     }
+   
   }
 
   irArriba()

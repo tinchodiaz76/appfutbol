@@ -61,8 +61,10 @@ export class HabitualService {
       {
 //        console.log('HabitualService-->armaArray-->this.pepe=', registro);
 //        console.log('HabitualService-->armaArray-->this.pepe=', objeto[registro]);
-
+/*
         if ((!objeto[registro].juega) && (objeto[registro].habitual))
+*/        
+      if (objeto[registro].habitual)
         this.jugadoresHabituales.push({id: registro,... objeto[registro]})
 //        console.log('this.jugadoresHabituales=',this.jugadoresHabituales);
       }

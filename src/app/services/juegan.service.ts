@@ -15,6 +15,8 @@ const URL= environment.urlServer;
 export class JueganService {
 
   juegan: jugadorHabitualModel[]=[];
+  nombreSplit:any=[];
+  nombre: string='';
 
   constructor(private http: HttpClient) { }
 
@@ -60,6 +62,27 @@ export class JueganService {
       delete habitualTemp.id;
   
       return this.http.put<jugadorHabitualModel>(`${URL}/juegan/${habitual.id}.json`, habitualTemp);
+  }
+
+  casteaNombre(nombre:string) : string
+  {
+    this.nombreSplit=[];
+    this.nombre='';
+
+    this.nombreSplit= nombre.split(' ');
+
+    this.nombreSplit.forEach((element:string) => {
+      if (this.nombre==='')
+      {
+        this.nombre= element[0].toUpperCase() + element.toLowerCase().substring(1)
+      }
+      else
+      {
+        this.nombre= this.nombre +' '+ element[0].toUpperCase() + element.toLowerCase().substring(1)
+      }
+    });
+
+    return this.nombre
   }
 }
 
