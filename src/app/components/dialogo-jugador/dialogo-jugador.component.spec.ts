@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AgregarHabitualesComponent } from './agregar-habituales.component';
+import { DialogoJugadorComponent } from './dialogo-jugador.component';
 
-describe('AgregarHabitualesComponent', () => {
-  let component: AgregarHabitualesComponent;
-  let fixture: ComponentFixture<AgregarHabitualesComponent>;
+describe('DialogoJugadorComponent', () => {
+  let component: DialogoJugadorComponent;
+  let fixture: ComponentFixture<DialogoJugadorComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AgregarHabitualesComponent ]
+      declarations: [ DialogoJugadorComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AgregarHabitualesComponent);
+    fixture = TestBed.createComponent(DialogoJugadorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

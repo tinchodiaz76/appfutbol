@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { jugadorHabitualModel } from 'src/app/models/habituales.model';
-import { HabitualService } from 'src/app/services/habitual.service';
 import { JueganService } from 'src/app/services/juegan.service';
-
-/* sweetalert2 */
-import Swal from 'sweetalert2'
-import 'sweetalert2/src/sweetalert2.scss'
-
+import { AlertasService } from 'src/app/services/alertas.service';
 
 import {ThemePalette} from '@angular/material/core';
 import {ProgressSpinnerMode} from '@angular/material/progress-spinner';
+import { JugadoresService } from 'src/app/services/jugadores.service';
+
+//Para la BD
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -19,40 +19,37 @@ import {ProgressSpinnerMode} from '@angular/material/progress-spinner';
   styleUrls: ['./listado-habituales.component.css']
 })
 export class ListadoHabitualesComponent implements OnInit {
+   
+  listaJuegan: Observable<any>
 
-  listaJugadoresHabituales: jugadorHabitualModel[]=[];
-  jugadoresHabitualesNoJuegan: jugadorHabitualModel[]=[];
+  juegan :jugadorHabitualModel[]=[];//any[]=[];
+  noJuegan :jugadorHabitualModel[]=[];//any[]=[];
+  jugador: any;
 
-  listaJuegan: jugadorHabitualModel[]=[];
-  seAnota :jugadorHabitualModel | undefined;
-
-  useForm!: FormGroup;
+  
   fecha: string='';
-  loadingJugadores :boolean=true;
   showDiv: boolean=false;
   
   color: ThemePalette = 'primary';
   mode: ProgressSpinnerMode = 'indeterminate';
-  nombre: string='';
-  
-  constructor(private habitualService: HabitualService,
-            private jueganService: JueganService
-              ) { }
+    
+  constructor(private jueganService: JueganService,
+              private alertasService: AlertasService,
+              private jugadoresService: JugadoresService,
+              private firestore: AngularFirestore
+              ) 
+  {
+    this.listaJuegan = firestore.collection('jugadores').valueChanges();
+  }
 
   ngOnInit(): void {
-
-    this.useForm = new FormGroup({
-      nombre: new FormControl('',[Validators.required, Validators.minLength(3)])
-    });
-
     this.fechaProximoSabado();
-    this.listaJugadoresHabituales=[];    
-    this.traerJugadoresHabituales();
+    this.getJugadores();
   }
 
   sumarDias(fecha: Date, dias: number){
     fecha.setDate(fecha.getDate() + dias);
-/*    console.log(fecha.getMonth()+1);*/
+//    console.log(fecha.getMonth()+1);
     this.fecha= fecha.getDate() + '/' +  `${fecha.getMonth()+1}` + '/' + fecha.getFullYear();
   }
   
@@ -63,171 +60,98 @@ export class ListadoHabitualesComponent implements OnInit {
     this.sumarDias(d, 6-nrodia);
   }
 
-  juegan()
+  getJugadores()
   {
-      this.jueganService.traerJugadores().subscribe((res:jugadorHabitualModel[])=>{
-        this.listaJuegan= res;
-        
-        this.loadingJugadores=false;
+    this.showDiv=true;
 
-        if (this.listaJuegan.length===10)
-        {
-          this.mostratSwettAlertToast('Somos 10!!!','success');
+    this.jueganService.getJugadores().subscribe((res:any)=>{
+
+      this.juegan=[];
+      this.noJuegan=[];
+
+
+//      console.log('res=', res);
+      res.forEach((element:any) => {
+        /*Acceso al ID*/
+//        console.log(element.payload.doc.id);
+        /*Acceso a los OBJETOS*/
+//        console.log(element.payload.doc.data());
+
+        if (element.payload.doc.data().juega){
+          this.juegan.push({
+            id: element.payload.doc.id,
+            ...element.payload.doc.data()
+          })
+
+//          console.log(this.juegan);
         }
-      })
-  }
-
-  habitualesNoJuegan(jugadoresHabituales: jugadorHabitualModel[]) :any{
-
-    this.listaJugadoresHabituales= this.listaJugadoresHabituales.filter(element=>
-      !element.juega
-    );
-
-    return this.listaJugadoresHabituales;
-  }
-
-  traerJugadoresHabituales()
-  {
-    this.habitualService.traerJugadorHabitual().subscribe((res :jugadorHabitualModel[])=>{
-
-      console.log('res=', res);
-      this.listaJugadoresHabituales= res;
-      this.jugadoresHabitualesNoJuegan= this.habitualesNoJuegan(res);
-
-      console.log('this.listaJugadoresHabituales=', this.listaJugadoresHabituales);
-      console.log('this.jugadoresHabitualesNoJuegan=', this.jugadoresHabitualesNoJuegan);
-      //this.listaJugadoresHabituales= res;
-
-      this.juegan();
-
-/*      console.log('this.listaJugadoresHabituales=', this.listaJugadoresHabituales);*/
+        else
+        {
+          if (element.payload.doc.data().habitual)
+          {
+            this.noJuegan.push({
+              id: element.payload.doc.id,
+              ...element.payload.doc.data()
+            })
+          }
+//          console.log(this.noJuegan);
+        }
+      });
+//      console.log('this.juegan=', this.juegan);
+//      console.log('this.noJuegan=', this.noJuegan);
+      this.showDiv=false;
+      this.jugadoresService.seteoJuegan(this.juegan);
+      this.jugadoresService.seteoNoJuegan(this.noJuegan);
+      this.irArriba();
     })
   }
 
+  actualizaJugador(estado: boolean, index:number){
+    this.showDiv= true;
 
-  cambiarEstado(estado: boolean, index: number){
-    
-    this.jugadoresHabitualesNoJuegan[index].juega=true
-
-    //this.listaJugadoresHabituales[index].juega= true;
-
-    //Bloque el DIV PRINCIPAL
-    this.showDiv=true;
-
-    this.habitualService.actualizarJugadorHabitual(this.jugadoresHabitualesNoJuegan[index]).subscribe((res:jugadorHabitualModel)=>{
-/*      console.log('actualizarJugadorHabitual--->res=', res);*/
-
-      this. mostratSwettAlertToast('Jugas!!!', 'success')
-
-      this.traerJugadoresHabituales();
-
-      this.irArriba();
-
-      //Elimino el bloque el DIV PRINCIPAL
-      this.showDiv=false;
-    }, err => {
-      this.mostratSwettAlert('Ocurrio un error al grabar, intente mas tarde!!!', 'error');
-
-      //Elimino el bloque el DIV PRINCIPAL
-      this.showDiv=false;
-    });
-  }
-
-  cambiarEstadoJuega(estado: boolean, index:number)
-  {
-    this.listaJuegan[index].juega= estado;
-
-    //Bloque el DIV PRINCIPAL
-    this.showDiv=true;
-
-    this.jueganService.actualizarJugador(this.listaJuegan[index]).subscribe((res:jugadorHabitualModel)=>{
-/*      console.log('actualizarJugadorHabitual--->res=', res);*/
-
-      this.traerJugadoresHabituales();
-
-      this.irArriba();
-      
-      //Elimino el bloque el DIV PRINCIPAL
-      this.showDiv=false;
-    }, err => {
-      this.mostratSwettAlert('Ocurrio un error al grabar, intente mas tarde!!!', 'error');
-            
-      //Elimino el bloque el DIV PRINCIPAL
-      this.showDiv=false;
-    });
-  }
-
-  anotate()  
-  {
-
-/*    console.log(this.useForm);*/
-/*    console.log(this.useForm.errors);*/
-
-    if (this.useForm['status']=='VALID')
-    {
-      this.nombre='';
-
-      this.nombre = this.jueganService.casteaNombre(this.useForm.value['nombre']);
-
-      if ((!this.listaJugadoresHabituales.some(e => e.nombre === this.nombre)) && (
-        !this.listaJuegan.some(p => p.nombre === this.nombre)
-      ))
-        //Si el nombre ingresado ya esta como habitual, no sigas
-      {
-          this.seAnota={
-            nombre: this.nombre,//this.useForm.value['nombre'],
-            juega: true,
-            habitual: false,
-            activo: true
-            };
-      
-          //Bloque el DIV PRINCIPAL
-          this.showDiv=true;
-
-          this.habitualService.crearJugadorHabitual(this.seAnota).subscribe(res=>{
-    //        console.log('res=', res);
-            
-            this. mostratSwettAlertToast('Jugas!!!', 'success')
-
-            this.useForm.setValue({nombre:''});
-
-            this.traerJugadoresHabituales();
-
-            this.irArriba();
-
-            //Elimino el bloque el DIV PRINCIPAL
-            this.showDiv=false;
-          }, err => {
-            this.mostratSwettAlert('Ocurrio un error al grabar, intente mas tarde!!!', 'error');
-                  
-            //Elimino el bloque el DIV PRINCIPAL
-            this.showDiv=false;
-          });
-      }
-      else
-      {
-            this.mostratSwettAlert('Ya existe un Jugador con ese nombre','error');
-      }
-      
+    //Si en el ESTADO=TRUE TOMO LA LISTA QUE NO THIS.NOJUEGAN
+    //Si en el ESTADO=FALSE TOMO LA LISTA QUE NO THIS.JUEGAN
+    if (estado)
+    {      
+      this.actualiza(this.noJuegan[index], estado);
     }
     else
     {
-      if (this.useForm.value['nombre']=='')
-      {
-        this. mostratSwettAlert('Debe ingresar el Nombre.', 'error')
-
-        //Elimino el bloque el DIV PRINCIPAL
-        this.showDiv=false;
-      }
-      else
-      {
-        this. mostratSwettAlert('El nombre debe tener al menos 3 caracteres.', 'error')
-
-        //Elimino el bloque el DIV PRINCIPAL
-        this.showDiv=false;
-      }
+      this.actualiza(this.juegan[index], estado);
     }
-   
+  }
+
+  actualiza(lista: any, estado: boolean)
+  {
+    if (!estado && !lista.habitual)
+    {
+      this.jueganService.eliminarJugador(lista.id).then(()=>{
+//        console.log('Se elimino jugador');
+      })
+    }
+    else
+    {
+      this.jugador={
+        id: lista.id,
+        nombre: lista.nombre,
+        juega: estado,
+        activo: lista.activo,
+        habitual: lista.habitual,
+        fechaActualizacion: new Date()
+      }
+
+      /*
+      //NO SE PUEDE OBTENER EL ID ASI....POR ESO CREO EL OBJETO JUGADOR.
+      //      console.log(res.payload.data()['id']);
+      */    
+
+      this.jueganService.actualizarEmpleado(this.jugador.id , this.jugador).then(()=>{
+        //console.log('llamo a this.getJugadores');
+        this.getJugadores();
+      }).catch(error=>{
+      console.log(error);
+      });
+    }
   }
 
   irArriba()
@@ -238,42 +162,5 @@ export class ListadoHabitualesComponent implements OnInit {
 
       behavior: 'smooth' // for smoothly scrolling
     });
-  }
-
-  mostratSwettAlert(mensaje: any, icono:any)  
-  {
-    Swal.fire({
-      title: 'Atencion!',
-      showClass: {
-        popup: 'animate__animated animate__fadeInDown'
-      },
-      hideClass: {
-        popup: 'animate__animated animate__fadeOutUp'
-      },
-      text: mensaje,
-      icon: icono,
-      confirmButtonText: 'Ok',
-      showConfirmButton:true
-    });
-  }
-
-  mostratSwettAlertToast(mensaje: any, icono: any)
-  {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.addEventListener('mouseenter', Swal.stopTimer)
-        toast.addEventListener('mouseleave', Swal.resumeTimer)
-      }
-    })
-
-    Toast.fire({
-      icon: icono,
-      title: mensaje
-    })
   }
 }

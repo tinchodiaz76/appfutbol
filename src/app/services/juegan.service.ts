@@ -1,12 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
 import { jugadorHabitualModel } from '../models/habituales.model';
-import { map } from 'rxjs/operators';
-import { jueganModel } from '../models/juegan.model';
-
-
-const URL= environment.urlServer;
+import { Observable } from 'rxjs';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -17,51 +13,36 @@ export class JueganService {
   juegan: jugadorHabitualModel[]=[];
   nombreSplit:any=[];
   nombre: string='';
+  firebase: any;
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private firestore: AngularFirestore,
+    private http: HttpClient
+    ) { }
 
-  traerJugadores()
+  agregarJugador(jugador: any) : Promise<any>
   {
-    this.juegan=[];
-    
-    return this.http.get<jueganModel>(`${URL}/juegan.json`).pipe(
-    map(res=>{
-//      console.log('traerJugadores.res=', res);
-      return this.armaArray(res);
-            })
-    )
+    return this.firestore.collection('jugadores').add(jugador);
   }
 
-  armaArray(objeto: any)
+  getJugadores() :Observable<any>
   {
-//    console.log('JueganService--->armaArray-->objeto')
-
-    for (const registro in objeto)
-    {
-
-      if ( objeto[registro].juega)
-      {
-//        console.log('JueganService-->armaArray-->registro=', registro);
-//        console.log('JueganService-->armaArray-->objeto[registro]=', objeto[registro]);
-
-        this.juegan.push({id: registro,...objeto[registro]});
-      }
-
-    }
-
-    return this.juegan;
+    return this.firestore.collection('jugadores',ref=>ref.orderBy('fechaCreacion','asc')).snapshotChanges();
   }
 
-  actualizarJugador(habitual: jugadorHabitualModel)
+  eliminarJugador(id:string) :Promise<any>
   {
+    return this.firestore.collection('jugadores').doc(id).delete();
+  }
 
-      let habitualTemp={
-        ...habitual
-      }
-  
-      delete habitualTemp.id;
-  
-      return this.http.put<jugadorHabitualModel>(`${URL}/juegan/${habitual.id}.json`, habitualTemp);
+  getJugador(id: string) :Observable<any>
+  {
+    return this.firestore.collection('jugadores').doc(id).snapshotChanges();
+  }
+
+  actualizarEmpleado(id: string, data:any) : Promise<any>
+  {
+    return this.firestore.collection('jugadores').doc(id).update(data);
   }
 
   casteaNombre(nombre:string) : string
@@ -85,4 +66,5 @@ export class JueganService {
     return this.nombre
   }
 }
+
 

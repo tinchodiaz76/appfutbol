@@ -10,7 +10,7 @@
         </mat-progress-spinner>
     </div>
 <!--Muestro el DIV que boquea hasta que termine de Grabar-->
-
+<!--
     <div class="animate__animated animate__fadeIn">
         <h1 class="animate__animated animate__fadeIn">Futbol de Cuarta....</h1>
     </div>
@@ -21,20 +21,27 @@
             <button class="btn btn-info" style="float: right;" [routerLink]="['/','agregar','jugador']" routerLinkActive="router-link-active" >Sumate a los de Siempre</button>
         </div>
     </div>
+-->
 
-    <div *ngIf="listaJuegan.length==0">
+    <hr>
+    <div *ngIf="juegan.length==0 && noJuegan.length==0">
+        <p><strong>No hay jugadores cargados...</strong></p>
+    </div>
+
+    <!--Los que JUEGAN-->
+    <div *ngIf="juegan.length>0">
+        <br>
+        <p style="color:blue;">Para el Sabado <strong>{{fecha}}</strong> somos <strong>{{juegan.length}}</strong></p>
+    </div>
+    
+    <div *ngIf="juegan.length==0 && noJuegan.length>0">
         <br>
         <p style="color:red;">Para el Sabado <strong>{{fecha}}</strong> no hay nadie anotado</p>
     </div>
 
-    <!--Los que Juegan-->
-    <div *ngIf="listaJuegan.length>0">
-        <br>
-        <p style="color:blue;">Para el Sabado <strong>{{fecha}}</strong> somos <strong>{{listaJuegan.length}}</strong></p>
-    </div>
-    
     <div class="row animate__animated animate__fadeIn">
-        <table class="table table-striped" *ngIf="listaJuegan.length > 0">  
+
+        <table class="table table-striped" *ngIf="juegan.length > 0">
             <thead>
                 <tr>
                     <th class="text-center" scope="col">Nombre</th>
@@ -42,13 +49,13 @@
             </thead>
             <tbody>
                 
-                <tr *ngFor="let listado of listaJuegan; let i = index">
+                <tr *ngFor="let listado of juegan; let i = index">
                 <td class="text-center">
                     {{listado.nombre}}          
                 </td>
             
                 <td class="text-center">
-                    <button class="btn btn-danger" style="width: 50;" (click)="cambiarEstadoJuega(false, i)">Me Bajo</button>
+                    <button class="btn btn-danger" style="width: 50;" (click)="actualizaJugador(false, i)">Me Bajo</button>
                 </td>
                 </tr>
             </tbody>
@@ -56,16 +63,17 @@
     </div>
 
     <br>
+<!---
     <hr>
-
-    <!--Lo de Siempre-->
-    <div *ngIf="listaJuegan.length>0">
+-->
+    <!--Lo que NO JUEGAN-->
+    <div *ngIf="noJuegan.length>0">
         <p style="color:blue;">Los de Siempre</p>
     </div>
 
     <div class="row animate__animated animate__fadeIn">
 
-        <table class="table table-striped" *ngIf="jugadoresHabitualesNoJuegan.length > 0">
+        <table class="table table-striped" *ngIf="noJuegan.length > 0">
             <thead>
                 <tr>
                 <th class="text-center" scope="col">Nombre
@@ -75,50 +83,17 @@
             </thead>
             <tbody>
             
-            <tr *ngFor="let listado of jugadoresHabitualesNoJuegan; let i = index">
+            <tr *ngFor="let listado of noJuegan; let i = index">
                 <td class="text-center">
                     {{listado.nombre}}          
                 </td>
 
                 <td class="text-center">
-                    <button *ngIf="listado.activo" class="btn btn-success" style="width: 50;" (click)="cambiarEstado(false, i)" type="submit" [disabled]="listaJuegan.length==10">Voy</button>
-
+                    <button *ngIf="listado.activo" class="btn btn-success" style="width: 50;" (click)="actualizaJugador(true, i)" type="submit" [disabled]="juegan.length==10">Voy</button>
                 </td>
             </tr>
             </tbody>
         </table>
-    </div>
-
-    <!--Agrega un jugador Individual-->
-    <div class="row">
-        <form novalidate  [formGroup]="useForm">
-            <div class="row animate__animated animate__fadeIn">
-
-                <div class="col-2">
-                    <label for="name">Nombre</label>
-                </div>
-                <div class="col">
-                        <input type="text" id="name" class="form-control" 
-                            formControlName="nombre" [disabled]="listaJuegan.length==10">
-<!--
-                        <div *ngIf="nombre?.invalid && 
-                                        (nombre?.touched && nombre?.dirty)" class="alert">
-                                        <small class="text-danger" *ngIf="nombre?.errors?.['required']">
-                                            El nombre es requerido.
-                                        </small>
-                                        <small class="text-danger" *ngIf="nombre?.errors?.['minlength']">
-                                            El nombre debe tener al menos 3 caracteres.
-                                        </small>
-                        </div>
--->
-                </div>
-                <div class="col">
-                    <!--useForm.invalid-->
-                    <button class="btn btn-primary mb-2" [disabled]=" this.listaJuegan.length===10"
-                        (click)="anotate()">Guardar</button>
-                </div>
-            </div>
-        </form>
     </div>
 </div>
 
