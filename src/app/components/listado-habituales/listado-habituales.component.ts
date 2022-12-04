@@ -102,7 +102,6 @@ export class ListadoHabitualesComponent implements OnInit {
       this.showDiv=false;
       this.jugadoresService.seteoJuegan(this.juegan);
       this.jugadoresService.seteoNoJuegan(this.noJuegan);
-      this.irArriba();
     })
   }
 
@@ -148,6 +147,7 @@ export class ListadoHabitualesComponent implements OnInit {
       this.jueganService.actualizarEmpleado(this.jugador.id , this.jugador).then(()=>{
         //console.log('llamo a this.getJugadores');
         this.getJugadores();
+        this.irArriba();
       }).catch(error=>{
       console.log(error);
       });
