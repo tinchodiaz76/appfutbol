@@ -1,12 +1,17 @@
 import { Component, Inject} from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { jugadorHabitualModel } from 'src/app/models/habituales.model';
+//Servicios
 import { JueganService } from 'src/app/services/juegan.service';
 import { AlertasService } from 'src/app/services/alertas.service';
+import { JugadoresService } from 'src/app/services/jugadores.service';
+import { GruposService } from 'src/app/services/grupos.service';
 
+//Rutas
+import { Router } from '@angular/router';
 
 import { DialogoJugadorComponent } from '../dialogo-jugador/dialogo-jugador.component';
-import { JugadoresService } from 'src/app/services/jugadores.service';
+import { timeStamp } from 'console';
 
 export interface DialogData {
   cantJugadores: number,
@@ -21,20 +26,24 @@ export interface DialogData {
 })
 
 export class HeaderComponent {
-  //nombre:string='';
-  //check:number=0;
+
 
   juegan :jugadorHabitualModel[]=[];
   noJuegan :jugadorHabitualModel[]=[];
-
   existeNombre :jugadorHabitualModel[]=[];
-
   showDiv: boolean= false;
+  fecha: string='';
+  nroGrupo!: number;
+  title!:string;
+  jugador!: jugadorHabitualModel;
+  cantIntegrantes: number=0;
 
   constructor(public dialog: MatDialog,
               private jueganService: JueganService,
               private alertasService: AlertasService,
-              private jugadoresService: JugadoresService
+              private jugadoresService: JugadoresService,
+              private router: Router,
+              private gruposService: GruposService
               ) 
               
   { 
@@ -48,23 +57,62 @@ export class HeaderComponent {
         this.noJuegan=res;
       });
     });
+
+    this.nroGrupo= this.gruposService.obtengoNroGrupo(this.router.url);
+    this.gruposService.getGrupo(this.nroGrupo).subscribe((res:any)=>{
+      res.forEach((element:any) => {
+        /*Acceso al ID*/
+//        console.log(element.payload.doc.id);
+        /*Acceso a los OBJETOS*/
+        console.log(element.payload.doc.data());
+
+        if (element.payload.doc.data()){
+          this.title= element.payload.doc.data().nombre;
+          this.cantIntegrantes= element.payload.doc.data().cantIntegrantes;
+        }
+      })
+      if (this.title==undefined && this.cantIntegrantes==0)
+      {
+        this.alertasService.mostratSwettAlert('', 'El grupo no existe','error');
+        this.router.navigate(['/']);
+      }
+      
+    });
+
+    this.fechaProximoSabado();
   }
 
-  insertaJugador(nombre:string, juega: boolean, activo: boolean, habitual: boolean, 
-                 title: string, mensaje: string, icono: string)
+  sumarDias(fecha: Date, dias: number){
+    fecha.setDate(fecha.getDate() + dias);
+//    console.log(fecha.getMonth()+1);
+    this.fecha= fecha.getDate() + '/' +  `${fecha.getMonth()+1}` + '/' + fecha.getFullYear();
+  }
+  
+  fechaProximoSabado()
   {
-    const jugador: any={
+    var d = new Date();
+    var nrodia:number= d.getDay();
+    this.sumarDias(d, 6-nrodia);
+  }
+
+  insertaJugador(idGrupo: number, nombre:string, juega: boolean, activo: boolean, habitual: boolean, 
+                 title: string, mensaje: string, icono: string
+                 )
+
+  {
+    this.jugador={
+      idGrupo,
       nombre, 
       juega, 
       activo,
       habitual,
       fechaCreacion: new Date(),
       fechaActualizacion: new Date()
-    }
+    };
 
-//    console.log('jugador=', jugador);
+    console.log('jugador=', this.jugador);
     
-    this.jueganService.agregarJugador(jugador).then(()=>{
+    this.jueganService.agregarJugador(this.jugador).then(()=>{
 //      console.log('Jugador Agregado con Exito');
       this.alertasService.mostratSwettAlert(title, mensaje, icono);
       this.showDiv= false;
@@ -80,6 +128,8 @@ export class HeaderComponent {
     });
 
     dialogo1.afterClosed().subscribe(art => {
+
+//          window.alert('dialogo1.afterClosed().nroGrupo='+ this.nroGrupo);
 
           if (art.nombre!='' || art=='undefined')
           //Controlo que haya ingresado un nomnbre
@@ -99,19 +149,19 @@ export class HeaderComponent {
               }
               else
               {
-                  if (this.juegan.length<10)
+                  if (this.juegan.length<this.cantIntegrantes)
                   //Son menos de 10 jugadores para el proximo Sabado
                   {
                     if (!art.check)
                     //No quiere ser habitual, se suma para jugar este Sabado
                     {
-                      this.insertaJugador(this.jueganService.casteaNombre(art.nombre), true,true,art.check,
+                      this.insertaJugador(this.nroGrupo, this.jueganService.casteaNombre(art.nombre), true,true,art.check,
                         '¡Nos vemos el Sábado!','', 'success' );
                     }  
                     else
                     //Lo sumamos como habitual.
                     {
-                      this.insertaJugador(this.jueganService.casteaNombre(art.nombre), false, true,art.check,
+                      this.insertaJugador(this.nroGrupo, this.jueganService.casteaNombre(art.nombre), false, true,art.check,
                           '¡Te sumaste a los de siempre!','', 'success' );
                       }
                   }
@@ -126,7 +176,7 @@ export class HeaderComponent {
                     else
                     {
                       //quiere ser habitual, pero le avisamo que lo esperamos la proxima
-                      this.insertaJugador(this.jueganService.casteaNombre(art.nombre), false, true,art.check,
+                      this.insertaJugador(this.nroGrupo, this.jueganService.casteaNombre(art.nombre), false, true,art.check,
                           '¡Te agregaste a los de siempre! <br> Te esperamos la próxima.','', 'info' );
                     }
                   }
@@ -139,4 +189,3 @@ export class HeaderComponent {
     });
   }
 }
-

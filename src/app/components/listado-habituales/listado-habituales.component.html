@@ -1,44 +1,14 @@
+<app-header></app-header>
 <div class="container">
-
-    <!--Muestro el DIV que boquea hasta que termine de Grabar-->
-<!--*ngIf="showDiv"-->
-<!--class=" bloqueodiv"-->
+<!--Muestro el DIV que boquea hasta que termine de Grabar-->
     <div class="container bloqueodiv" *ngIf="showDiv">
         <mat-progress-spinner [color]="color"
             [mode]="mode" 
         >
         </mat-progress-spinner>
     </div>
-<!--Muestro el DIV que boquea hasta que termine de Grabar-->
-<!--
-    <div class="animate__animated animate__fadeIn">
-        <h1 class="animate__animated animate__fadeIn">Futbol de Cuarta....</h1>
-    </div>
-
-    <div class="row">
-        <div class="col ">
-            <hr>
-            <button class="btn btn-info" style="float: right;" [routerLink]="['/','agregar','jugador']" routerLinkActive="router-link-active" >Sumate a los de Siempre</button>
-        </div>
-    </div>
--->
-
-    <hr>
-    <div *ngIf="juegan.length==0 && noJuegan.length==0">
-        <p><strong>No hay jugadores cargados...</strong></p>
-    </div>
 
     <!--Los que JUEGAN-->
-    <div *ngIf="juegan.length>0">
-        <br>
-        <p style="color:blue;">Para el Sabado <strong>{{fecha}}</strong> somos <strong>{{juegan.length}}</strong></p>
-    </div>
-    
-    <div *ngIf="juegan.length==0 && noJuegan.length>0">
-        <br>
-        <p style="color:red;">Para el Sabado <strong>{{fecha}}</strong> no hay nadie anotado</p>
-    </div>
-
     <div class="row animate__animated animate__fadeIn">
 
         <table class="table table-striped" *ngIf="juegan.length > 0">
@@ -63,9 +33,7 @@
     </div>
 
     <br>
-<!---
-    <hr>
--->
+
     <!--Lo que NO JUEGAN-->
     <div *ngIf="noJuegan.length>0">
         <p style="color:blue;">Los de Siempre</p>
@@ -89,7 +57,7 @@
                 </td>
 
                 <td class="text-center">
-                    <button *ngIf="listado.activo" class="btn btn-success" style="width: 50;" (click)="actualizaJugador(true, i)" type="submit" [disabled]="juegan.length==10">Voy</button>
+                    <button *ngIf="listado.activo" class="btn btn-success" style="width: 50;" (click)="actualizaJugador(true, i)" type="submit" [disabled]="juegan.length==cantIntegrantes">Voy</button>
                 </td>
             </tr>
             </tbody>

@@ -1,15 +1,29 @@
-<div class="container">
-<div style="height: 70px">
-    <div class="row">
-        <div class="col">
-            <h1><strong>Fútbol de Cuarta</strong></h1>
+<div class="Header-principal">
+    <div class="container">
+        <div class="row">
+            <div class="col-8">
+                <h1><strong>{{title}}</strong></h1>
+            </div>
+            <div class="col-4">
+                <button class="btn btn-danger" style="float: right;" mat-raised-button (click)="abrirDialogo()">Me Sumo</button>
+            </div>
         </div>
-        <br>
-        <div class="col-2">
-            <!--<button class="btn btn-info" style="float: right;" (click)="openMobile()">Sumate!!!</button>-->
-            <button class="btn btn-info" style="float: right;" mat-raised-button (click)="abrirDialogo()">Me Sumo</button>
+        <hr>
+        <div class="row">
+            <div class="col">
+                <div *ngIf="juegan.length==0 && noJuegan.length==0">
+                    <p><strong>No hay jugadores cargados...</strong></p>
+                </div>
+                <div *ngIf="juegan.length>0">
+
+                    <p style="color:blue;">Para el Sabado <strong>{{fecha}}</strong> somos <strong>{{juegan.length}}</strong></p>
+                </div>
+                <div *ngIf="juegan.length==0 && noJuegan.length>0">
+
+                    <p style="color:red;">Para el Sabado <strong>{{fecha}}</strong> no hay nadie anotado</p>
+                </div>
+            </div>
         </div>
+        <hr>
     </div>
 </div>
-</div>
-

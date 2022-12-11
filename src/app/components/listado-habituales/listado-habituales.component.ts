@@ -1,12 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { jugadorHabitualModel } from 'src/app/models/habituales.model';
+//Servicios
 import { JueganService } from 'src/app/services/juegan.service';
-import { AlertasService } from 'src/app/services/alertas.service';
+import { JugadoresService } from 'src/app/services/jugadores.service';
+import { GruposService } from 'src/app/services/grupos.service';
+
+//Rutas
+import { Router } from '@angular/router';
 
 import {ThemePalette} from '@angular/material/core';
 import {ProgressSpinnerMode} from '@angular/material/progress-spinner';
-import { JugadoresService } from 'src/app/services/jugadores.service';
+
 
 //Para la BD
 import { AngularFirestore } from '@angular/fire/compat/firestore';
@@ -20,57 +25,60 @@ import { Observable } from 'rxjs';
 })
 export class ListadoHabitualesComponent implements OnInit {
    
-  listaJuegan: Observable<any>
-
   juegan :jugadorHabitualModel[]=[];//any[]=[];
   noJuegan :jugadorHabitualModel[]=[];//any[]=[];
   jugador: any;
+  nroGrupo!: number;
+  cantIntegrantes!: number;
 
-  
-  fecha: string='';
   showDiv: boolean=false;
   
   color: ThemePalette = 'primary';
   mode: ProgressSpinnerMode = 'indeterminate';
     
   constructor(private jueganService: JueganService,
-              private alertasService: AlertasService,
               private jugadoresService: JugadoresService,
-              private firestore: AngularFirestore
+              private firestore: AngularFirestore,
+              private router: Router,
+              private gruposService: GruposService
               ) 
   {
-    this.listaJuegan = firestore.collection('jugadores').valueChanges();
   }
 
-  ngOnInit(): void {
-    this.fechaProximoSabado();
-    this.getJugadores();
-  }
-
-  sumarDias(fecha: Date, dias: number){
-    fecha.setDate(fecha.getDate() + dias);
-//    console.log(fecha.getMonth()+1);
-    this.fecha= fecha.getDate() + '/' +  `${fecha.getMonth()+1}` + '/' + fecha.getFullYear();
-  }
-  
-  fechaProximoSabado()
+  ngOnInit(): void
   {
-    var d = new Date();
-    var nrodia:number= d.getDay();
-    this.sumarDias(d, 6-nrodia);
+    
+    this.nroGrupo= this.gruposService.obtengoNroGrupo(this.router.url)
+
+//    window.alert('listado-habituales--->this.nroGrupo='+this.nroGrupo);
+
+    this.getJugadoreByGroup(this.nroGrupo);
+
+    this.gruposService.getGrupo(this.nroGrupo).subscribe((res:any)=>{
+      res.forEach((element:any) => {
+        /*Acceso al ID*/
+//        console.log(element.payload.doc.id);
+        /*Acceso a los OBJETOS*/
+        console.log(element.payload.doc.data());
+
+        if (element.payload.doc.data()){
+          this.cantIntegrantes= element.payload.doc.data().cantIntegrantes;
+        }
+      })
+    });
   }
 
-  getJugadores()
+/*
+  getJugadores(nrogrupo: number)
+*/
+  getJugadoreByGroup(nroGrupo: number)
   {
     this.showDiv=true;
 
-    this.jueganService.getJugadores().subscribe((res:any)=>{
-
+    this.jueganService.getJugadoresByGroup(nroGrupo).subscribe((res:any)=>{
       this.juegan=[];
       this.noJuegan=[];
-
-
-//      console.log('res=', res);
+      console.log('res=', res);
       res.forEach((element:any) => {
         /*Acceso al ID*/
 //        console.log(element.payload.doc.id);
@@ -131,7 +139,7 @@ export class ListadoHabitualesComponent implements OnInit {
     else
     {
       this.jugador={
-        id: lista.id,
+//        id: lista.id,
         nombre: lista.nombre,
         juega: estado,
         activo: lista.activo,
@@ -144,9 +152,10 @@ export class ListadoHabitualesComponent implements OnInit {
       //      console.log(res.payload.data()['id']);
       */    
 
-      this.jueganService.actualizarEmpleado(this.jugador.id , this.jugador).then(()=>{
+      this.jueganService.actualizarJugador(lista.id , this.jugador).then(()=>{
         //console.log('llamo a this.getJugadores');
-        this.getJugadores();
+        this.getJugadoreByGroup(this.nroGrupo);
+        //this.getJugadores(this.nrogrupo);
         this.irArriba();
       }).catch(error=>{
       console.log(error);

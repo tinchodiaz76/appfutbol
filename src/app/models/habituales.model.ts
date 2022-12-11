@@ -1,16 +1,10 @@
-export class jugadorHabitualModel{
-    id:string;
+export interface jugadorHabitualModel{
+    //id:string;
+    idGrupo:number;
     nombre: string;
     juega: boolean;
     habitual: boolean;
     activo: boolean;
-
-    constructor(){
-        this.id='';
-        this.nombre=''
-        this.activo=true;
-        this.habitual=true;
-        this.juega=false;
-    }
+    fechaCreacion: Date;
+    fechaActualizacion: Date;
 }
-

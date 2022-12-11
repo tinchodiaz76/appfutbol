@@ -20,14 +20,16 @@ import { DialogoJugadorComponent } from './components/dialogo-jugador/dialogo-ju
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import {MatDialogModule} from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 //Para las BD
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { environment } from '../environments/environment';
+import { GrupoComponent } from './components/grupo/grupo.component';
 
 
 @NgModule({
@@ -35,7 +37,8 @@ import { environment } from '../environments/environment';
     AppComponent,
     ListadoHabitualesComponent,
     HeaderComponent,
-    DialogoJugadorComponent
+    DialogoJugadorComponent,
+    GrupoComponent
   ],
   imports: [
     BrowserModule,
@@ -51,6 +54,7 @@ import { environment } from '../environments/environment';
     MatDialogModule,
     MatTableModule,
     MatCheckboxModule,
+    MatFormFieldModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     ServiceWorkerModule.register('ngsw-worker.js', {

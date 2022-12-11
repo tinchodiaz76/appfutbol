@@ -4,6 +4,7 @@ import { jugadorHabitualModel } from '../models/habituales.model';
 import { Observable } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -19,6 +20,13 @@ export class JueganService {
     private firestore: AngularFirestore,
     private http: HttpClient
     ) { }
+
+  getJugadoresByGroup(idGrupo: any):Observable<any>
+  {
+    console.log('this.nrogrupo=', idGrupo);
+    return this.firestore.collection('jugadores', ref => ref.where('idGrupo', '==', parseInt(idGrupo))).snapshotChanges();
+  }
+
 
   agregarJugador(jugador: any) : Promise<any>
   {
@@ -40,7 +48,7 @@ export class JueganService {
     return this.firestore.collection('jugadores').doc(id).snapshotChanges();
   }
 
-  actualizarEmpleado(id: string, data:any) : Promise<any>
+  actualizarJugador(id: string, data:any) : Promise<any>
   {
     return this.firestore.collection('jugadores').doc(id).update(data);
   }
@@ -66,5 +74,3 @@ export class JueganService {
     return this.nombre
   }
 }
-
-

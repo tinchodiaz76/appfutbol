@@ -15,13 +15,13 @@ export class JugadoresService {
   constructor(private jueganService: JueganService) 
   { }
 
-  seteoJuegan(juegan: any) :void
+  seteoJuegan(juegan: jugadorHabitualModel[]) :void
   {
     this.juegan$.next(juegan);
 
   }
 
-  seteoNoJuegan(juegan: any) :void
+  seteoNoJuegan(juegan: jugadorHabitualModel[]) :void
   {
     this.noJuegan$.next(juegan);
   }
@@ -35,5 +35,4 @@ export class JugadoresService {
    
     return this.noJuegan$.asObservable();
   }
-
 }

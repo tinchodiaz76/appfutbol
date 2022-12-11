@@ -17,4 +17,4 @@ Se instalo para la PWA:
 git push -u origin main
 	
 Token o Clave de GIT
-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
+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
