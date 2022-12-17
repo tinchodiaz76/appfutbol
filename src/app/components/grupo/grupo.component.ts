@@ -19,6 +19,8 @@ export class GrupoComponent implements OnInit {
   estado: boolean=false;
   nroGrupo: number=0;
   grupoInsert!: grupoModel;
+  idGrupo!: string;
+  puedeNavegar: boolean= false;
 
   constructor(private grupoService: GruposService,
               private alertasService: AlertasService,
@@ -28,63 +30,48 @@ export class GrupoComponent implements OnInit {
 
   ngOnInit(): void 
   {
+    this.puedeNavegar=false;
     this.grupo = new FormGroup({
       nombre: new FormControl('', [Validators.required, Validators.minLength(3)]),
       cantIntegrantes: new FormControl('', [Validators.required, Validators.minLength(1),Validators.maxLength(2)]),
-      estado: new FormControl('',Validators.required)
+      linkGrupo: new FormControl('')
     });
   }
 
   onSubmit()
   {
-//    console.log('this.grupo.value=', this.grupo.value);
 
-//    let grupoInsert:any={};
-
-    if (this.grupo.get('estado')?.value==1)
-      this.estado=true;
-    else
-      this.estado=false;
-
-    this.grupoService.getGrupos().subscribe((res:any)=>{
-      console.log('res=', res);
-      this.nroGrupo= res.docs.length;
-
-
-
-      if (res.docs.length==0)
-      {
-        this.nroGrupo= 1;
-
-        this.grupoInsert={
-          idGrupo:this.nroGrupo,
-          nombre: this.jueganService.casteaNombre(this.grupo.get('nombre')?.value),
-          cantIntegrantes: parseInt(this.grupo.get('cantIntegrantes')?.value),
-          activo:this.estado,
-          fechaCreacion: new Date(),
-        }
-      }
-      else
-      {
-        this.nroGrupo= this.nroGrupo+1;
+    this.grupoInsert={
+      nombre: this.jueganService.casteaNombre(this.grupo.get('nombre')?.value),
+      cantIntegrantes: parseInt(this.grupo.get('cantIntegrantes')?.value),
+      fechaCreacion: new Date(),
+    }
       
-        this.grupoInsert={
-          idGrupo:this.nroGrupo,
-          nombre:this.jueganService.casteaNombre(this.grupo.get('nombre')?.value),
-          cantIntegrantes: parseInt(this.grupo.get('cantIntegrantes')?.value),
-          activo:this.estado,
-          fechaCreacion: new Date(),
-        }
-      }
- 
-      this.grupoService.agregarGrupo(this.grupoInsert).then((res:any)=>{
-        console.log('res=', res);
-        this.alertasService.mostratSwettAlert('','Dimos de alta el grupo!.','success');
-        this.router.navigate(['/grupo', this.nroGrupo]);
-      },
-      (error)=>{
-        console.log('error=', error);
-      })
-    });
+    this.grupoInsert={
+      nombre:this.jueganService.casteaNombre(this.grupo.get('nombre')?.value),
+      cantIntegrantes: parseInt(this.grupo.get('cantIntegrantes')?.value),
+      fechaCreacion: new Date(),
+    }
+      
+    this.grupoService.agregarGrupo(this.grupoInsert).then((res:any)=>{
+      this.alertasService.mostratSwettAlert('','Dimos de alta el grupo!.','success');
+  
+      this.idGrupo= res.id;
+      //this.grupo.setValue({linkGrupo: this.router.url + '/grupo/' + res.id});
+      //this.grupo.setValue({linkGrupo: '1111'});
+      this.grupo.controls['linkGrupo'].setValue(this.router.url + 'grupo/' + res.id);
+      this.puedeNavegar=true;
+//      this.router.navigate(['/grupo', res.id]);
+
+
+    },
+    (error)=>{
+      console.log('error=', error);
+    })
+  }
+
+  navegarGrupo()
+  {
+    this.router.navigate(['/grupo', this.idGrupo]);
   }
 }

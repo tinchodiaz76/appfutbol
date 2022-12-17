@@ -33,7 +33,7 @@ export class HeaderComponent {
   existeNombre :jugadorHabitualModel[]=[];
   showDiv: boolean= false;
   fecha: string='';
-  nroGrupo!: number;
+  idGrupo!: string;
   title!:string;
   jugador!: jugadorHabitualModel;
   cantIntegrantes: number=0;
@@ -58,25 +58,22 @@ export class HeaderComponent {
       });
     });
 
-    this.nroGrupo= this.gruposService.obtengoNroGrupo(this.router.url);
-    this.gruposService.getGrupo(this.nroGrupo).subscribe((res:any)=>{
-      res.forEach((element:any) => {
-        /*Acceso al ID*/
-//        console.log(element.payload.doc.id);
-        /*Acceso a los OBJETOS*/
-        console.log(element.payload.doc.data());
+    this.idGrupo= this.gruposService.obtengoIdGrupo(this.router.url);
 
-        if (element.payload.doc.data()){
-          this.title= element.payload.doc.data().nombre;
-          this.cantIntegrantes= element.payload.doc.data().cantIntegrantes;
-        }
-      })
-      if (this.title==undefined && this.cantIntegrantes==0)
+    this.gruposService.getGrupo(this.idGrupo).subscribe((res:any)=>{
+      if (res.payload.data())
       {
-        this.alertasService.mostratSwettAlert('', 'El grupo no existe','error');
-        this.router.navigate(['/']);
+        this.title= res.payload.data().nombre;
+        this.cantIntegrantes= res.payload.data().cantIntegrantes;
       }
-      
+      else
+      {
+        if (this.cantIntegrantes==0)
+        {
+          this.alertasService.mostratSwettAlert('', 'El grupo no existe','error');
+          this.router.navigate(['/']);
+        }
+      }
     });
 
     this.fechaProximoSabado();
@@ -95,7 +92,7 @@ export class HeaderComponent {
     this.sumarDias(d, 6-nrodia);
   }
 
-  insertaJugador(idGrupo: number, nombre:string, juega: boolean, activo: boolean, habitual: boolean, 
+  insertaJugador(idGrupo: string, nombre:string, juega: boolean, activo: boolean, habitual: boolean, 
                  title: string, mensaje: string, icono: string
                  )
 
@@ -150,18 +147,19 @@ export class HeaderComponent {
               else
               {
                   if (this.juegan.length<this.cantIntegrantes)
+
                   //Son menos de 10 jugadores para el proximo Sabado
                   {
                     if (!art.check)
                     //No quiere ser habitual, se suma para jugar este Sabado
                     {
-                      this.insertaJugador(this.nroGrupo, this.jueganService.casteaNombre(art.nombre), true,true,art.check,
+                      this.insertaJugador(this.idGrupo, this.jueganService.casteaNombre(art.nombre), true,true,art.check,
                         '¡Nos vemos el Sábado!','', 'success' );
                     }  
                     else
                     //Lo sumamos como habitual.
                     {
-                      this.insertaJugador(this.nroGrupo, this.jueganService.casteaNombre(art.nombre), false, true,art.check,
+                      this.insertaJugador(this.idGrupo, this.jueganService.casteaNombre(art.nombre), false, true,art.check,
                           '¡Te sumaste a los de siempre!','', 'success' );
                       }
                   }
@@ -176,7 +174,7 @@ export class HeaderComponent {
                     else
                     {
                       //quiere ser habitual, pero le avisamo que lo esperamos la proxima
-                      this.insertaJugador(this.nroGrupo, this.jueganService.casteaNombre(art.nombre), false, true,art.check,
+                      this.insertaJugador(this.idGrupo, this.jueganService.casteaNombre(art.nombre), false, true,art.check,
                           '¡Te agregaste a los de siempre! <br> Te esperamos la próxima.','', 'info' );
                     }
                   }

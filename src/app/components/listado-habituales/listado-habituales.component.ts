@@ -28,7 +28,7 @@ export class ListadoHabitualesComponent implements OnInit {
   juegan :jugadorHabitualModel[]=[];//any[]=[];
   noJuegan :jugadorHabitualModel[]=[];//any[]=[];
   jugador: any;
-  nroGrupo!: number;
+  idGrupo!: string;
   cantIntegrantes!: number;
 
   showDiv: boolean=false;
@@ -48,42 +48,34 @@ export class ListadoHabitualesComponent implements OnInit {
   ngOnInit(): void
   {
     
-    this.nroGrupo= this.gruposService.obtengoNroGrupo(this.router.url)
+    this.idGrupo= this.gruposService.obtengoIdGrupo(this.router.url)
 
-//    window.alert('listado-habituales--->this.nroGrupo='+this.nroGrupo);
+    this.getJugadoreByGroup(this.idGrupo);
 
-    this.getJugadoreByGroup(this.nroGrupo);
 
-    this.gruposService.getGrupo(this.nroGrupo).subscribe((res:any)=>{
-      res.forEach((element:any) => {
-        /*Acceso al ID*/
-//        console.log(element.payload.doc.id);
-        /*Acceso a los OBJETOS*/
-        console.log(element.payload.doc.data());
-
-        if (element.payload.doc.data()){
-          this.cantIntegrantes= element.payload.doc.data().cantIntegrantes;
-        }
-      })
+    this.gruposService.getGrupo(this.idGrupo).subscribe((res:any)=>{
+//      console.log('res=', res.payload);
+//      console.log('res=', res.payload.data());
+      
+      if (res.payload.data())
+      {
+        this.cantIntegrantes= res.payload.data().cantIntegrantes;
+      }
     });
   }
-
-/*
-  getJugadores(nrogrupo: number)
-*/
-  getJugadoreByGroup(nroGrupo: number)
+  getJugadoreByGroup(idGrupo: string)
   {
     this.showDiv=true;
 
-    this.jueganService.getJugadoresByGroup(nroGrupo).subscribe((res:any)=>{
+    this.jueganService.getJugadoresByGroup(idGrupo).subscribe((res:any)=>{
       this.juegan=[];
       this.noJuegan=[];
-      console.log('res=', res);
+//      console.log('getJugadoresByGroup--->res=', res);
       res.forEach((element:any) => {
         /*Acceso al ID*/
-//        console.log(element.payload.doc.id);
+//       console.log('element.payload.doc.id=', element.payload.doc.id);
         /*Acceso a los OBJETOS*/
-//        console.log(element.payload.doc.data());
+//       console.log(element.payload.doc.data());
 
         if (element.payload.doc.data().juega){
           this.juegan.push({
@@ -154,7 +146,7 @@ export class ListadoHabitualesComponent implements OnInit {
 
       this.jueganService.actualizarJugador(lista.id , this.jugador).then(()=>{
         //console.log('llamo a this.getJugadores');
-        this.getJugadoreByGroup(this.nroGrupo);
+        this.getJugadoreByGroup(this.idGrupo);
         //this.getJugadores(this.nrogrupo);
         this.irArriba();
       }).catch(error=>{

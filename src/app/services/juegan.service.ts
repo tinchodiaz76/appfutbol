@@ -23,8 +23,7 @@ export class JueganService {
 
   getJugadoresByGroup(idGrupo: any):Observable<any>
   {
-    console.log('this.nrogrupo=', idGrupo);
-    return this.firestore.collection('jugadores', ref => ref.where('idGrupo', '==', parseInt(idGrupo))).snapshotChanges();
+    return this.firestore.collection('jugadores', ref => ref.where('idGrupo', '==', idGrupo)).snapshotChanges();
   }
 
 
