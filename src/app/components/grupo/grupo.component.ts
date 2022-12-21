@@ -51,32 +51,38 @@ export class GrupoComponent implements OnInit {
 
   onSubmit()
   {
-  
-    if (this.grupo.get('cantIntegrantes')?.value>1) 
+    if (this.grupo.get('cantIntegrantes')?.value!='Selecciona...')
     {
-      this.grupoInsert={
-        nombre:this.jueganService.casteaNombre(this.grupo.get('nombre')?.value),
-        cantIntegrantes: parseInt(this.grupo.get('cantIntegrantes')?.value),
-        fechaCreacion: new Date(),
-        dia: parseInt(this.grupo.get('dia')?.value)
-      }
+      if (this.grupo.get('dia')?.value!='Selecciona...')
+      {
+          this.grupoInsert={
+            nombre:this.jueganService.casteaNombre(this.grupo.get('nombre')?.value),
+            cantIntegrantes: parseInt(this.grupo.get('cantIntegrantes')?.value),
+            fechaCreacion: new Date(),
+            dia: parseInt(this.grupo.get('dia')?.value)
+          }
+            
+          this.grupoService.agregarGrupo(this.grupoInsert).then((res:any)=>{
+            this.alertasService.mostratSwettAlert('','¡Dimos de alta al equipo!','success');
         
-      this.grupoService.agregarGrupo(this.grupoInsert).then((res:any)=>{
-        this.alertasService.mostratSwettAlert('','¡Dimos de alta al equipo!','success');
-    
-        this.idGrupo= res.id;
+            this.idGrupo= res.id;
 
-        this.linkGrupo=environment.baseUrl+ 'grupo/' + res.id;
-        this.puedeNavegar=true;
-        this.grabo=false;
-      },
-      (error)=>{
-        console.log('error=', error);
-      })
+            this.linkGrupo=environment.baseUrl+ 'grupo/' + res.id;
+            this.puedeNavegar=true;
+            this.grabo=false;
+          },
+          (error)=>{
+            console.log('error=', error);
+          })
+      }
+      else
+      {
+        this.alertasService.mostratSwettAlert('','Debe seleccionar el día','error');
+      }
     }
     else
     {
-      this.alertasService.mostratSwettAlert('','La cantidad de integrantes deber ser mayor que 1','error');
+      this.alertasService.mostratSwettAlert('','Debe seleccionar la cantidad de jugadores','error');
     }
   }
 
