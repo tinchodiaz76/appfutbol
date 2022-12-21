@@ -35,8 +35,10 @@ export class HeaderComponent {
   fecha: string='';
   idGrupo!: string;
   title!:string;
+  dia!:number;
   jugador!: jugadorHabitualModel;
   cantIntegrantes: number=0;
+  nombreDia!: string;
 
   constructor(public dialog: MatDialog,
               private jueganService: JueganService,
@@ -65,6 +67,34 @@ export class HeaderComponent {
       {
         this.title= res.payload.data().nombre;
         this.cantIntegrantes= res.payload.data().cantIntegrantes;
+        this.dia= res.payload.data().dia;
+
+        switch (this.dia) {
+          case 0:
+            //Declaraciones ejecutadas cuando el resultado de expresión coincide con el valor1
+            this.nombreDia='Domingo';
+            break;
+          case 1:
+            this.nombreDia='Lunes';
+            break;
+          case 2:
+            this.nombreDia='Martes';
+            break;
+          case 3:
+              this.nombreDia='Miercoles';
+              break;
+          case 4:
+              this.nombreDia='Jueves';
+              break;
+          case 5:
+            this.nombreDia='Viernes';
+            break;
+          default:
+            this.nombreDia='Sabado';
+            break;
+        }
+
+        this.fechaProximoDia(this.dia);
       }
       else
       {
@@ -76,20 +106,45 @@ export class HeaderComponent {
       }
     });
 
-    this.fechaProximoSabado();
+//    this.fechaProximoDia(this.dia);
   }
 
   sumarDias(fecha: Date, dias: number){
     fecha.setDate(fecha.getDate() + dias);
-//    console.log(fecha.getMonth()+1);
-    this.fecha= fecha.getDate() + '/' +  `${fecha.getMonth()+1}` + '/' + fecha.getFullYear();
+    console.log(fecha);
+    console.log(fecha.getDate());
+    console.log(fecha.getMonth());
+    this.fecha= `${fecha.getDate()}` + '/' +  `${fecha.getMonth()+1}` + '/' + fecha.getFullYear();
+    console.log('this.fecha='+ this.fecha);
   }
   
-  fechaProximoSabado()
+  fechaProximoDia(dia: number)
   {
+    window.alert('dia='+ dia);
+
     var d = new Date();
     var nrodia:number= d.getDay();
-    this.sumarDias(d, 6-nrodia);
+
+    window.alert('nrodia='+ nrodia);
+
+/*    this.sumarDias(d, 6-nrodia);*/
+/*2-3*/
+    if (dia<nrodia)
+    {
+      this.sumarDias(d,dia+nrodia+1)
+    }
+    else
+    {
+        if (dia==nrodia)
+        {
+          this.sumarDias(d,0);
+        }
+        else
+        {
+          this.sumarDias(d,dia-nrodia);
+        }
+    }    
+
   }
 
   insertaJugador(idGrupo: string, nombre:string, juega: boolean, activo: boolean, habitual: boolean, 

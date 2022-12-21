@@ -6,11 +6,7 @@
     </div>
 
     <form novalidate (ngSubmit)="onSubmit()"  [formGroup]="grupo">
-    
         <div class="form-group">
-<!--
-            <label for="nombre">Grupo</label>
--->
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
                     <label class="input-group-text" for="nombre">Equipo</label>
@@ -19,70 +15,74 @@
                     class="form-control" id="nombre" placeholder="Ingresá el nombre"
                 >
             </div>
-        </div>
-        <div class="error"
-            *ngIf="grupo.get('nombre')?.hasError('required') && grupo.get('nombre')?.touched">
-            El Nombre del Grupo es Obligatorio
-        </div>
+
+<!--        </div>-->
+            <div class="error"
+                *ngIf="grupo.get('nombre')?.hasError('required') && grupo.get('nombre')?.touched">
+                El nombre del equipo es obligatorio
+            </div>
+
+            <div class="error"
+                *ngIf="grupo.get('nombre')?.hasError('minLength') && grupo.get('nombre')?.touched">
+                El nombre del equipo requiere como minimo 3 caracteres
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="cantIntegrantes">Jugadores</label>
+                </div>
+                <select class="custom-select" id="cantIntegrantes"
+                    formControlName="cantIntegrantes">
+                    <option selected>Selecciona...</option>
+                    <option value="10">10</option>
+                    <option value="12">12</option>
+                    <option value="14">14</option>
+                    <option value="16">16</option>
+                    <option value="20">22</option>
+                </select>
+            </div>
+
+            <div class="error"
+                *ngIf="grupo.get('cantIntegrantes')?.hasError('required') && grupo.get('cantIntegrantes')?.touched">
+                La cantidad de jugadores es obligatorio.
+            </div>
         
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <label class="input-group-text" for="cantIntegrantes">Jugadores</label>
-            </div>
-            <select class="custom-select" id="cantIntegrantes"
-                formControlName="cantIntegrantes">
-                <option selected>Selecciona...</option>
-                <option value="2">2</option>
-                <option value="4">4</option>
-                <option value="6">6</option>
-                <option value="8">8</option>
-                <option value="10">10</option>
-                <option value="12">12</option>
-                <option value="14">14</option>
-                <option value="16">16</option>
-                <option value="18">18</option>
-                <option value="20">20</option>
-            </select>
-        </div>
-
-        <div class="error"
-        *ngIf="grupo.get('cantIntegrantes')?.hasError('required') && grupo.get('cantIntegrantes')?.touched">
-        La Cantidad de Jugadores es Obligatorio
-    </div>
-<!--
-        <div class="form-group mt-3">
-            <label for="cantIntegrantes">Cant. de Jugadores</label>
-            <input type="number" formControlName="cantIntegrantes"
-                class="form-control" id="cantIntegrantes" placeholder="Cantidad de Integrantes"
-            >
-        </div>
-        <div class="error"
-            *ngIf="grupo.get('cantIntegrantes')?.hasError('required') && grupo.get('cantIntegrantes')?.touched">
-            La Cantidad de Jugadores es Obligatorio
-        </div>
--->
-        <div class="form-group row mt-3">
-            <div class="row">
-                <div class="col-12">
-                        <button type="submit" [disabled]="grupo.invalid"
-                        class="btn btn-primary" *ngIf="grabo"
-                        >Grabar</button>
-
-                        <button type="button" *ngIf="puedeNavegar"
-                        class="btn btn-primary" (click)="navegarGrupo()"
-                        >Armar Equipo</button>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="dia">Dia</label>
                 </div>
-
-<!--
-                <div class="col-6">
-                        <button type="button" *ngIf="puedeNavegar"
-                        class="btn btn-primary" (click)="navegarGrupo()"
-                        >Armar Equipo</button>
-                </div>
--->                
+                <select class="custom-select" id="dia"
+                    formControlName="dia">
+                    <option selected>Selecciona...</option>
+                    <option value="1">Lunes</option>
+                    <option value="2">Martes</option>
+                    <option value="3">Miercoles</option>
+                    <option value="4">Jueves</option>
+                    <option value="5">Viernes</option>
+                    <option value="6">Sabado</option>
+                    <option value="0">Domingo</option>
+                </select>
             </div>
-        </div>  
 
+            <div class="error"
+                *ngIf="grupo.get('dia')?.hasError('required') && grupo.get('dia')?.touched">
+                El dia que juegan es obligatorio
+            </div>
+
+            <div class="form-group row mt-3">
+                <div class="row">
+                    <div class="col-12">
+                            <button type="submit" [disabled]="grupo.invalid"
+                            class="btn btn-primary" *ngIf="grabo"
+                            >Grabar</button>
+
+                            <button type="button" *ngIf="puedeNavegar"
+                            class="btn btn-primary" (click)="navegarGrupo()"
+                            >Armar Equipo</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </form>
 
     <div  *ngIf="puedeNavegar" class="form-group mt-1">

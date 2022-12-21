@@ -35,7 +35,5 @@ export class GruposService {
   getGrupo(idrupo: string):Observable<any>
   {
     return this.firestore.collection('grupos').doc(idrupo).snapshotChanges();
-    //.snapshotChanges(); 
-
   }    
 }
