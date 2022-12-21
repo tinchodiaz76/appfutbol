@@ -8,5 +8,6 @@ export const environment = {
     messagingSenderId: "270632453523",
     appId: "1:270632453523:web:a3ec2a5189a954d7c95466"
   },
-  urlServer: "https://appfutbol-f0078-default-rtdb.firebaseio.com"
+  urlServer: "https://appfutbol-f0078-default-rtdb.firebaseio.com",
+  baseUrl:'https://appfutbol1.000webhostapp.com/'
 };

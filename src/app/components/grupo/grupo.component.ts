@@ -10,6 +10,8 @@ import { JueganService } from 'src/app/services/juegan.service';
 import { ClipboardService } from 'ngx-clipboard';
 //FontAwasome
 import { faCopy } from '@fortawesome/free-solid-svg-icons';
+//Variables de Entorno
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-grupo',
@@ -64,7 +66,7 @@ export class GrupoComponent implements OnInit {
     
         this.idGrupo= res.id;
 
-        this.linkGrupo=this.router.url + 'grupo/' + res.id;
+        this.linkGrupo=environment.baseUrl+ 'grupo/' + res.id;
         this.puedeNavegar=true;
         this.grabo=false;
       },
@@ -84,7 +86,6 @@ export class GrupoComponent implements OnInit {
   }
 
   copyText() {
-    window.alert('Copioo');
     this.clipboardApi.copyFromContent(this.linkGrupo);
   }
 

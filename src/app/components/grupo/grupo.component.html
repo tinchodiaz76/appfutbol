@@ -87,7 +87,8 @@
 
     <div  *ngIf="puedeNavegar" class="form-group mt-1">
         <!--<button type="button" class="btn btn-link" (click)="navegarGrupo()">Armar Equipo</button>-->
-        <input type="text" [(ngModel)]="linkGrupo" readonly #formInputText>
+        <input type="text" [(ngModel)]="linkGrupo" readonly #formInputText
+        style="height: 35px; width: 270px; background-color: lightgray;">
         <button mat-raised-button 
             matTooltip="Compartir"
             class="btn btn-primary" 

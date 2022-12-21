@@ -15,7 +15,7 @@ import {ProgressSpinnerMode} from '@angular/material/progress-spinner';
 
 //Para la BD
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Observable } from 'rxjs';
+import { Observable, windowCount } from 'rxjs';
 
 
 @Component({
@@ -48,6 +48,8 @@ export class ListadoHabitualesComponent implements OnInit {
   ngOnInit(): void
   {
     
+//    window.alert('this.router.url='+this.router.url);
+
     this.idGrupo= this.gruposService.obtengoIdGrupo(this.router.url)
 
     this.getJugadoreByGroup(this.idGrupo);

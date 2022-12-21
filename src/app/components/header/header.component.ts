@@ -120,15 +120,9 @@ export class HeaderComponent {
   
   fechaProximoDia(dia: number)
   {
-    window.alert('dia='+ dia);
-
     var d = new Date();
     var nrodia:number= d.getDay();
-
-    window.alert('nrodia='+ nrodia);
-
-/*    this.sumarDias(d, 6-nrodia);*/
-/*2-3*/
+    
     if (dia<nrodia)
     {
       this.sumarDias(d,dia+nrodia+1)
