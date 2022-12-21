@@ -7,6 +7,7 @@ import { AlertasService } from 'src/app/services/alertas.service';
 import { FormControl, FormGroup, Validators} from '@angular/forms';
 import { Router } from '@angular/router';
 import { JueganService } from 'src/app/services/juegan.service';
+//Copy
 import { ClipboardService } from 'ngx-clipboard';
 //FontAwasome
 import { faCopy } from '@fortawesome/free-solid-svg-icons';

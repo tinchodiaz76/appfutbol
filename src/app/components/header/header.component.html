@@ -22,6 +22,20 @@
                 </div>
             </div>
         </div>
+
+        <div class="row">
+            <div class="col">
+                    <input type="text" [(ngModel)]="linkGrupo" readonly #formInputText
+                    style="height: 35px; width: 270px; background-color: lightgray;">
+                    <button mat-raised-button 
+                        matTooltip="Compartir"
+                        class="btn btn-primary" 
+                        (click)="copyText()">
+                        <fa-icon [icon]="faCopy"></fa-icon>
+                    </button>
+            </div>
+        </div>
+        
         <hr>
     </div>
 </div>

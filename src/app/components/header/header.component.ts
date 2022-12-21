@@ -11,7 +11,12 @@ import { GruposService } from 'src/app/services/grupos.service';
 import { Router } from '@angular/router';
 
 import { DialogoJugadorComponent } from '../dialogo-jugador/dialogo-jugador.component';
-import { timeStamp } from 'console';
+//FontAwasome
+import { faCopy } from '@fortawesome/free-solid-svg-icons';
+//Variables de Entorno
+import { environment } from 'src/environments/environment';
+//Copy
+import { ClipboardService } from 'ngx-clipboard';
 
 export interface DialogData {
   cantJugadores: number,
@@ -39,13 +44,17 @@ export class HeaderComponent {
   jugador!: jugadorHabitualModel;
   cantIntegrantes: number=0;
   nombreDia!: string;
+  linkGrupo!: string
+  
+  faCopy= faCopy;
 
   constructor(public dialog: MatDialog,
               private jueganService: JueganService,
               private alertasService: AlertasService,
               private jugadoresService: JugadoresService,
               private router: Router,
-              private gruposService: GruposService
+              private gruposService: GruposService,
+              private clipboardApi: ClipboardService
               ) 
               
   { 
@@ -68,6 +77,7 @@ export class HeaderComponent {
         this.title= res.payload.data().nombre;
         this.cantIntegrantes= res.payload.data().cantIntegrantes;
         this.dia= res.payload.data().dia;
+
 
         switch (this.dia) {
           case 0:
@@ -93,6 +103,8 @@ export class HeaderComponent {
             this.nombreDia='Sabado';
             break;
         }
+
+        this.linkGrupo=environment.baseUrl+ 'grupo/' + res.payload.id;
 
         this.fechaProximoDia(this.dia);
       }
@@ -234,5 +246,9 @@ export class HeaderComponent {
               this.alertasService.mostratSwettAlert('¡Debe ingresar un nombre!','','error');
           }
     });
+  }
+
+  copyText() {
+    this.clipboardApi.copyFromContent(this.linkGrupo);
   }
 }
