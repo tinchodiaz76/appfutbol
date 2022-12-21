@@ -1,4 +1,13 @@
+/*
 .container{
     padding-top: 100px;
   }
-  
+*/  
+
+.example-button {
+  margin-top: 16px;
+}
+
+.example-tooltip-uppercase {
+  text-transform: uppercase;
+}

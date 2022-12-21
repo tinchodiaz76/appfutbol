@@ -24,13 +24,17 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
-
+import { MatTooltipModule } from '@angular/material/tooltip';
 //Para las BD
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { environment } from '../environments/environment';
 import { GrupoComponent } from './components/grupo/grupo.component';
 
+//Para el copy clipboard
+import { ClipboardModule } from 'ngx-clipboard';
+//Iconos de FontAwasome
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -55,6 +59,9 @@ import { GrupoComponent } from './components/grupo/grupo.component';
     MatTableModule,
     MatCheckboxModule,
     MatFormFieldModule,
+    MatTooltipModule,
+    ClipboardModule,
+    FontAwesomeModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     ServiceWorkerModule.register('ngsw-worker.js', {

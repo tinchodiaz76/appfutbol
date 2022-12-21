@@ -11,6 +11,11 @@ Se instalaron las siguientes herramientas:
 	npm i -g http-server para probar la PWA localmente
 	Para levantar la PWA localmente, ejecutar "http-server"
 	
+	npm install ngx-clipboard
+	
+	npm install @fortawesome/angular-fontawesome@0.10.1
+	npm install @fortawesome/free-solid-svg-icons
+	
 Se instalo para la PWA:
 	ng add @angular/pwa@13	
 
