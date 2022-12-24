@@ -23,11 +23,6 @@
                     <td class="text-center">
                         {{listado.nombre}}          
                     </td>
-<!--
-                    <td class="text-center">
-                        <input type="number" style="width: 50px;" value={{value}} readonly>
-                    </td>
--->                    
                     <td class="text-center">
                         ${{value}}
                     </td>
@@ -38,9 +33,7 @@
             </tbody>
         </table>
     </div>
-<!--
-    <br>
--->
+
     <!--Lo que NO JUEGAN-->
     <div *ngIf="noJuegan.length>0">
         <p style="color:blue;">Los de Siempre</p>
