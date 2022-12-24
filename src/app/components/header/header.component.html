@@ -1,41 +1,71 @@
 <div class="Header-principal">
     <div class="container">
-        <div class="row">
+        <div class="row" *ngIf="infoGrupo">
             <div class="col-8">
                 <h1><strong>{{title}}</strong></h1>
             </div>
             <div class="col-4">
-                <button class="btn btn-danger" style="float: right;" mat-raised-button (click)="abrirDialogo()">Me Sumo</button>
-            </div>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col">
-                <div *ngIf="juegan.length==0 && noJuegan.length==0">
-                    <p><strong>No hay jugadores cargados...</strong></p>
-                </div>
-                <div *ngIf="juegan.length>0">
-                    <p style="color:blue;">Para el {{nombreDia}} <strong>{{fecha}}</strong> somos <strong>{{juegan.length}}</strong></p>
-                </div>
-                <div *ngIf="juegan.length==0 && noJuegan.length>0">
-                    <p style="color:red;">Para el {{nombreDia}} <strong>{{fecha}}</strong> no hay nadie anotado</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col">
-                    <input type="text" [(ngModel)]="linkGrupo" readonly #formInputText
-                    style="height: 35px; width: 270px; background-color: lightgray;">
-                    <button mat-raised-button 
-                        matTooltip="Compartir"
-                        class="btn btn-primary" 
-                        (click)="copyText()">
-                        <fa-icon [icon]="faCopy"></fa-icon>
-                    </button>
+                <button mat-raised-button
+                matTooltip="Sumate"
+                style="background-color: #2E86C1;float: right;"
+                (click)="abrirDialogo()">
+                <fa-icon [icon]="faPlus"></fa-icon>Me sumo
+                </button>
             </div>
         </div>
         
-        <hr>
+        <div *ngIf="!cargando">
+            <div class="row" *ngIf="infoGrupo">
+      
+                <div class="col-8">
+                    <p> Cuánto: ${{precio}}</p>
+                </div>
+
+                <div class="col-4">
+                    <button mat-raised-button
+                    matTooltip="Salir"
+                    style="float: right;background-color: #CD5C5C;"
+                    (click)="back()">
+                    <fa-icon [icon]="faRightFromBracket"></fa-icon>
+                    </button>
+                </div>
+
+            </div>
+      
+            <div class="row" *ngIf="infoGrupo">
+                <div class="col-12">
+                    <p style="color:black;"> Dónde: {{direccion}} a las {{hora}}hs</p>
+                </div>
+            </div>
+            
+            <div class="row" *ngIf="infoJugadores">
+                <div class="col">
+                    <div *ngIf="juegan.length==0 && noJuegan.length==0">
+                        <p>No hay jugadores cargados...</p>
+                    </div>
+                    <div *ngIf="juegan.length>0 && infoJugadores">
+                        <p style="color:black;">Para el {{nombreDia}} {{fecha}} somos {{juegan.length}}</p>
+                    </div>
+                    <div *ngIf="juegan.length==0 && noJuegan.length>0">
+                        <p style="color:black;">Para el {{nombreDia}} {{fecha}} no hay nadie anotado</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" *ngIf="infoGrupo">
+                <div class="col">
+                        <input type="text" [(ngModel)]="linkGrupo" readonly
+                        style="height: 35px; width: 270px; background-color: lightgray;">
+                        <button mat-raised-button 
+                            matTooltip="Compartir"
+                            class="btn btn-primary" 
+                            (click)="copyText()">
+                            <fa-icon [icon]="faCopy"></fa-icon>
+                        </button>
+                </div>
+            </div>
+        
+            <hr>
+        </div>
     </div>
 </div>

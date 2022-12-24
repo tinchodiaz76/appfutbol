@@ -52,7 +52,7 @@ export class JueganService {
     return this.firestore.collection('jugadores').doc(id).update(data);
   }
 
-  casteaNombre(nombre:string) : string
+  castea(nombre:string) : string
   {
     this.nombreSplit=[];
     this.nombre='';

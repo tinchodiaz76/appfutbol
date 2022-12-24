@@ -1,0 +1,83 @@
+<div class="Header-principal">
+    <div class="container">
+        <div class="row">
+            <div class="col-8">
+                <h1><strong>Grupo de Futbol</strong></h1>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="input-group mb-3">
+                <p>Si ya esta creado el grupo, ingresá el código.</p>
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="codigo">Codigo</label>
+                </div>            
+                <div class="col-sm-10">
+                    <input type="text" 
+                        class="form-control" id="codigo" placeholder="Ingresá el código del grupo" [(ngModel)]="codigo"
+                    >
+                </div>
+                <div class="col-sm-2">
+                    <button mat-raised-button 
+                    matTooltip="Validar Grupo"
+                    class="btn btn-primary" 
+                    style="background-color: #05D1D1;"
+                    (click)="validarCodigo()">
+                    <fa-icon [icon]="faMagnifyingGlass"></fa-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+ 
+        <div class="form-group">
+            <div class="input-group mb-3">
+                <div class="col-10">
+                    <p>Creá un equipo</p>
+                </div>
+                <div class="col-2">
+                    <button mat-raised-button style="padding-left: 20px;"
+                    matTooltip="Nuevo Grupo"
+                    class="btn btn-primary" 
+                    style="background-color: #2E86C1;"
+                    (click)="crearGrupo()">
+                    <fa-icon [icon]="faPlus"></fa-icon>
+                    </button>  
+                </div>
+            </div>
+        </div>
+                
+        <div class="form-group" *ngIf="codigoValido">
+            <div class="input-group mb-3">
+                <div class="col-10">
+                    <p>Sumá jugadores</p>
+                </div>
+                <div class="col-2">
+                    <button mat-raised-button 
+                    matTooltip="Agregar Jugador"
+                    class="btn btn-primary" 
+                    style="background-color: #2E86C1;"
+                    (click)="agregoJugador()">
+                    <fa-icon [icon]="faPersonRunning"></fa-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+                
+        <div class="form-group" *ngIf="codigoValido">
+            <div class="input-group mb-3">
+                <div class="col-10">
+                    <p>Modificar info del equipo</p>
+                </div>
+                <div class="col-2">
+                    <button mat-raised-button *ngIf="codigoValido"
+                    matTooltip="Editar Grupo"
+                    class="btn btn-primary" 
+                    style="background-color: #2E86C1;"
+                    (click)="modificaGrupo()">
+                    <fa-icon [icon]="faPen"></fa-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

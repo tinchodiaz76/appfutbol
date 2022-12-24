@@ -35,5 +35,10 @@ export class GruposService {
   getGrupo(idrupo: string):Observable<any>
   {
     return this.firestore.collection('grupos').doc(idrupo).snapshotChanges();
-  }    
+  }
+
+  actualizarGrupo(id: string, data:any) : Promise<any>
+  {
+    return this.firestore.collection('grupos').doc(id).update(data);
+  }
 }

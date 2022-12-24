@@ -15,38 +15,42 @@
             <thead>
                 <tr>
                     <th class="text-center" scope="col">Nombre</th>
+                    <th class="text-center" scope="col">Pagás</th>
                 </tr>
             </thead>
             <tbody>
-                
                 <tr *ngFor="let listado of juegan; let i = index">
-                <td class="text-center">
-                    {{listado.nombre}}          
-                </td>
-            
-                <td class="text-center">
-                    <button class="btn btn-danger" style="width: 50;" (click)="actualizaJugador(false, i)">Me Bajo</button>
-                </td>
+                    <td class="text-center">
+                        {{listado.nombre}}          
+                    </td>
+<!--
+                    <td class="text-center">
+                        <input type="number" style="width: 50px;" value={{value}} readonly>
+                    </td>
+-->                    
+                    <td class="text-center">
+                        ${{value}}
+                    </td>
+                    <td class="text-center">
+                        <button class="btn btn-danger" style="width: 50;float: right" (click)="actualizaJugador(false, i)">Me Bajo</button>
+                    </td>
                 </tr>
             </tbody>
         </table>
     </div>
-
+<!--
     <br>
-
+-->
     <!--Lo que NO JUEGAN-->
     <div *ngIf="noJuegan.length>0">
         <p style="color:blue;">Los de Siempre</p>
     </div>
 
     <div class="row animate__animated animate__fadeIn">
-
         <table class="table table-striped" *ngIf="noJuegan.length > 0">
             <thead>
                 <tr>
-                <th class="text-center" scope="col">Nombre
-                </th>
-                <th class="text-center" scope="col">Confirmar</th>
+                    <th class="text-center" scope="col">Nombre</th>
                 </tr>
             </thead>
             <tbody>
@@ -55,9 +59,8 @@
                 <td class="text-center">
                     {{listado.nombre}}          
                 </td>
-
                 <td class="text-center">
-                    <button *ngIf="listado.activo" class="btn btn-success" style="width: 50;" (click)="actualizaJugador(true, i)" type="submit" [disabled]="juegan.length==cantIntegrantes">Voy</button>
+                    <button *ngIf="listado.activo" class="btn btn-success" style="float: right;width: 84.02px;" (click)="actualizaJugador(true, i)" type="submit" [disabled]="juegan.length==cantIntegrantes">Voy</button>
                 </td>
             </tr>
             </tbody>

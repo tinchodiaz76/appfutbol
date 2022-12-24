@@ -7,7 +7,7 @@
         </div>
     </div>
 
-    <form novalidate (ngSubmit)="onSubmit()"  [formGroup]="grupo">
+    <form novalidate  [formGroup]="grupoForm">
         <div class="form-group">
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
@@ -18,14 +18,13 @@
                 >
             </div>
 
-<!--        </div>-->
             <div class="error"
-                *ngIf="grupo.get('nombre')?.hasError('required') && grupo.get('nombre')?.touched">
-                El nombre del equipo es obligatorio
+                *ngIf="grupoForm.get('nombre')?.hasError('required') && grupoForm.get('nombre')?.touched">
+                Falta el nombre del equipo
             </div>
 
             <div class="error"
-                *ngIf="grupo.get('nombre')?.hasError('minLength') && grupo.get('nombre')?.touched">
+                *ngIf="grupoForm.get('nombre')?.hasError('minLength') && grupoForm.get('nombre')?.touched">
                 El nombre del equipo requiere como minimo 3 caracteres
             </div>
 
@@ -45,13 +44,13 @@
             </div>
 
             <div class="error"
-                *ngIf="grupo.get('cantIntegrantes')?.hasError('required') && grupo.get('cantIntegrantes')?.touched">
-                La cantidad de jugadores es obligatorio.
+                *ngIf="grupoForm.get('cantIntegrantes')?.hasError('required') && grupoForm.get('cantIntegrantes')?.touched">
+                Falta la cantidad de jugadores
             </div>
         
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
-                    <label class="input-group-text" for="dia">Dia</label>
+                    <label class="input-group-text" for="dia">Día</label>
                 </div>
                 <select class="custom-select" id="dia"
                     formControlName="dia">
@@ -67,33 +66,101 @@
             </div>
 
             <div class="error"
-                *ngIf="grupo.get('dia')?.hasError('required') && grupo.get('dia')?.touched">
-                El dia que juegan es obligatorio
+                *ngIf="grupoForm.get('dia')?.hasError('required') && grupoForm.get('dia')?.touched">
+                Falta el día del partido
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="direccion">Dirección</label>
+                </div>            
+                <input type="text" formControlName="direccion"
+                    class="form-control" id="direccion" placeholder="Dirección de la cancha"
+                >
+            </div>
+
+            <div class="error"
+                *ngIf="grupoForm.get('direccion')?.hasError('required') && grupoForm.get('direccion')?.touched">
+                Falta la dirección
+            </div>
+
+            <div class="error"
+                *ngIf="grupoForm.get('direccion')?.hasError('minLength') && grupoForm.get('direccion')?.touched">
+                La direccion requiere como minimo 3 caracteres
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="hora">Hora</label>
+                </div>            
+                <input type="time" formControlName="hora"
+                    class="form-control" id="hora" placeholder="Hora que jugamos"
+                >
+            </div>
+
+            <div class="error"
+                *ngIf="grupoForm.get('hora')?.hasError('required') && grupoForm.get('hora')?.touched">
+                Falta la hora
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="cancha">Precio</label>
+                </div>            
+                <input type="number" formControlName="precio"
+                min="10" max="100000" class="form-control" id="precio" placeholder="Precio de la cancha"
+                >
+            </div>
+
+            <div class="error"
+                *ngIf="grupoForm.get('precio')?.hasError('required') && grupoForm.get('precio')?.touched">
+                Falta el precio
             </div>
 
             <div class="form-group row mt-3">
                 <div class="row">
-                    <div class="col-12">
-                            <button type="submit" [disabled]="grupo.invalid"
-                            class="btn btn-primary" *ngIf="grabo"
-                            >Grabar</button>
+                    <div class="example-button-row">
+                        <button mat-raised-button *ngIf="grabo"
+                            matTooltip="Grabar"
+                            [disabled]="grupoForm.invalid"
+                            color="primary"
+                            style="background-color: #2E86C1;"
+                            (click)="onSubmit()">
+                            <fa-icon [icon]="faFloppyDisk"></fa-icon>
+                        </button>
 
-                            <button type="button" *ngIf="puedeNavegar"
-                            class="btn btn-primary" (click)="navegarGrupo()"
-                            >Armar Equipo</button>
+                        <button mat-raised-button
+                            matTooltip="Atras"
+                            color="warn"
+                            (click)="back()"
+                            style="background-color: #CD5C5C"
+                            >
+                            <fa-icon [icon]="faRightFromBracket"></fa-icon>
+                        </button>
+
+                        <button mat-raised-button *ngIf="puedeNavegar"
+                            matTooltip="Armar Equipo"
+                            class="btn btn-primary" 
+                            [disabled]="grupoForm.invalid"
+                             style="background-color: #3859F0;"
+                            (click)="navegarGrupo()">
+                            <fa-icon [icon]="faFutbol"></fa-icon>
+                            Armar Equipo</button>
                     </div>
                 </div>
             </div>
         </div>
     </form>
 
-    <div  *ngIf="puedeNavegar" class="form-group mt-1">
-        <!--<button type="button" class="btn btn-link" (click)="navegarGrupo()">Armar Equipo</button>-->
+    <div  *ngIf="puedeNavegar" class="form-group mt-2">
+        <p>¡Enviale este link a tus amigos!</p>
+
         <input type="text" [(ngModel)]="linkGrupo" readonly #formInputText
         style="height: 35px; width: 270px; background-color: lightgray;">
         <button mat-raised-button 
             matTooltip="Compartir"
             class="btn btn-primary" 
+            style="background-color: #4300fb;"
             (click)="copyText()">
             <fa-icon [icon]="faCopy"></fa-icon>
         </button>

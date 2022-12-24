@@ -12,11 +12,12 @@ import { Router } from '@angular/router';
 
 import { DialogoJugadorComponent } from '../dialogo-jugador/dialogo-jugador.component';
 //FontAwasome
-import { faCopy } from '@fortawesome/free-solid-svg-icons';
+import { faCopy, faRightFromBracket, faPlus } from '@fortawesome/free-solid-svg-icons';
 //Variables de Entorno
 import { environment } from 'src/environments/environment';
 //Copy
 import { ClipboardService } from 'ngx-clipboard';
+import { Time } from '@angular/common';
 
 export interface DialogData {
   cantJugadores: number,
@@ -41,12 +42,19 @@ export class HeaderComponent {
   idGrupo!: string;
   title!:string;
   dia!:number;
+  precio!:number;
   jugador!: jugadorHabitualModel;
   cantIntegrantes: number=0;
+  direccion!:string;
+  hora!:Time;
   nombreDia!: string;
   linkGrupo!: string
-  
+  infoGrupo:boolean=false;
+  infoJugadores: boolean=false;
+  cargando:boolean=true;
   faCopy= faCopy;
+  faRightFromBracket= faRightFromBracket;
+  faPlus=faPlus;
 
   constructor(public dialog: MatDialog,
               private jueganService: JueganService,
@@ -66,6 +74,8 @@ export class HeaderComponent {
       this.jugadoresService.getNoJuegan().subscribe((res)=>{
 //        console.log('this.noJuegan=', res);
         this.noJuegan=res;
+
+        this.infoJugadores=true;
       });
     });
 
@@ -74,10 +84,13 @@ export class HeaderComponent {
     this.gruposService.getGrupo(this.idGrupo).subscribe((res:any)=>{
       if (res.payload.data())
       {
+        
         this.title= res.payload.data().nombre;
         this.cantIntegrantes= res.payload.data().cantIntegrantes;
         this.dia= res.payload.data().dia;
-
+        this.precio= res.payload.data().precio;
+        this.direccion= res.payload.data().direccion;
+        this.hora= res.payload.data().hora;
 
         switch (this.dia) {
           case 0:
@@ -104,7 +117,7 @@ export class HeaderComponent {
             break;
         }
 
-        this.linkGrupo=environment.baseUrl+ 'grupo/' + res.payload.id;
+        this.linkGrupo=res.payload.id;
 
         this.fechaProximoDia(this.dia);
       }
@@ -116,6 +129,8 @@ export class HeaderComponent {
           this.router.navigate(['/']);
         }
       }
+      this.infoGrupo=true;
+      this.cargando=false;
     });
 
 //    this.fechaProximoDia(this.dia);
@@ -199,7 +214,7 @@ export class HeaderComponent {
 
               const namesNoJuegan = this.noJuegan.map(el => el.nombre);
         
-              if ((namesJuegan.includes(this.jueganService.casteaNombre(art.nombre))) || (namesNoJuegan.includes(this.jueganService.casteaNombre(art.nombre))))
+              if ((namesJuegan.includes(this.jueganService.castea(art.nombre))) || (namesNoJuegan.includes(this.jueganService.castea(art.nombre))))
               //Controlo que el nombre ingresado no este ni en listaJuegan, ni en listaNoJuegan
               {
                   this.showDiv= true;  
@@ -214,13 +229,13 @@ export class HeaderComponent {
                     if (!art.check)
                     //No quiere ser habitual, se suma para jugar este Sabado
                     {
-                      this.insertaJugador(this.idGrupo, this.jueganService.casteaNombre(art.nombre), true,true,art.check,
+                      this.insertaJugador(this.idGrupo, this.jueganService.castea(art.nombre), true,true,art.check,
                         '¡Nos vemos el Sábado!','', 'success' );
                     }  
                     else
                     //Lo sumamos como habitual.
                     {
-                      this.insertaJugador(this.idGrupo, this.jueganService.casteaNombre(art.nombre), false, true,art.check,
+                      this.insertaJugador(this.idGrupo, this.jueganService.castea(art.nombre), false, true,art.check,
                           '¡Te sumaste a los de siempre!','', 'success' );
                       }
                   }
@@ -235,7 +250,7 @@ export class HeaderComponent {
                     else
                     {
                       //quiere ser habitual, pero le avisamo que lo esperamos la proxima
-                      this.insertaJugador(this.idGrupo, this.jueganService.casteaNombre(art.nombre), false, true,art.check,
+                      this.insertaJugador(this.idGrupo, this.jueganService.castea(art.nombre), false, true,art.check,
                           '¡Te agregaste a los de siempre! <br> Te esperamos la próxima.','', 'info' );
                     }
                   }
@@ -250,5 +265,9 @@ export class HeaderComponent {
 
   copyText() {
     this.clipboardApi.copyFromContent(this.linkGrupo);
+  }
+
+  back(){
+    this.router.navigate(['/']);
   }
 }

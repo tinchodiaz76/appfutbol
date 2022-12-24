@@ -35,6 +35,7 @@ import { GrupoComponent } from './components/grupo/grupo.component';
 import { ClipboardModule } from 'ngx-clipboard';
 //Iconos de FontAwasome
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { InicialComponent } from './components/inicial/inicial.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     ListadoHabitualesComponent,
     HeaderComponent,
     DialogoJugadorComponent,
-    GrupoComponent
+    GrupoComponent,
+    InicialComponent
   ],
   imports: [
     BrowserModule,

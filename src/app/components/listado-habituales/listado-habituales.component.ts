@@ -30,7 +30,8 @@ export class ListadoHabitualesComponent implements OnInit {
   jugador: any;
   idGrupo!: string;
   cantIntegrantes!: number;
-
+  precio!: number;
+  value!:string;
   showDiv: boolean=false;
   
   color: ThemePalette = 'primary';
@@ -62,9 +63,11 @@ export class ListadoHabitualesComponent implements OnInit {
       if (res.payload.data())
       {
         this.cantIntegrantes= res.payload.data().cantIntegrantes;
+        this.precio= res.payload.data().precio;
       }
     });
   }
+
   getJugadoreByGroup(idGrupo: string)
   {
     this.showDiv=true;
@@ -85,7 +88,7 @@ export class ListadoHabitualesComponent implements OnInit {
             ...element.payload.doc.data()
           })
 
-//          console.log(this.juegan);
+          this.value=(this.precio/this.juegan.length).toFixed(2);
         }
         else
         {
@@ -138,7 +141,7 @@ export class ListadoHabitualesComponent implements OnInit {
         juega: estado,
         activo: lista.activo,
         habitual: lista.habitual,
-        fechaActualizacion: new Date()
+        fechaCreacion: new Date()
       }
 
       /*
