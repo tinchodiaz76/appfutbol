@@ -17,18 +17,24 @@ Se instalaron las siguientes herramientas:
 	npm install @fortawesome/free-solid-svg-icons
 	
 	 /*Se instala IONIC como global*/
-	 npm install -g @ionic/cli
+	 npm i -g @ionic/cli
+	 /*Para empezar el proyecto*/
+	 ionic start
+	 /*Para correrlo de modo local*/
+	 ionic serve
 	 /*Se instala el PLUGINS IN-APP-BROWSER*/
 	 npm install cordova-plugin-inappbrowser 
 	 npm install @awesome-cordova-plugins/in-app-browser 
-	 /*Se agrega la plataforma de Android*/
-	 ionic capacitor add android
-	 
+	 /*Sincroniza*/
 	 ionic cap sync
+	 /*Se agrega la plataforma de Android, esto luego abre Android Studio*/
+	 ionic capacitor add android
+	 /*Copia los archivos de Angular*/
 	 ionic cap copy
 	 /*Genera la APK y abre el ANDROID STUDIO para ejecutar la APP*/
 	 ionic cap build
-	 
+
+
 	 
 Se instalo para la PWA:
 	ng add @angular/pwa@13	

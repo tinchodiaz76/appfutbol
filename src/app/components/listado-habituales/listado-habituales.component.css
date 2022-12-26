@@ -1,7 +1,7 @@
 /*Bloquea el DIV donde estan los datos*/
 /*Con position: fixed; no puedo acceder al DIV de abajo*/ 
 .container{
-  padding-top: 180px;
+  padding-top: 200px;
 }
 
 .bloqueodiv {
