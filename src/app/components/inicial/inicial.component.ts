@@ -83,4 +83,13 @@ export class InicialComponent implements OnInit {
   {
     this.router.navigate(['/grupo', this.codigo])
   }
+
+  codigoValue(event:any)
+  {
+    //window.alert(event.target.value);
+    if (event.target.value=='')
+    {
+      this.codigoValido=false;
+    }
+  }
 }

@@ -19,6 +19,7 @@
                 <div class="col-7">                    
                     <input type="text" 
                         class="form-control" id="codigo" placeholder="Ingresá el código del equipo" [(ngModel)]="codigo"
+                        (keyup)="codigoValue($event)" (keydown.enter)="validarCodigo()"
                     >
                 </div>
 
@@ -28,7 +29,8 @@
                     matTooltip="Validar Grupo"
                     class="btn btn-primary" 
                     style="background-color: #05D1D1;"
-                    (click)="validarCodigo()">
+                    (click)="validarCodigo()"
+                    >
                     <fa-icon [icon]="faMagnifyingGlass"></fa-icon>
                     </button>
                 </div>
@@ -38,29 +40,10 @@
         <div class="row" *ngIf="codigoValido">
             <input type="text" 
             class="form-control" id="nombreEquipo"  [(ngModel)]="nombreEquipo" readonly style="text-align: center;"
-        >
+            >
         </div>
         <br>
 
-        
-<!--
-        <div class="form-group">
-            <div class="input-group mb-3">
-                <div class="col-10">
-                    <p>Creá un equipo</p>
-                </div>
-                <div class="col-2">
-                    <button mat-raised-button 
-                    matTooltip="Agregar Jugador"
-                    class="btn btn-primary" 
-                    style="background-color: #2E86C1;"
-                    (click)="crearGrupo()">
-                    <fa-icon [icon]="faPlus"></fa-icon>
-                    </button>
-                </div>
-            </div>
-        </div>
--->
         <div class="form-group" *ngIf="codigoValido">
             <div class="input-group mb-3">
                 <div class="col-10">
