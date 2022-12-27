@@ -18,6 +18,7 @@ export class InicialComponent implements OnInit {
   faPersonRunning= faPersonRunning;
 
   codigo!: string;
+  nombreEquipo!: string;
   codigoValido: boolean= false;
 
   constructor(private router: Router,
@@ -26,11 +27,23 @@ export class InicialComponent implements OnInit {
 
   ngOnInit(): void {
     this.codigoValido=false;
-  }
 
-  copyText()
-  {
+    console.log(this.gruposService.getCodigoGrupo());
 
+   let codigo='';
+
+   codigo= this.gruposService.getCodigoGrupo()
+
+    if (codigo.length!=undefined)
+    {
+      this.codigo= this.gruposService.getCodigoGrupo();
+      this.validarCodigo();
+    }
+    else
+    {
+      this.codigo='';
+    }
+    
   }
 
   crearGrupo()
@@ -51,9 +64,13 @@ export class InicialComponent implements OnInit {
       else
       {
         this.codigoValido= true;
+        this.gruposService.setCodigoGrupo(this.codigo);
+        this.nombreEquipo='Estás en ' + res.payload.data().nombre;
+
 /*        
         this.router.navigate(['/grupo/edit', this.codigo]);
 */        
+
       }
     })
   }

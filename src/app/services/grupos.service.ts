@@ -31,7 +31,6 @@ export class GruposService {
     return this.firestore.collection('grupos').get();
   }
 
-
   getGrupo(idrupo: string):Observable<any>
   {
     return this.firestore.collection('grupos').doc(idrupo).snapshotChanges();
@@ -41,4 +40,24 @@ export class GruposService {
   {
     return this.firestore.collection('grupos').doc(id).update(data);
   }
+
+  setCodigoGrupo(codigoGrupo :any){
+    localStorage.setItem('codigoGrupo',JSON.stringify(codigoGrupo));
+  }
+  
+  getCodigoGrupo()
+  {
+    let codigoGrupo= JSON.parse(localStorage.getItem('codigoGrupo') || '{}');
+    //console.log('usuario=', usuario);
+    //console.log('JSON.parse(usuario)=', JSON.parse(usuario));
+    return (codigoGrupo);
+  }
+
+  logout()
+  {
+    //this.logueado=false;
+    localStorage.removeItem('codigoGrupo');
+  }
+
+
 }
