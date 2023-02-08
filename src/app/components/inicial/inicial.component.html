@@ -2,37 +2,62 @@
     <div class="container">
         <div class="row">
             <div class="col-8">
-                <h1><strong>¡Hay equipo!</strong></h1>
+                <h1><strong>¿Quién juega?</strong></h1>
             </div>
         </div>
 
         <div class="form-group">
             <p>Si ya está creado el equipo, ingresá el código</p>
-            <div class="input-group mb-3">
-                
-                <div class="input-group-prepend">
-                    <label class="input-group-text" for="codigo"
-                    style="padding-right: 25px;">Código</label>
-                </div>
-         
-                <!--<div class="col-sm-7">-->
-                <div class="col-7">                    
+            <div class="input-group mb-3" >
+                <!--input-group-prepend   style="padding-right: 25px;" input-group-text-->
+                <div class="row">
+<!--
+                    <div class="col-3 p-0"> 
+                        <label class="input-group-text" for="codigo" style="display: block;
+                        "
+                        >Código</label>
+                    </div>
+-->                    
+                    <div class="col-6 p-0">
                     <input type="text" 
-                        class="form-control" id="codigo" placeholder="Ingresá el código del equipo" [(ngModel)]="codigo"
+                        class="form-control" id="codigo" placeholder="Ingresá el código" 
+                        [(ngModel)]="codigo"
                         (keyup)="codigoValue($event)" (keydown.enter)="validarCodigo()"
                     >
-                </div>
+                    </div>
 
-                <!--<div class="col-sm-2">-->
-                <div class="col-2">
-                    <button mat-raised-button 
-                    matTooltip="Validar Grupo"
-                    class="btn btn-primary" 
-                    style="background-color: #05D1D1;"
-                    (click)="validarCodigo()"
-                    >
-                    <fa-icon [icon]="faMagnifyingGlass"></fa-icon>
+                    <div class="col-2 p-0">
+                        <button mat-raised-button 
+                        matTooltip="Validar Grupo"
+                        class="btn btn-primary" 
+                        style="background-color: #05D1D1;"
+                        (click)="validarCodigo()"
+                        >
+                        <fa-icon [icon]="faMagnifyingGlass"></fa-icon>
+                        </button>
+                    </div>
+    
+                    <div class="col-2 p-0">
+                        <button mat-raised-button 
+                        matTooltip="Borrar Codigo de Grupo"
+                        class="btn btn-primary" 
+                        style="background-color: #A9A9A9"
+                        (click)="eliminarCodigo()"
+                        >
+                        <fa-icon [icon]="faTrash"></fa-icon>
+                        </button>
+                    </div>
+
+                    <div class="col-2 p-0">
+                        <button mat-raised-button 
+                        matTooltip="Compartir por Whatsapp"
+                        class="btn btn-primary" 
+                        style="background-color: #4300fb;"
+                        (click)="compartirWhatsapp()">
+                        <fa-icon [icon]="faWhatsapp"></fa-icon>
                     </button>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -47,7 +72,7 @@
         <div class="form-group" *ngIf="codigoValido">
             <div class="input-group mb-3">
                 <div class="col-10">
-                    <p>Sumá jugadores</p>
+                    <strong>Sumá jugadores</strong>
                 </div>
                 <div class="col-2">
                     <button mat-raised-button 
@@ -64,7 +89,7 @@
         <div class="form-group" *ngIf="codigoValido">
             <div class="input-group mb-3">
                 <div class="col-10">
-                    <p>Modificar info del equipo</p>
+                    <strong>Modificá info del equipo</strong>
                 </div>
                 <div class="col-2">
                     <button mat-raised-button *ngIf="codigoValido"
@@ -83,7 +108,7 @@
         <div class="form-group">
             <div class="input-group mb-3">
                 <div class="col-10">
-                    <p>Creá un equipo</p>
+                    <strong>Creá un equipo*</strong>
                 </div>
                 <div class="col-2">
                     <button mat-raised-button 
@@ -95,6 +120,10 @@
                     </button>
                 </div>
             </div>
+        </div>
+
+        <div class="form-group">
+            <p style="font-style: italic">* Recordá que solo un integrante debe crear el equipo para que se genere un código único. <br> Una vez creado el equipo, se comparte el código con tus amigos.</p>
         </div>
     </div>
 </div>

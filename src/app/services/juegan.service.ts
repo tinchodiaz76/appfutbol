@@ -41,12 +41,12 @@ export class JueganService {
   {
     return this.firestore.collection('jugadores').doc(id).delete();
   }
-
+/*
   getJugador(id: string) :Observable<any>
   {
     return this.firestore.collection('jugadores').doc(id).snapshotChanges();
   }
-
+*/
   actualizarJugador(id: string, data:any) : Promise<any>
   {
     return this.firestore.collection('jugadores').doc(id).update(data);

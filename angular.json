@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "appFutbol": {
+    "quienJuega": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:application": {
@@ -25,6 +25,8 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
+              "src/manifest.webmanifest",
+              "src/manifest.webmanifest",
               "src/manifest.webmanifest"
             ],
             "scripts": [],
@@ -71,10 +73,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "appFutbol:build:production"
+              "browserTarget": "quienJuega:build:production"
             },
             "development": {
-              "browserTarget": "appFutbol:build:development"
+              "browserTarget": "quienJuega:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -82,7 +84,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "appFutbol:build"
+            "browserTarget": "quienJuega:build"
           }
         },
         "test": {
@@ -95,6 +97,8 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
+              "src/manifest.webmanifest",
+              "src/manifest.webmanifest",
               "src/manifest.webmanifest"
             ],
             "scripts": [],
@@ -106,5 +110,5 @@
       }
     }
   },
-  "defaultProject": "appFutbol"
+  "defaultProject": "quienJuega"
 }

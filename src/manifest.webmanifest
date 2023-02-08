@@ -1,6 +1,6 @@
 {
-  "name": "appFutbol",
-  "short_name": "appFutbol",
+  "name": "quienJuega",
+  "short_name": "quienJuega",
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",

@@ -34,12 +34,26 @@ Se instalaron las siguientes herramientas:
 	 /*Genera la APK y abre el ANDROID STUDIO para ejecutar la APP*/
 	 ionic cap build
 
+	             "ngswConfigPath": "ngsw-config.json"
 
 	 
 Se instalo para la PWA:
-	ng add @angular/pwa@13	
+	ng add @angular/pwa@13 --project quienJuega
 
+	ng buid --prod
+	
 git push -u origin main
 	
+Servidores DNS de 000webhost:
+-----------------------------
+ns01.000webhost.com
+ns02.000webhost.com	
+
+Como no te dan el SSL, cree una cuenta en cloudflare
+----------------------------------------------------
+Sus DNS son 
+connie.ns.cloudflare.com y randall.ns.cloudflare.com
+
+
 Token o Clave de GIT
 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

@@ -117,6 +117,24 @@
                 Falta el precio
             </div>
 
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="cancha">Mail</label>
+                </div>            
+                <input type="email" formControlName="mail"
+                class="form-control" id="mail" placeholder="Mail de contacto"
+                >
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="form-check">
+                    <input class="form-check-input" formControlName="juegaTorneo" type="checkbox" value="" id="juegaTorneo">
+                    <label class="form-check-label" for="flexCheckIndeterminate">
+                      Disponible para jugar torneos
+                    </label>
+                  </div>
+            </div>
+
             <div class="form-group row mt-3">
                 <div class="row">
                     <div class="example-button-row">
@@ -158,11 +176,11 @@
         <input type="text" [(ngModel)]="linkGrupo" readonly #formInputText
         style="height: 35px; width: 270px; background-color: lightgray;">
         <button mat-raised-button 
-            matTooltip="Compartir"
+            matTooltip="Compartir por Whatsapp"
             class="btn btn-primary" 
             style="background-color: #4300fb;"
-            (click)="copyText()">
-            <fa-icon [icon]="faCopy"></fa-icon>
+            (click)="compartirWhatsapp()">
+            <fa-icon [icon]="faWhatsapp"></fa-icon>
         </button>
     </div>
 </div>

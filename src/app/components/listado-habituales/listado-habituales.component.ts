@@ -36,7 +36,7 @@ export class ListadoHabitualesComponent implements OnInit {
   
   color: ThemePalette = 'primary';
   mode: ProgressSpinnerMode = 'indeterminate';
-    
+
   constructor(private jueganService: JueganService,
               private jugadoresService: JugadoresService,
               private firestore: AngularFirestore,
@@ -115,12 +115,18 @@ export class ListadoHabitualesComponent implements OnInit {
 
     //Si en el ESTADO=TRUE TOMO LA LISTA QUE NO THIS.NOJUEGAN
     //Si en el ESTADO=FALSE TOMO LA LISTA QUE NO THIS.JUEGAN
+    
+    
     if (estado)
     {      
+      console.log('this.noJuegan[index]=', this.noJuegan[index]);
       this.actualiza(this.noJuegan[index], estado);
+      //Si la fechaProximoPartido de la coleccion grupos es menor a la fecha del dia. Cambio la fechaProximoPartido de la 
+      //coleccion grupos.
     }
     else
     {
+      console.log('this.juegan[index]=', this.juegan[index]);
       this.actualiza(this.juegan[index], estado);
     }
   }
@@ -136,21 +142,18 @@ export class ListadoHabitualesComponent implements OnInit {
     else
     {
       this.jugador={
-//        id: lista.id,
-        nombre: lista.nombre,
         juega: estado,
-        activo: lista.activo,
-        habitual: lista.habitual,
-        fechaCreacion: new Date()
+        fechaActualizacion: new Date()
       }
 
+      console.log('this.jugador='+ this.jugador);
       /*
       //NO SE PUEDE OBTENER EL ID ASI....POR ESO CREO EL OBJETO JUGADOR.
       //      console.log(res.payload.data()['id']);
       */    
 
       this.jueganService.actualizarJugador(lista.id , this.jugador).then(()=>{
-        //console.log('llamo a this.getJugadores');
+        console.log('llamo a this.getJugadores');
         this.getJugadoreByGroup(this.idGrupo);
         //this.getJugadores(this.nrogrupo);
         this.irArriba();

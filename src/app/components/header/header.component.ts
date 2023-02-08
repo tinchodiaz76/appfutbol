@@ -13,11 +13,13 @@ import { Router } from '@angular/router';
 import { DialogoJugadorComponent } from '../dialogo-jugador/dialogo-jugador.component';
 //FontAwasome
 import { faCopy, faRightFromBracket, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faWhatsapp} from '@fortawesome/free-brands-svg-icons'
 //Variables de Entorno
 import { environment } from 'src/environments/environment';
 //Copy
 import { ClipboardService } from 'ngx-clipboard';
 import { Time } from '@angular/common';
+import { UtilidadesService } from 'src/app/services/utilidades.service';
 
 export interface DialogData {
   cantJugadores: number,
@@ -43,7 +45,8 @@ export class HeaderComponent {
   title!:string;
   dia!:number;
   precio!:number;
-  jugador!: jugadorHabitualModel;
+//  jugador!: jugadorHabitualModel;
+  jugador: any;
   cantIntegrantes: number=0;
   direccion!:string;
   hora!:Time;
@@ -52,9 +55,11 @@ export class HeaderComponent {
   infoGrupo:boolean=false;
   infoJugadores: boolean=false;
   cargando:boolean=true;
+  
   faCopy= faCopy;
   faRightFromBracket= faRightFromBracket;
   faPlus=faPlus;
+  faWhatsapp= faWhatsapp;
 
   constructor(public dialog: MatDialog,
               private jueganService: JueganService,
@@ -62,7 +67,8 @@ export class HeaderComponent {
               private jugadoresService: JugadoresService,
               private router: Router,
               private gruposService: GruposService,
-              private clipboardApi: ClipboardService
+              private clipboardApi: ClipboardService,
+              private utilidades:UtilidadesService
               ) 
               
   { 
@@ -119,7 +125,13 @@ export class HeaderComponent {
 
         this.linkGrupo=res.payload.id;
 
-        this.fechaProximoDia(this.dia);
+        this.fecha= this.utilidades.fechaProximoDia(this.dia);
+        this.fecha= this.fecha.substring(6,8) + '/' + this.fecha.substring(4,6) + '/' + this.fecha.substring(0,4);
+
+        if (this.juegan.length==10)
+        {
+          this.alertasService.mostratSwettAlert('', '¡Ya somos 10!','success');
+        }
       }
       else
       {
@@ -132,40 +144,6 @@ export class HeaderComponent {
       this.infoGrupo=true;
       this.cargando=false;
     });
-
-//    this.fechaProximoDia(this.dia);
-  }
-
-  sumarDias(fecha: Date, dias: number){
-    fecha.setDate(fecha.getDate() + dias);
-    console.log(fecha);
-    console.log(fecha.getDate());
-    console.log(fecha.getMonth());
-    this.fecha= `${fecha.getDate()}` + '/' +  `${fecha.getMonth()+1}` + '/' + fecha.getFullYear();
-    console.log('this.fecha='+ this.fecha);
-  }
-  
-  fechaProximoDia(dia: number)
-  {
-    var d = new Date();
-    var nrodia:number= d.getDay();
-    
-    if (dia<nrodia)
-    {
-      this.sumarDias(d,dia+nrodia+1)
-    }
-    else
-    {
-        if (dia==nrodia)
-        {
-          this.sumarDias(d,0);
-        }
-        else
-        {
-          this.sumarDias(d,dia-nrodia);
-        }
-    }    
-
   }
 
   insertaJugador(idGrupo: string, nombre:string, juega: boolean, activo: boolean, habitual: boolean, 
@@ -179,8 +157,8 @@ export class HeaderComponent {
       juega, 
       activo,
       habitual,
-      fechaCreacion: new Date(),
-      fechaActualizacion: new Date()
+      fechaCreacion: new Date()//,
+      //fechaActualizacion: new Date()
     };
 
     console.log('jugador=', this.jugador);
@@ -263,8 +241,12 @@ export class HeaderComponent {
     });
   }
 
-  copyText() {
-    this.clipboardApi.copyFromContent(this.linkGrupo);
+  compartirWhatsapp() {
+
+    //window.open("https://web.whatsapp.com/send?text=quienJuega-El codigo del grupo es: "+ this.linkGrupo);
+    window.open("https://api.whatsapp.com/send?text=Ingresá aquí www.quienjuega.com.ar/grupo/"+ this.linkGrupo + " para sumarte");
+    //this.clipboardApi.copyFromContent(this.linkGrupo);
+    //this.alertasService.mostratSwettAlertToast('Link copiado','success');
   }
 
   back(){

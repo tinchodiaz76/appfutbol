@@ -44,10 +44,12 @@
                         <p>No hay jugadores cargados...</p>
                     </div>
                     <div *ngIf="juegan.length>0 && infoJugadores">
-                        <p style="color:black;">Para el {{nombreDia}} {{fecha}} somos {{juegan.length}}</p>
+                        <p style="color:black;">Cuándo: {{nombreDia}} {{fecha}} </p> <!--somos {{juegan.length}}</p>-->
+                        <p>Confirmados: <strong style="color: red; font-size: large;"> {{juegan.length}}</strong></p>
                     </div>
                     <div *ngIf="juegan.length==0 && noJuegan.length>0">
-                        <p style="color:black;">Para el {{nombreDia}} {{fecha}} no hay nadie anotado</p>
+                        <p style="color:black;">Cuándo: {{nombreDia}} {{fecha}} </p><!--hay nadie anotado</p>-->
+                        <p>Confirmados: <strong style="color: red; font-size: large;">0</strong></p>
                     </div>
                 </div>
             </div>
@@ -57,10 +59,11 @@
                         <input type="text" [(ngModel)]="linkGrupo" readonly
                         style="height: 35px; width: 270px; background-color: lightgray;">
                         <button mat-raised-button 
-                            matTooltip="Compartir"
+                            matTooltip="Compartir por Whatsapp"
                             class="btn btn-primary" 
-                            (click)="copyText()">
-                            <fa-icon [icon]="faCopy"></fa-icon>
+                            style="background-color: #4300fb;"
+                            (click)="compartirWhatsapp()">
+                            <fa-icon [icon]="faWhatsapp"></fa-icon>
                         </button>
                 </div>
             </div>

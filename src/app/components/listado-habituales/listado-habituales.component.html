@@ -53,7 +53,7 @@
                     {{listado.nombre}}          
                 </td>
                 <td class="text-center">
-                    <button *ngIf="listado.activo" class="btn btn-success" style="float: right;width: 84.02px;" (click)="actualizaJugador(true, i)" type="submit" [disabled]="juegan.length==cantIntegrantes">Voy</button>
+                    <button *ngIf="listado.activo" class="btn btn-success" style="float: right;width: 84.02px;" (click)="actualizaJugador(true, i)" [disabled]="juegan.length==cantIntegrantes">Voy</button>
                 </td>
             </tr>
             </tbody>
