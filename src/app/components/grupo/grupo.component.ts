@@ -92,9 +92,8 @@ export class GrupoComponent implements OnInit {
       {
         if (this.idGrupo=='grupo')
         {
-//          window.alert('parseInt(this.grupoForm.get(dia)?.value=' + parseInt(this.grupoForm.get('dia')?.value));
-          
-          this.fecha= this.utilidades.fechaProximoDia(parseInt(this.grupoForm.get('dia')?.value));
+//          this.fecha= this.utilidades.fechaProximoDia(this.grupoForm.get('dia')?.value);          
+          this.fecha= this.utilidades.buscar(this.grupoForm.get('dia')?.value);
 
           //Es un grupo nuevo
           this.grupo={
@@ -110,7 +109,7 @@ export class GrupoComponent implements OnInit {
             mail: this.grupoForm.get('mail')?.value
           }
           
-          console.log('this.grupo=', this.grupo);
+//          console.log('this.grupo=', this.grupo);
           this.grupoService.agregarGrupo(this.grupo).then((res:any)=>{
             this.alertasService.mostratSwettAlert('','¡Grupo creado!','success');
         
@@ -123,11 +122,12 @@ export class GrupoComponent implements OnInit {
           (error)=>{
             console.log('error=', error);
           })
+
         }
         else
         {
-          //Es un modificacion
-          this.fecha= this.utilidades.fechaProximoDia(this.grupoForm.get('dia')?.value);
+//          this.fecha= this.utilidades.fechaProximoDia(this.grupoForm.get('dia')?.value);
+          this.fecha= this.utilidades.buscar(this.grupoForm.get('dia')?.value);
 
           this.grupo={
             nombre:this.jueganService.castea(this.grupoForm.get('nombre')?.value),

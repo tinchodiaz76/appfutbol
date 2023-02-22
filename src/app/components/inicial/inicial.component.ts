@@ -13,6 +13,8 @@ import { resolve } from 'dns';
 */
 import { grupoModel } from 'src/app/models/grupo.model';
 import { ClipboardService } from 'ngx-clipboard';
+import * as moment from 'moment';
+import { UtilidadesService } from 'src/app/services/utilidades.service';
 
 @Component({
   selector: 'app-inicial',
@@ -35,28 +37,29 @@ export class InicialComponent implements OnInit {
   fecha!: string;
   fechaActual!: Date;
   fechaHoy !: string;
+  FechaHoy : Date= new Date();
   jugador: any;
   grupo!: grupoModel;
   idGrupo: string='';
+  pedro !: string;
 
   constructor(private router: Router,
               private gruposService: GruposService,
               private alertasService: AlertasService,
               private jueganService: JueganService,
               private grupoService: GruposService,
-              private clipboardApi: ClipboardService) { }
+              private utilidades: UtilidadesService) { }
 
   ngOnInit(): void {
     this.codigoValido=false;
 
-    let codigo='';
+    //let codigo='';
 
-    codigo= this.gruposService.getCodigoGrupo()
+    this.codigo= this.gruposService.getCodigoGrupo()
 
-    if (codigo.length!=undefined)
+    if (this.codigo.length!=undefined)
     {
-      this.codigo= this.gruposService.getCodigoGrupo();
-      console.log('Codigo Grupo=', this.gruposService.getCodigoGrupo());
+//      console.log('Codigo Grupo=', this.codigo);
       this.validarCodigo();
     }
     else
@@ -74,8 +77,8 @@ export class InicialComponent implements OnInit {
   validarCodigo()
   {
     this.gruposService.getGrupo(this.codigo).subscribe((res:any)=>{
-      console.log('res=', res.payload.data());
-      console.log('res=', res);
+//      console.log('res=', res.payload.data());
+//      console.log('res=', res);
 
       if (res.payload.data()==undefined)
       {
@@ -89,47 +92,33 @@ export class InicialComponent implements OnInit {
         this.nombreEquipo='Estás en ' + res.payload.data().nombre;
         this.fechaActual=new Date();
 
-        this.fechaHoy= this.fechaActual.getFullYear().toString()+((this.fechaActual.getMonth()+1).toString()).padStart(2,'0')+(this.fechaActual.getDate().toString()).padStart(2,'0');
-
-        console.log('res.payload.data().fechaProximoPartido=' + parseInt(res.payload.data().fechaProximoPartido));
-        console.log('this.fechaHoy=' + parseInt(this.fechaHoy));
-
-        //Si la fechaProximoPartido de la coleccion GRUPOS es menor a la fecha del dia, juega=false
-
-        if (parseInt(res.payload.data().fechaProximoPartido)<parseInt(this.fechaHoy)) 
+        if (moment(res.payload.data().fechaProximoPartido).isBefore(moment().format('L')))
         {
-          //Le paso la fechaProximoPartido y el id del grupo
-          console.log('fecha ultimo partido MENOR a fecha de hoy');
-          console.log('res.payload.id=', res.payload.id);
+//          window.alert('true')
 
-          //Pongo todos los jugadores que pertenecen a ese grupo en juega=false
           this.falseJuega(res.payload.id);
 
           //Debo cambiar la fechaProximoPartido, en la coleccion GRUPOS.
           this.grupo={
-            nombre:res.payload.data().nombre,
-            cantIntegrantes: res.payload.data().cantIntegrantes,
-            dia: res.payload.data().dia,
-            direccion: res.payload.data().direccion,
-            hora: res.payload.data().hora,
-            precio: res.payload.data().precio,
-            fechaProximoPartido: (parseInt(res.payload.data().precio) + 6).toString(),
-            juegaTorneo: res.payload.data().juegaTorneo,
-            mail: res.payload.data().mail
-          }
-          
-          this.idGrupo= this.grupoService.obtengoIdGrupo(this.router.url)
+          nombre:res.payload.data().nombre,
+          cantIntegrantes: res.payload.data().cantIntegrantes,
+          dia: res.payload.data().dia,
+          direccion: res.payload.data().direccion,
+          hora: res.payload.data().hora,
+          precio: res.payload.data().precio,
+          fechaProximoPartido: this.utilidades.buscar(parseInt(res.payload.data().dia)),
+          juegaTorneo: res.payload.data().juegaTorneo,
+          mail: res.payload.data().mail
+          };
+
+          this.idGrupo= res.payload.id;
 
           this.grupoService.actualizarGrupo(this.idGrupo, this.grupo).then(()=>{
-            //console.log('Jugador Agregado con Exito');
-            //this.alertasService.mostratSwettAlert('', '¡Se modifico el grupo!', 'success');
+//            this.alertasService.mostratSwettAlert('', '¡Se modifico el grupo!', 'success');
           }).catch(error=>{
             console.log(error);
           });          
-
-        }          
-        else
-          console.log('fecha ultimo partido NOOOO ES MENOR a fecha de hoy');
+        }
       }
     })
   }

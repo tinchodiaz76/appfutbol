@@ -41,6 +41,7 @@ export class HeaderComponent {
   existeNombre :jugadorHabitualModel[]=[];
   showDiv: boolean= false;
   fecha: string='';
+  fecha_Bck: string='';
   idGrupo!: string;
   title!:string;
   dia!:number;
@@ -99,16 +100,12 @@ export class HeaderComponent {
         this.hora= res.payload.data().hora;
 
         switch (this.dia) {
-          case 0:
-            //Declaraciones ejecutadas cuando el resultado de expresión coincide con el valor1
-            this.nombreDia='Domingo';
-            break;
           case 1:
-            this.nombreDia='Lunes';
-            break;
+              this.nombreDia='Lunes';
+              break;
           case 2:
-            this.nombreDia='Martes';
-            break;
+              this.nombreDia='Martes';
+              break;
           case 3:
               this.nombreDia='Miercoles';
               break;
@@ -116,17 +113,25 @@ export class HeaderComponent {
               this.nombreDia='Jueves';
               break;
           case 5:
-            this.nombreDia='Viernes';
-            break;
+              this.nombreDia='Viernes';
+              break;
+          case 6:
+              this.nombreDia='Sabado';
+              break;
           default:
-            this.nombreDia='Sabado';
-            break;
+              //Declaraciones ejecutadas cuando el resultado de expresión coincide con el valor1
+              this.nombreDia='Domingo';
+              break;            
         }
 
         this.linkGrupo=res.payload.id;
 
-        this.fecha= this.utilidades.fechaProximoDia(this.dia);
-        this.fecha= this.fecha.substring(6,8) + '/' + this.fecha.substring(4,6) + '/' + this.fecha.substring(0,4);
+//        this.fecha= this.utilidades.fechaProximoDia(this.dia);
+        this.fecha_Bck= this.utilidades.buscar(this.dia);
+
+//        window.alert(this.fecha_Bck.substring(3,5) + '/' + this.fecha_Bck.substring(0,2) + '/' + this.fecha_Bck.substring(6,10));
+        
+        this.fecha= this.fecha_Bck.substring(3,5) + '/' + this.fecha_Bck.substring(0,2) + '/' + this.fecha_Bck.substring(6,10);
 
         if (this.juegan.length==10)
         {
@@ -161,7 +166,7 @@ export class HeaderComponent {
       //fechaActualizacion: new Date()
     };
 
-    console.log('jugador=', this.jugador);
+//    console.log('jugador=', this.jugador);
     
     this.jueganService.agregarJugador(this.jugador).then(()=>{
 //      console.log('Jugador Agregado con Exito');

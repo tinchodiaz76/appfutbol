@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,35 @@ export class UtilidadesService {
 //    window.alert('this.fecha='+ this.fecha);
   }
   
+
+ buscar(dia: number) {
+  let proximoPartido;
+  const diaRequerido = dia;
+  let hoy = moment().isoWeekday();
+  
+//  window.alert('diaRequerido-1='+diaRequerido);
+//  window.alert('hoy='+hoy);
+
+  if (hoy <= diaRequerido) {
+    if (hoy==diaRequerido)
+    {
+      return moment().add(1,'weeks').format('L');
+    }
+    else
+    {
+      proximoPartido= moment().isoWeekday()+(diaRequerido-hoy);
+
+      return moment().day(proximoPartido).format('L');
+    }
+  } else 
+  {
+      proximoPartido= moment().add(1, 'weeks').isoWeekday() - (hoy-diaRequerido);
+      return moment().add(1, 'weeks').day(proximoPartido).format('L');
+  }
+}
+
+
+/*
   fechaProximoDia(dia: number):string
   //dia es el Numero de Dia que eligio para jugar al futbol (0= Domingo al Sabado=6)
   {
@@ -40,16 +70,16 @@ export class UtilidadesService {
     
 //    window.alert('nrodiaActual='+ nrodiaActual);
 //    window.alert('dia='+ dia);
-    /****************************** Opcion 2 ************************/
+    //****************************** Opcion 2 **********************
     //dia= 4
     //nrodiaActual= 4
-    /****************************** Opcion 1 ************************/
+    /****************************** Opcion 1 ***********************
     //dia= 2 
     //nrodiaActual= 4
     /******************************/
     //dia= 0
     //nrodiaActual= 4
-    /****************************** Opcion 1 ************************/
+    /****************************** Opcion 1 ***********************
     //dia= 5
     //nrodiaActual= 4
 
@@ -74,4 +104,5 @@ export class UtilidadesService {
     }    
     return this.fecha;
   }
+*/  
 }

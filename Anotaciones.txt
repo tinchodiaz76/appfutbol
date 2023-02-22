@@ -8,6 +8,7 @@ Para Firebase se instalo:
 Se instalaron las siguientes herramientas:
 	npm i sweetalert2
 	ng add @angular/material
+	npm install moment --save 
 	npm i -g http-server para probar la PWA localmente
 	Para levantar la PWA localmente, ejecutar "http-server"
 	

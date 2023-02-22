@@ -119,14 +119,14 @@ export class ListadoHabitualesComponent implements OnInit {
     
     if (estado)
     {      
-      console.log('this.noJuegan[index]=', this.noJuegan[index]);
+//      console.log('this.noJuegan[index]=', this.noJuegan[index]);
       this.actualiza(this.noJuegan[index], estado);
       //Si la fechaProximoPartido de la coleccion grupos es menor a la fecha del dia. Cambio la fechaProximoPartido de la 
       //coleccion grupos.
     }
     else
     {
-      console.log('this.juegan[index]=', this.juegan[index]);
+//      console.log('this.juegan[index]=', this.juegan[index]);
       this.actualiza(this.juegan[index], estado);
     }
   }
@@ -146,14 +146,13 @@ export class ListadoHabitualesComponent implements OnInit {
         fechaActualizacion: new Date()
       }
 
-      console.log('this.jugador='+ this.jugador);
+//      console.log('this.jugador='+ this.jugador);
       /*
       //NO SE PUEDE OBTENER EL ID ASI....POR ESO CREO EL OBJETO JUGADOR.
       //      console.log(res.payload.data()['id']);
       */    
 
       this.jueganService.actualizarJugador(lista.id , this.jugador).then(()=>{
-        console.log('llamo a this.getJugadores');
         this.getJugadoreByGroup(this.idGrupo);
         //this.getJugadores(this.nrogrupo);
         this.irArriba();
