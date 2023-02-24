@@ -11,10 +11,10 @@ export class JugadoresService {
   
   private juegan$: BehaviorSubject<jugadorHabitualModel[]>= new BehaviorSubject<jugadorHabitualModel[]>([]);
   private noJuegan$: BehaviorSubject<jugadorHabitualModel[]>= new BehaviorSubject<jugadorHabitualModel[]>([]);
-/*
+
   public readonly currentJuegan$: Observable<jugadorHabitualModel[]>= this.juegan$.asObservable();
   public readonly currentNoJuegan$: Observable<jugadorHabitualModel[]>= this.noJuegan$.asObservable();
-*/
+
   constructor(private jueganService: JueganService) 
   { }
 

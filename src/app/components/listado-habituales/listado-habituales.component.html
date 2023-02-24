@@ -1,4 +1,81 @@
-<app-header></app-header>
+<!--<app-header></app-header>-->
+<div class="Header-principal">
+    <div class="container">
+        <div class="row" *ngIf="infoGrupo">
+            <div class="col-8">
+                <h1><strong>{{title}}</strong></h1>
+            </div>
+            <div class="col-4">
+                <button mat-raised-button
+                matTooltip="Sumate"
+                style="background-color: #2E86C1;float: right;"
+                (click)="abrirDialogo()">
+                <fa-icon [icon]="faPlus"></fa-icon>Me sumo
+                </button>
+            </div>
+        </div>
+        
+        <div *ngIf="!cargando">
+            <div class="row" *ngIf="infoGrupo">
+      
+                <div class="col-8">
+                    <p> Cuánto: ${{precio}}</p>
+                </div>
+
+                <div class="col-4">
+                    <button mat-raised-button
+                    matTooltip="Salir"
+                    style="float: right;background-color: #CD5C5C;"
+                    (click)="back()">
+                    <fa-icon [icon]="faRightFromBracket"></fa-icon>
+                    </button>
+                </div>
+
+            </div>
+      
+            <div class="row" *ngIf="infoGrupo">
+                <div class="col-12">
+                    <p style="color:black;"> Dónde: {{direccion}} a las {{hora}}hs</p>
+                </div>
+            </div>
+            
+            <div class="row" *ngIf="infoJugadores">
+                <div class="col">
+                    <div *ngIf="juegan.length==0 && noJuegan.length==0">
+                        <p>No hay jugadores cargados...</p>
+                    </div>
+                    <div *ngIf="juegan.length>0 && infoJugadores">
+                        <p style="color:black;">Cuándo: {{nombreDia}} {{fecha}} </p> <!--somos {{juegan.length}}</p>-->
+                        <p>Confirmados: <strong style="color: red; font-size: large;"> {{juegan.length}}</strong></p>
+                    </div>
+                    <div *ngIf="juegan.length==0 && noJuegan.length>0">
+                        <p style="color:black;">Cuándo: {{nombreDia}} {{fecha}} </p><!--hay nadie anotado</p>-->
+                        <p>Confirmados: <strong style="color: red; font-size: large;">0</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" *ngIf="infoGrupo">
+                <div class="col">
+                        <input type="text" [(ngModel)]="linkGrupo" readonly
+                        style="height: 35px; width: 270px; background-color: lightgray;">
+                        <button mat-raised-button 
+                            matTooltip="Compartir por Whatsapp"
+                            class="btn btn-primary" 
+                            style="background-color: #4300fb;"
+                            (click)="compartirWhatsapp()">
+                            <fa-icon [icon]="faWhatsapp"></fa-icon>
+                        </button>
+                </div>
+            </div>
+        
+            <hr>
+        </div>
+    </div>
+</div>
+
+
+
 <div class="container">
 <!--Muestro el DIV que boquea hasta que termine de Grabar-->
     <div class="container bloqueodiv" *ngIf="showDiv">
@@ -9,6 +86,10 @@
     </div>
 
     <!--Los que JUEGAN-->
+    <div *ngIf="juegan.length>0">
+        <p style="color:blue;">Los que Juegan</p>
+    </div>
+
     <div class="row animate__animated animate__fadeIn">
 
         <table class="table table-striped" *ngIf="juegan.length > 0">

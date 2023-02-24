@@ -20,6 +20,7 @@ import { environment } from 'src/environments/environment';
 import { ClipboardService } from 'ngx-clipboard';
 import { Time } from '@angular/common';
 import { UtilidadesService } from 'src/app/services/utilidades.service';
+import { Subscription } from 'rxjs';
 
 export interface DialogData {
   cantJugadores: number,
@@ -62,6 +63,9 @@ export class HeaderComponent {
   faPlus=faPlus;
   faWhatsapp= faWhatsapp;
 
+  private juganServiceSubscription: Subscription | undefined;
+  private noJuganServiceSubscription: Subscription | undefined;
+
   constructor(public dialog: MatDialog,
               private jueganService: JueganService,
               private alertasService: AlertasService,
@@ -70,22 +74,101 @@ export class HeaderComponent {
               private gruposService: GruposService,
               private clipboardApi: ClipboardService,
               private utilidades:UtilidadesService
-              ) 
-              
-  { 
+              ) {}
+  ngOnInit(): void {
+ 
     //Traigo los que juegan
+/*    
+    this.juganServiceSubscription= this.jugadoresService.getJuegan().subscribe((res)=>{
+*/      
+//this.juganServiceSubscription?.unsubscribe();
+//this.noJuganServiceSubscription?.unsubscribe();
+/*
     this.jugadoresService.getJuegan().subscribe((res)=>{
-//      console.log('this.juegan=', res);
+*/      
+
+    this.juganServiceSubscription= this.jugadoresService.currentJuegan$.subscribe((res)=>{
       this.juegan=res;
 
-      this.jugadoresService.getNoJuegan().subscribe((res)=>{
-//        console.log('this.noJuegan=', res);
+      this.noJuganServiceSubscription= this.jugadoresService.currentNoJuegan$.subscribe((res)=>{
+      
+//      this.jugadoresService.getNoJuegan().subscribe((res)=>{
+      //this.noJuganServiceSubscription= this.jugadoresService.getNoJuegan().subscribe((res)=>{
         this.noJuegan=res;
 
         this.infoJugadores=true;
+
+//        this.juganServiceSubscription?.unsubscribe();
+//        this.noJuganServiceSubscription?.unsubscribe();
+
+
+        this.idGrupo= this.gruposService.obtengoIdGrupo(this.router.url);
+
+        this.gruposService.getGrupo(this.idGrupo).subscribe((res:any)=>{
+          if (res.payload.data())
+          {
+            
+            this.title= res.payload.data().nombre;
+            this.cantIntegrantes= res.payload.data().cantIntegrantes;
+            this.dia= res.payload.data().dia;
+            this.precio= res.payload.data().precio;
+            this.direccion= res.payload.data().direccion;
+            this.hora= res.payload.data().hora;
+    
+            switch (this.dia) {
+              case 1:
+                  this.nombreDia='Lunes';
+                  break;
+              case 2:
+                  this.nombreDia='Martes';
+                  break;
+              case 3:
+                  this.nombreDia='Miercoles';
+                  break;
+              case 4:
+                  this.nombreDia='Jueves';
+                  break;
+              case 5:
+                  this.nombreDia='Viernes';
+                  break;
+              case 6:
+                  this.nombreDia='Sabado';
+                  break;
+              default:
+                  //Declaraciones ejecutadas cuando el resultado de expresión coincide con el valor1
+                  this.nombreDia='Domingo';
+                  break;            
+            }
+    
+            this.linkGrupo=res.payload.id;
+    
+    //        this.fecha= this.utilidades.fechaProximoDia(this.dia);
+            this.fecha_Bck= this.utilidades.buscar(this.dia);
+    
+    //        window.alert(this.fecha_Bck.substring(3,5) + '/' + this.fecha_Bck.substring(0,2) + '/' + this.fecha_Bck.substring(6,10));
+            
+            this.fecha= this.fecha_Bck.substring(3,5) + '/' + this.fecha_Bck.substring(0,2) + '/' + this.fecha_Bck.substring(6,10);
+    
+            if (this.juegan.length==10)
+            {
+              this.alertasService.mostratSwettAlert('', '¡Ya somos 10!','success');
+            }
+
+          }
+          else
+          {
+            if (this.cantIntegrantes==0)
+            {
+              this.alertasService.mostratSwettAlert('', 'El grupo no existe','error');
+              this.router.navigate(['/']);
+            }
+          }
+          this.infoGrupo=true;
+          this.cargando=false;
+        });
       });
     });
-
+    /*
     this.idGrupo= this.gruposService.obtengoIdGrupo(this.router.url);
 
     this.gruposService.getGrupo(this.idGrupo).subscribe((res:any)=>{
@@ -149,6 +232,7 @@ export class HeaderComponent {
       this.infoGrupo=true;
       this.cargando=false;
     });
+    */
   }
 
   insertaJugador(idGrupo: string, nombre:string, juega: boolean, activo: boolean, habitual: boolean, 
@@ -256,5 +340,12 @@ export class HeaderComponent {
 
   back(){
     this.router.navigate(['/']);
+  }
+
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.juganServiceSubscription?.unsubscribe()
+    this.noJuganServiceSubscription?.unsubscribe()
   }
 }
