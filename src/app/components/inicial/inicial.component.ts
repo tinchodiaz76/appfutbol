@@ -6,13 +6,9 @@ import { faWhatsapp} from '@fortawesome/free-brands-svg-icons'
 import { GruposService } from 'src/app/services/grupos.service';
 import { AlertasService } from 'src/app/services/alertas.service';
 import { JueganService } from 'src/app/services/juegan.service';
-/*
-import { ThisReceiver } from '@angular/compiler';
-import { exit } from 'process';
-import { resolve } from 'dns';
-*/
+
 import { grupoModel } from 'src/app/models/grupo.model';
-import { ClipboardService } from 'ngx-clipboard';
+//import { ClipboardService } from 'ngx-clipboard';
 import * as moment from 'moment';
 import { UtilidadesService } from 'src/app/services/utilidades.service';
 
@@ -35,13 +31,11 @@ export class InicialComponent implements OnInit {
   nombreEquipo!: string;
   codigoValido: boolean= false;
   fecha!: string;
-  fechaActual!: Date;
   fechaHoy !: string;
   FechaHoy : Date= new Date();
-  jugador: any;
   grupo!: grupoModel;
   idGrupo: string='';
-  pedro !: string;
+  jugador: any;
 
   constructor(private router: Router,
               private gruposService: GruposService,
@@ -90,13 +84,12 @@ export class InicialComponent implements OnInit {
         this.codigoValido= true;
         this.gruposService.setCodigoGrupo(this.codigo);
         this.nombreEquipo='Estás en ' + res.payload.data().nombre;
-        this.fechaActual=new Date();
 
         if (moment(res.payload.data().fechaProximoPartido).isBefore(moment().format('L')))
         {
 //          window.alert('true')
 
-          this.falseJuega(res.payload.id);
+          this.jueganService.falseJuega(res.payload.id);
 
           //Debo cambiar la fechaProximoPartido, en la coleccion GRUPOS.
           this.grupo={
@@ -123,6 +116,7 @@ export class InicialComponent implements OnInit {
     })
   }
 
+
   eliminarCodigo()
   {
     this.codigo='';
@@ -146,27 +140,6 @@ export class InicialComponent implements OnInit {
     {
       this.codigoValido=false;
     }
-  }
-
-  falseJuega(idGrupo: string)
-  {
-    //Paso el campo juega a false, si el jugador no fue modificado 
-    this.jueganService.getJugadoresByGroup(idGrupo).subscribe((res:any)=>{
-//      console.log('getJugadoresByGroup--->res=', res);
-        res.forEach((element:any) => {
-          if (element.payload.doc.data().juega)
-          {
-              this.jugador={
-                        juega: false,
-                        fechaActualizacion: new Date()
-                      }
-
-              this.jueganService.actualizarJugador(element.payload.doc.id , this.jugador).catch(error=>{
-                console.log(error);
-              });
-          }
-        });
-    });
   }
 
   compartirWhatsapp() {

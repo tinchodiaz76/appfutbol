@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { jugadorHabitualModel } from '../models/habituales.model';
-import { Observable } from 'rxjs';
+import { Observable, Subscription} from 'rxjs';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-
 
 @Injectable({
   providedIn: 'root'
@@ -15,15 +14,19 @@ export class JueganService {
   nombreSplit:any=[];
   nombre: string='';
   firebase: any;
+  jugador: any;
+  subscription: Subscription | undefined;
 
   constructor(
-    private firestore: AngularFirestore,
-    private http: HttpClient
+    private firestore: AngularFirestore
     ) { }
 
   getJugadoresByGroup(idGrupo: any):Observable<any>
   {
     return this.firestore.collection('jugadores', ref => ref.where('idGrupo', '==', idGrupo)).snapshotChanges();
+    //return this.firestore.collection('jugadores', ref => ref.where('idGrupo', '==', idGrupo)).get();
+      
+    
   }
 
 
@@ -41,14 +44,12 @@ export class JueganService {
   {
     return this.firestore.collection('jugadores').doc(id).delete();
   }
-/*
-  getJugador(id: string) :Observable<any>
-  {
-    return this.firestore.collection('jugadores').doc(id).snapshotChanges();
-  }
-*/
+
   actualizarJugador(id: string, data:any) : Promise<any>
   {
+//    console.log('data.nombre=' + data.nombre);
+//    console.log('data.juega=' + data.juega);
+
     return this.firestore.collection('jugadores').doc(id).update(data);
   }
 
@@ -71,5 +72,37 @@ export class JueganService {
     });
 
     return this.nombre
+  }
+
+  falseJuega(idGrupo: string)
+  {
+    //Paso el campo juega a false, si el jugador no fue modificado 
+    this.subscription = this.getJugadoresByGroup(idGrupo).subscribe((res:any)=>{
+//      console.log('getJugadoresByGroup--->res=', res);
+        res.forEach((element:any) => {
+          if (element.payload.doc.data().juega)
+          {
+              this.jugador={
+                        juega: false,
+                        fechaActualizacion: new Date()
+                      }
+
+              if (!element.payload.doc.data().habitual)
+              {
+                this.eliminarJugador(element.payload.doc.id).catch(error=>{
+                  console.log(error);
+                });
+              }
+              else
+              {
+                this.actualizarJugador(element.payload.doc.id , this.jugador).catch(error=>{
+                  console.log(error);
+                });
+              }
+          }
+        });
+
+        this.subscription?.unsubscribe();
+    });
   }
 }
