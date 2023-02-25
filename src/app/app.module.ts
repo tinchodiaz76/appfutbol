@@ -14,7 +14,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 //Para la PWA
 import { ServiceWorkerModule } from '@angular/service-worker';
 
-import { HeaderComponent } from './components/header/header.component';
 import { DialogoJugadorComponent } from './components/dialogo-jugador/dialogo-jugador.component';
 
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -41,7 +40,6 @@ import { InicialComponent } from './components/inicial/inicial.component';
   declarations: [
     AppComponent,
     ListadoHabitualesComponent,
-    HeaderComponent,
     DialogoJugadorComponent,
     GrupoComponent,
     InicialComponent

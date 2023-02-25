@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { jugadorHabitualModel } from 'src/app/models/habituales.model';
 import { grupoModel } from 'src/app/models/grupo.model';
 import { UtilidadesService } from 'src/app/services/utilidades.service';
@@ -28,6 +28,7 @@ import { faWhatsapp} from '@fortawesome/free-brands-svg-icons'
 //Dialog
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { DialogoJugadorComponent } from '../dialogo-jugador/dialogo-jugador.component';
+import { Subscription } from 'rxjs';
 
 export interface DialogData {
   cantJugadores: number,
@@ -40,10 +41,10 @@ export interface DialogData {
   templateUrl: './listado-habituales.component.html',
   styleUrls: ['./listado-habituales.component.css']
 })
-export class ListadoHabitualesComponent implements OnInit {
+export class ListadoHabitualesComponent implements OnInit  {
    
-  juegan :jugadorHabitualModel[]=[];//any[]=[];
-  noJuegan :jugadorHabitualModel[]=[];//any[]=[];
+  public juegan :jugadorHabitualModel[]=[];//any[]=[];
+  public noJuegan :jugadorHabitualModel[]=[];//any[]=[];
   jugador: any;
   idGrupo!: string;
   cantIntegrantes!: number;
@@ -73,11 +74,12 @@ export class ListadoHabitualesComponent implements OnInit {
   faRightFromBracket= faRightFromBracket;
   faPlus=faPlus;
   faWhatsapp= faWhatsapp;
-  cambioEstadoJugadores: boolean=false;
   
+  //subscription: Subscription | undefined;
+  subscriptionGrupo: Subscription | undefined;
+  subscription: Subscription | undefined;
+
   constructor(private jueganService: JueganService,
-              private jugadoresService: JugadoresService,
-              private firestore: AngularFirestore,
               private router: Router,
               private gruposService: GruposService,
               private utilidades: UtilidadesService,
@@ -90,201 +92,203 @@ export class ListadoHabitualesComponent implements OnInit {
 
   ngOnInit()
   {
+//    this.juegan=[];
+//    this.noJuegan=[];
+    //tomo el idGrupo que viene en la URL
     this.idGrupo= this.gruposService.obtengoIdGrupo(this.router.url)
-//    this.getJugadoreByGroup(this.idGrupo);
 
+    //Me fijo si el Grupo Existe
+    this.grupoService.getGrupo(this.idGrupo).subscribe((grupoSnapshot:any)=>{
 
-    this.gruposService.getGrupo(this.idGrupo).subscribe(async (res:any)=>{
-//      console.log('res=', res.payload);
-//      console.log('res=', res.payload.data());
-      
-      if (res.payload.data())
+      if (grupoSnapshot.payload.data()==undefined)
       {
-        
-        if (moment(res.payload.data().fechaProximoPartido).isBefore(moment().format('L')))
-        {
-          this.cambioEstadoJugadores=true;
-//          window.alert('this.cambioEstadoJugadores-1='+this.cambioEstadoJugadores);
-
-          this.jueganService.falseJuega(res.payload.id)
-
-          //Debo cambiar la fechaProximoPartido, en la coleccion GRUPOS.
-          this.grupo={
-          nombre:res.payload.data().nombre,
-          cantIntegrantes: res.payload.data().cantIntegrantes,
-          dia: res.payload.data().dia,
-          direccion: res.payload.data().direccion,
-          hora: res.payload.data().hora,
-          precio: res.payload.data().precio,
-          fechaProximoPartido: this.utilidades.buscar(parseInt(res.payload.data().dia)),
-          juegaTorneo: res.payload.data().juegaTorneo,
-          mail: res.payload.data().mail
-          };
-
-          this.idGrupo= res.payload.id;
-
-          this.grupoService.actualizarGrupo(this.idGrupo, this.grupo).then(()=>{
-//                console.log('llamo a getJugadoreByGroup-con Modificacion de GRUPO');
-            this.getJugadoreByGroup(this.idGrupo);
-            this.cambioEstadoJugadores=false;
-          }).catch(error=>{
-            console.log(error);
-          });          
-        }
-        else
-        {
-          //this.cambioEstadoJugadores=false;
-//          window.alert('this.cambioEstadoJugadores-2='+this.cambioEstadoJugadores);
-//            console.log('llamo a getJugadoreByGroup ONINIT');
-          this.getJugadoreByGroup(this.idGrupo);
-        }
-
-        this.cantIntegrantes= res.payload.data().cantIntegrantes;
-        this.precio= res.payload.data().precio;
-
-        this.title= res.payload.data().nombre;
-        this.cantIntegrantes= res.payload.data().cantIntegrantes;
-        this.dia= res.payload.data().dia;
-        this.precio= res.payload.data().precio;
-        this.direccion= res.payload.data().direccion;
-        this.hora= res.payload.data().hora;
-    
-        switch (this.dia) {
-          case 1:
-              this.nombreDia='Lunes';
-              break;
-          case 2:
-              this.nombreDia='Martes';
-              break;
-          case 3:
-              this.nombreDia='Miercoles';
-              break;
-          case 4:
-              this.nombreDia='Jueves';
-              break;
-          case 5:
-              this.nombreDia='Viernes';
-              break;
-          case 6:
-              this.nombreDia='Sabado';
-              break;
-          default:
-              //Declaraciones ejecutadas cuando el resultado de expresión coincide con el valor1
-              this.nombreDia='Domingo';
-              break;            
-        }
-    
-        this.linkGrupo=res.payload.id;
-
-//        this.fecha= this.utilidades.fechaProximoDia(this.dia);
-        this.fecha_Bck= this.utilidades.buscar(this.dia);
-
-//        window.alert(this.fecha_Bck.substring(3,5) + '/' + this.fecha_Bck.substring(0,2) + '/' + this.fecha_Bck.substring(6,10));
-        
-        this.fecha= this.fecha_Bck.substring(3,5) + '/' + this.fecha_Bck.substring(0,2) + '/' + this.fecha_Bck.substring(6,10);
+//          editGrupoSubscribe.unsubscribe();
+          this.alertasService.mostratSwettAlert('','El codigo no existe', 'error');
       }
       else
       {
-        this.alertasService.mostratSwettAlert('', 'El grupo no existe','error');
-        this.router.navigate(['/']);
-      }
-    });
-  }
+          this.cantIntegrantes= grupoSnapshot.payload.data().cantIntegrantes;
+          this.precio= grupoSnapshot.payload.data().precio;
 
-  getJugadoreByGroup(idGrupo: string)
-  {
-      this.jueganService.getJugadoresByGroup(idGrupo).subscribe((catsSnapshot) => {
-        this.juegan=[]
-        this.noJuegan=[];
-        catsSnapshot.forEach((catData: any) => {
-          //console.log(catData.payload.doc.data());
-          if (catData.payload.doc.data().juega===true)
+          this.title= grupoSnapshot.payload.data().nombre;
+          this.cantIntegrantes= grupoSnapshot.payload.data().cantIntegrantes;
+          this.dia= grupoSnapshot.payload.data().dia;
+          this.precio= grupoSnapshot.payload.data().precio;
+          this.direccion= grupoSnapshot.payload.data().direccion;
+          this.hora= grupoSnapshot.payload.data().hora;
+      
+          this.linkGrupo=grupoSnapshot.payload.id;
+          this.fecha_Bck= this.utilidades.buscar(this.dia);
+          this.fecha= this.fecha_Bck.substring(3,5) + '/' + this.fecha_Bck.substring(0,2) + '/' + this.fecha_Bck.substring(6,10);
+
+          switch (this.dia) 
           {
-            this.juegan.push({
-              /*
-              id: catData.payload.doc.id,
-              data: catData.payload.doc.data()
-              */
-              id: catData.payload.doc.id,
-              ...catData.payload.doc.data()
-            });
-            this.value=(this.precio/this.juegan.length).toFixed(2);
+              case 1:
+                  this.nombreDia='Lunes';
+                  break;
+              case 2:
+                  this.nombreDia='Martes';
+                  break;
+              case 3:
+                  this.nombreDia='Miercoles';
+                  break;
+              case 4:
+                  this.nombreDia='Jueves';
+                  break;
+              case 5:
+                  this.nombreDia='Viernes';
+                  break;
+              case 6:
+                  this.nombreDia='Sabado';
+                  break;
+              default:
+                  //Declaraciones ejecutadas cuando el resultado de expresión coincide con el valor1
+                  this.nombreDia='Domingo';
+                  break;            
+          };
+
+
+          if (moment(grupoSnapshot.payload.data().fechaProximoPartido).isBefore(moment().format('L')))
+          {
+//            window.alert('222222');
+            this.jueganService.falseJuega(grupoSnapshot.payload.id);
+            //Debo cambiar la fechaProximoPartido, en la coleccion GRUPOS.
+            this.grupo={
+                nombre:grupoSnapshot.payload.data().nombre,
+                cantIntegrantes: grupoSnapshot.payload.data().cantIntegrantes,
+                dia: grupoSnapshot.payload.data().dia,
+                direccion: grupoSnapshot.payload.data().direccion,
+                hora: grupoSnapshot.payload.data().hora,
+                precio: grupoSnapshot.payload.data().precio,
+                fechaProximoPartido: this.utilidades.buscar(parseInt(grupoSnapshot.payload.data().dia)),
+                juegaTorneo: grupoSnapshot.payload.data().juegaTorneo,
+                mail: grupoSnapshot.payload.data().mail
+            };
+
+            this.grupoService.actualizarGrupo(this.idGrupo, this.grupo).then(()=>{
+              console.log('Se actualizo el GRUPO exitosamente');
+            }).catch(error=>{
+              console.log(error);
+            }); 
           }
           else
           {
-            if (catData.payload.doc.data().habitual)
-            {
-              this.noJuegan.push({
-                id: catData.payload.doc.id,
-                ...catData.payload.doc.data()
-              })
-            }
-            this.value=(this.precio/this.juegan.length).toFixed(2);
+//            window.alert('333333');
+            this.jueganService.getJugadores().subscribe((jugadoresSnapshot) => {
+              this.juegan=[];
+              this.noJuegan=[];
+
+              jugadoresSnapshot.forEach((catData: any) => {
+                //Si pertenece al grupo
+                if (catData.payload.doc.data().idGrupo== this.idGrupo)
+                {
+//                  console.log(catData.payload.doc.data());
+                  //Si juega
+                  if (catData.payload.doc.data().juega)
+                  {
+                    this.juegan.push({
+                      id: catData.payload.doc.id,
+                      idGrupo: catData.payload.doc.data().idGrupo,
+                      nombre: catData.payload.doc.data().nombre,
+                      juega: catData.payload.doc.data().juega,
+                      habitual: catData.payload.doc.data().habitual,
+                      activo: catData.payload.doc.data().activo,
+                      fechaActualizacion: catData.payload.doc.data().fechaActualizacion
+                    });
+                  }
+                  else
+                  {
+                    this.noJuegan.push({
+                      id: catData.payload.doc.id,
+                      idGrupo: catData.payload.doc.data().idGrupo,
+                      nombre: catData.payload.doc.data().nombre,
+                      juega: catData.payload.doc.data().juega,
+                      habitual: catData.payload.doc.data().habitual,
+                      activo: catData.payload.doc.data().activo,
+                      fechaActualizacion: catData.payload.doc.data().fechaActualizacion
+                    });
+                  }
+                }
+              });//Finalo el forEach
+
+              this.value=(this.precio/this.juegan.length).toFixed(2);
+
+              this.infoJugadores= true;
+              this.infoGrupo=true;
+              this.cargando=false;
+      
+              this.showDiv=false;
+//              console.log('this.juegan='+ this.juegan.length);
+            });
           }
-        });
+      }
+  })
+}
 
-//        console.log('this.juegan=', this.juegan);
-//        console.log('this.noJuegan=', this.noJuegan);
-
-        this.infoJugadores= true;
-        this.infoGrupo=true;
-        this.cargando=false;
-
-        this.showDiv=false;
-        this.jugadoresService.seteoJuegan(this.juegan);
-        this.jugadoresService.seteoNoJuegan(this.noJuegan);
-
-        if (this.juegan.length==10 && !this.cambioEstadoJugadores)
-        {
-          this.alertasService.mostratSwettAlert('', '¡Ya somos 10!','success');
-        }
-
-//////////////////        this.irArriba();
-      });
-  }
 
   actualizaJugador(estado: boolean, index:number){
-
     this.showDiv= true;
-
-//    console.log('Entro en actualizaJugador');
     //Si en el ESTADO=TRUE TOMO LA LISTA QUE NO THIS.NOJUEGAN
     //Si en el ESTADO=FALSE TOMO LA LISTA QUE NO THIS.JUEGAN
     if (estado)
-    {      
-      this.actualiza(this.noJuegan[index], estado);
+    { 
+//      this.actualiza(this.noJuegan[index], estado);
+
+      const data = {
+        idGrupo:this.noJuegan[index].idGrupo,
+        nombre: this.noJuegan[index].nombre,
+        juega: true,
+        habitual: this.noJuegan[index].habitual,
+        activo: this.noJuegan[index].activo,
+        fechaActualizacion: new Date()
+      };
+
+      this.jueganService.actualizarJugador(this.noJuegan[index].id, data).then(()=>{
+        this.showDiv=false;
+        console.log('Documento editado exitósamente');
+
+        if (this.juegan.length===10)
+        {
+            this.alertasService.mostratSwettAlert('', '¡Ya somos 10!','success');
+        }
+      }, (error) => {
+        console.log(error);
+      });
     }
     else
     {
+      //En el estado viene FALSE, si es habitual cambia solo el estado a FALSE. Si no es habitual, elimino el 
+      //el jugador.
+      /*
       this.actualiza(this.juegan[index], estado)
+      */
+      if (this.juegan[index].habitual)
+      {
+        const data = {
+          idGrupo:this.juegan[index].idGrupo,
+          nombre: this.juegan[index].nombre,
+          juega: false,
+          habitual: this.juegan[index].habitual,
+          activo: this.juegan[index].activo,
+          fechaActualizacion: new Date()
+        };
+      
+        this.jueganService.actualizarJugador(this.juegan[index].id, data).then(()=>{
+          this.showDiv=false;
+          console.log('Documento editado exitósamente');
+        }, (error) => {
+          console.log(error);
+        });
+      }
+      else
+      {
+        this.jueganService.eliminarJugador(this.juegan[index].id).then(()=>{
+          console.log('Documento eliminado exitósamente');
+        }, (error) => {
+          console.log(error);
+        });
+      }
     }
-  }
-
-  actualiza(lista: any, estado: boolean)
-  {
-          if (!estado && !lista.habitual)
-          {
-            this.jueganService.eliminarJugador(lista.id).catch(error=>{
-              console.log(error);
-            });
-          }
-          else
-          {
-            const data = {
-              idGrupo:lista.idGrupo,
-              nombre: lista.nombre,
-              juega: estado,
-              habitual: lista.habitual,
-              activo: lista.activo,
-              fechaActualizacion: new Date()
-            };
- 
-            this.jueganService.actualizarJugador(lista.id , data).then(()=>{
-              console.log('Documento editado exitósamente');
-            }, (error) => {
-              console.log(error);
-            });
-          }
   }
 
   irArriba()
@@ -306,17 +310,13 @@ export class ListadoHabitualesComponent implements OnInit {
       nombre, 
       juega, 
       activo,
-      habitual,
-      fechaCreacion: new Date()//,
-      //fechaActualizacion: new Date()
+      habitual
       };
-
       //    console.log('jugador=', this.jugador);
-
       this.jueganService.agregarJugador(this.jugador).then(()=>{
-      //      console.log('Jugador Agregado con Exito');
-      this.alertasService.mostratSwettAlert(title, mensaje, icono);
-      this.showDiv= false;
+        console.log('Documento agregado exitósamente');
+        this.alertasService.mostratSwettAlert(title, mensaje, icono);
+        this.showDiv= false;
       }).catch(error=>{
       console.log(error);
       });
@@ -330,9 +330,6 @@ export class ListadoHabitualesComponent implements OnInit {
     });
 
     dialogo1.afterClosed().subscribe(art => {
-
-//          window.alert('dialogo1.afterClosed().nroGrupo='+ this.nroGrupo);
-
           if (art.nombre!='' || art=='undefined')
           //Controlo que haya ingresado un nomnbre
           {
@@ -394,14 +391,19 @@ export class ListadoHabitualesComponent implements OnInit {
   }
 
   compartirWhatsapp() {
-
-    //window.open("https://web.whatsapp.com/send?text=quienJuega-El codigo del grupo es: "+ this.linkGrupo);
     window.open("https://api.whatsapp.com/send?text=Ingresá aquí www.quienjuega.com.ar/grupo/"+ this.linkGrupo + " para sumarte");
-    //this.clipboardApi.copyFromContent(this.linkGrupo);
-    //this.alertasService.mostratSwettAlertToast('Link copiado','success');
   }
 
   back(){
     this.router.navigate(['/']);
   }
+
+  
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.juegan=[];
+    this.subscription?.unsubscribe();
+  }
+  
 }

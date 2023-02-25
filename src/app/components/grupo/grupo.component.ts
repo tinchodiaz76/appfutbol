@@ -13,6 +13,7 @@ import { ClipboardService } from 'ngx-clipboard';
 import { faCopy, faFloppyDisk, faFutbol, faSquareCaretLeft, faRightFromBracket} from '@fortawesome/free-solid-svg-icons';
 import { faWhatsapp} from '@fortawesome/free-brands-svg-icons'
 import { UtilidadesService } from 'src/app/services/utilidades.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-grupo',
@@ -39,6 +40,8 @@ export class GrupoComponent implements OnInit {
   grabo=true;
   
   fecha: string='';
+
+  subscription: Subscription | undefined;
 
   constructor(private grupoService: GruposService,
               private alertasService: AlertasService,
@@ -77,7 +80,8 @@ export class GrupoComponent implements OnInit {
                                   precio: res.payload.data().precio, 
                                   mail:res.payload.data().mail, 
                                   juegaTorneo: res.payload.data().juegaTorneo})
-        });
+         });
+        
     }
 
     this.puedeNavegar=false;
@@ -141,14 +145,14 @@ export class GrupoComponent implements OnInit {
             juegaTorneo: this.grupoForm.get('juegaTorneo')?.value,
             mail: this.grupoForm.get('mail')?.value
           }
-          
-          this.grupoService.actualizarGrupo(this.idGrupo, this.grupo).then(()=>{
-      //      console.log('Jugador Agregado con Exito');
-            this.alertasService.mostratSwettAlert('', '¡Se modifico el grupo!', 'success');
 
+          this.grupoService.actualizarGrupo(this.idGrupo, this.grupo).then(()=>{
+            console.log('Se actualizo el GRUPO');
+            this.alertasService.mostratSwettAlert('', '¡Se modifico el grupo!', 'success');
           }).catch(error=>{
             console.log(error);
           });
+
         }
       }
       else

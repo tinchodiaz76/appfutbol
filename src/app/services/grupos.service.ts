@@ -36,9 +36,11 @@ export class GruposService {
     return this.firestore.collection('grupos').doc(idrupo).snapshotChanges();
   }
 
-  actualizarGrupo(id: string, data:any) : Promise<any>
+  actualizarGrupo(id: string, data:any) //: Promise<any>
   {
-    return this.firestore.collection('grupos').doc(id).update(data);
+    //return this.firestore.collection('grupos').doc(id).update(data);
+    //return this.firestore.collection('jugadores', ref => ref.where('idGrupo', '==', idGrupo)).snapshotChanges();
+    return this.firestore.collection('grupos').doc(id).set(data)
   }
 
   setCodigoGrupo(codigoGrupo :any){
