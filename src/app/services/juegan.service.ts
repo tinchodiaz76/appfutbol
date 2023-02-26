@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { jugadorHabitualModel } from '../models/habituales.model';
 import { Observable, Subscription} from 'rxjs';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { JugadoresService } from './jugadores.service';
 
 @Injectable({
   providedIn: 'root'
@@ -39,13 +38,6 @@ export class JueganService {
   {
     return this.firestore.collection('jugadores').add(jugador);
   }
-
-  /*
-  getJugadores() :Observable<any>
-  {
-    return this.firestore.collection('jugadores',ref=>ref.orderBy('fechaCreacion','asc')).snapshotChanges();
-  }
-  */
 
   eliminarJugador(id:string) //:Promise<any>
   {

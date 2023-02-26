@@ -26,11 +26,6 @@ export class GruposService {
     return this.firestore.collection('grupos').add(grupo);
   }
 
-  getGrupos():Observable<any>
-  {
-    return this.firestore.collection('grupos').get();
-  }
-
   getGrupo(idrupo: string):Observable<any>
   {
     return this.firestore.collection('grupos').doc(idrupo).snapshotChanges();
@@ -54,12 +49,4 @@ export class GruposService {
     //console.log('JSON.parse(usuario)=', JSON.parse(usuario));
     return (codigoGrupo);
   }
-
-  logout()
-  {
-    //this.logueado=false;
-    localStorage.removeItem('codigoGrupo');
-  }
-
-
 }

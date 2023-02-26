@@ -5,7 +5,6 @@ import { UtilidadesService } from 'src/app/services/utilidades.service';
 
 //Servicios
 import { JueganService } from 'src/app/services/juegan.service';
-import { JugadoresService } from 'src/app/services/jugadores.service';
 import { GruposService } from 'src/app/services/grupos.service';
 
 //Rutas
@@ -174,7 +173,50 @@ export class ListadoHabitualesComponent implements OnInit  {
           else
           {
 //            window.alert('333333');
-            this.jueganService.getJugadores().subscribe((jugadoresSnapshot) => {
+            this.jueganService.getJugadoresByGroup(this.idGrupo).subscribe((jugadoresSnapshot) => {
+              this.juegan=[];
+              this.noJuegan=[];
+              jugadoresSnapshot.forEach((catData: any) => {
+                //Si pertenece al grupo
+//                  console.log(catData.payload.doc.data());
+                  //Si juega
+                  if (catData.payload.doc.data().juega)
+                  {
+                    this.juegan.push({
+                      id: catData.payload.doc.id,
+                      idGrupo: catData.payload.doc.data().idGrupo,
+                      nombre: catData.payload.doc.data().nombre,
+                      juega: catData.payload.doc.data().juega,
+                      habitual: catData.payload.doc.data().habitual,
+                      activo: catData.payload.doc.data().activo,
+                      fechaActualizacion: catData.payload.doc.data().fechaActualizacion
+                    });
+                  }
+                  else
+                  {
+                    this.noJuegan.push({
+                      id: catData.payload.doc.id,
+                      idGrupo: catData.payload.doc.data().idGrupo,
+                      nombre: catData.payload.doc.data().nombre,
+                      juega: catData.payload.doc.data().juega,
+                      habitual: catData.payload.doc.data().habitual,
+                      activo: catData.payload.doc.data().activo,
+                      fechaActualizacion: catData.payload.doc.data().fechaActualizacion
+                    });
+                  }
+              });//Finalo el forEach
+
+              this.value=(this.precio/this.juegan.length).toFixed(2);
+
+              this.infoJugadores= true;
+              this.infoGrupo=true;
+              this.cargando=false;
+      
+              this.showDiv=false;
+//              console.log('this.juegan='+ this.juegan.length);
+
+/*            
+              this.jueganService.getJugadores().subscribe((jugadoresSnapshot) => {
               this.juegan=[];
               this.noJuegan=[];
 
@@ -219,6 +261,7 @@ export class ListadoHabitualesComponent implements OnInit  {
       
               this.showDiv=false;
 //              console.log('this.juegan='+ this.juegan.length);
+*/
             });
           }
       }
@@ -259,9 +302,6 @@ export class ListadoHabitualesComponent implements OnInit  {
     {
       //En el estado viene FALSE, si es habitual cambia solo el estado a FALSE. Si no es habitual, elimino el 
       //el jugador.
-      /*
-      this.actualiza(this.juegan[index], estado)
-      */
       if (this.juegan[index].habitual)
       {
         const data = {

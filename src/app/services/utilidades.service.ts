@@ -9,31 +9,6 @@ export class UtilidadesService {
 
   constructor() { }
 
-  sumarDias(fecha: Date, dias: number) :string
-  {
-    fecha.setDate(fecha.getDate() + dias);
-
-    if (fecha.getDate()<10)
-    {
-      if ((fecha.getMonth()+1)<10)
-        this.fecha= fecha.getFullYear() + `0${fecha.getMonth()+1}` +`0${fecha.getDate()}`;
-      else
-        this.fecha= fecha.getFullYear() + `0${fecha.getMonth()+1}` +`0${fecha.getDate()}`;
-    }
-    else
-    {
-      if ((fecha.getMonth()+1)<10)
-        this.fecha= fecha.getFullYear() + `0${fecha.getMonth()+1}` + `${fecha.getDate()}`;
-      else
-        this.fecha= fecha.getFullYear() + `0${fecha.getMonth()+1}` + `${fecha.getDate()}`;
-    }
-
-    return this.fecha;
-
-//    window.alert('this.fecha='+ this.fecha);
-  }
-  
-
   buscar(dia: number) 
   {
       let proximoPartido;
@@ -59,8 +34,6 @@ export class UtilidadesService {
       {
 //        window.alert('222222222');
         //7-2=5
-        if (diaRequerido<hoy)
-        {
 //          window.alert('33333333');
           if (hoy===7)
           {
@@ -76,7 +49,7 @@ export class UtilidadesService {
 //            window.alert('proximoPartido-1='+proximoPartido);
             return moment().day(proximoPartido).format('L');
           }
-        }
+/*        
         else
         {
 //          window.alert('44444444');
@@ -84,6 +57,8 @@ export class UtilidadesService {
           window.alert('proximoPartido-2='+proximoPartido);
           return moment().add(1, 'weeks').day(proximoPartido).format('L');
         }
+      }
+*/      
       }
   }
 }
