@@ -34,75 +34,56 @@ export class UtilidadesService {
   }
   
 
- buscar(dia: number) {
-  let proximoPartido;
-  const diaRequerido = dia;
-  let hoy = moment().isoWeekday();
-  
-//  window.alert('diaRequerido-1='+diaRequerido);
-//  window.alert('hoy='+hoy);
-
-  if (hoy <= diaRequerido) {
-    if (hoy==diaRequerido)
-    {
-      return moment().add(1,'weeks').format('L');
-    }
-    else
-    {
-      proximoPartido= moment().isoWeekday()+(diaRequerido-hoy);
-
-      return moment().day(proximoPartido).format('L');
-    }
-  } else 
+  buscar(dia: number) 
   {
-      proximoPartido= moment().add(1, 'weeks').isoWeekday() - (hoy-diaRequerido);
-      return moment().add(1, 'weeks').day(proximoPartido).format('L');
-  }
-}
-
-
-/*
-  fechaProximoDia(dia: number):string
-  //dia es el Numero de Dia que eligio para jugar al futbol (0= Domingo al Sabado=6)
-  {
-    var d = new Date();
-    var nrodiaActual:number= d.getDay();
-    
-//    window.alert('nrodiaActual='+ nrodiaActual);
-//    window.alert('dia='+ dia);
-    //****************************** Opcion 2 **********************
-    //dia= 4
-    //nrodiaActual= 4
-    /****************************** Opcion 1 ***********************
-    //dia= 2 
-    //nrodiaActual= 4
-    /******************************/
-    //dia= 0
-    //nrodiaActual= 4
-    /****************************** Opcion 1 ***********************
-    //dia= 5
-    //nrodiaActual= 4
-
-    if (dia<nrodiaActual)
-    {
-      //Opcion 1
-      this.fecha= this.sumarDias(d,7-(nrodiaActual-dia))
-      
-    }
-    else
-    {
-        if (dia==nrodiaActual)
+      let proximoPartido;
+      const diaRequerido = dia;
+      let hoy = moment().isoWeekday();
+//      let hoy= 5
+//Viernes 24 HOY=5
+//Martes 28 DIAREQUERIDO=2
+      if (hoy <= diaRequerido) 
+      {
+        if (hoy==diaRequerido)
         {
-          //Opcion 2
-          this.fecha= this.sumarDias(d,7);
+          return moment().add(1,'weeks').format('L');
         }
         else
         {
-          //Opcion 3
-          this.fecha= this.sumarDias(d,dia-nrodiaActual);
+          proximoPartido= moment().isoWeekday()+(diaRequerido-hoy);
+
+          return moment().day(proximoPartido).format('L');
         }
-    }    
-    return this.fecha;
+      } 
+      else 
+      {
+//        window.alert('222222222');
+        //7-2=5
+        if (diaRequerido<hoy)
+        {
+//          window.alert('33333333');
+          if (hoy===7)
+          {
+            //PROBADO
+            proximoPartido= moment().add(1, 'weeks').isoWeekday()-(hoy-diaRequerido);
+//            window.alert('proximoPartido-0='+ proximoPartido);
+            return moment().day(proximoPartido).format('L');
+          }
+          else
+          {
+//            window.alert('entrooooo');
+            proximoPartido= moment().add(1, 'weeks').isoWeekday()+(diaRequerido-hoy);
+//            window.alert('proximoPartido-1='+proximoPartido);
+            return moment().day(proximoPartido).format('L');
+          }
+        }
+        else
+        {
+//          window.alert('44444444');
+          proximoPartido= moment().add(1, 'weeks').isoWeekday() - (hoy-diaRequerido);
+          window.alert('proximoPartido-2='+proximoPartido);
+          return moment().add(1, 'weeks').day(proximoPartido).format('L');
+        }
+      }
   }
-*/  
 }
