@@ -82,6 +82,7 @@ export class InicialComponent implements OnInit {
       else
       {
         this.codigoValido= true;
+        this.grupoService.removeCodigoGrupo();
         this.gruposService.setCodigoGrupo(this.codigo);
         this.nombreEquipo='Estás en ' + res.payload.data().nombre;
 

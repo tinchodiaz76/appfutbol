@@ -435,6 +435,8 @@ export class ListadoHabitualesComponent implements OnInit  {
   }
 
   back(){
+    this.grupoService.removeCodigoGrupo();
+    this.gruposService.setCodigoGrupo(this.linkGrupo);
     this.router.navigate(['/']);
   }
 

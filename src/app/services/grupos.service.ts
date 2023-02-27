@@ -38,6 +38,10 @@ export class GruposService {
     return this.firestore.collection('grupos').doc(id).set(data)
   }
 
+  removeCodigoGrupo(){
+    localStorage.removeItem('codigoGrupo');
+  }
+
   setCodigoGrupo(codigoGrupo :any){
     localStorage.setItem('codigoGrupo',JSON.stringify(codigoGrupo));
   }
