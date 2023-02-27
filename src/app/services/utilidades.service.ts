@@ -9,7 +9,7 @@ export class UtilidadesService {
 
   constructor() { }
 
-  buscar(dia: number) 
+  buscar(dia: number)
   {
       let proximoPartido;
       const diaRequerido = dia;
@@ -19,15 +19,16 @@ export class UtilidadesService {
 //Martes 28 DIAREQUERIDO=2
       if (hoy <= diaRequerido) 
       {
-        if (hoy==diaRequerido)
+        if (hoy!=diaRequerido)
         {
-          return moment().add(1,'weeks').format('L');
-        }
-        else
-        {
+          //PROBADO UN DIA LUNES, CON DIAREQUERIDO=6(SABADO)
           proximoPartido= moment().isoWeekday()+(diaRequerido-hoy);
 
           return moment().day(proximoPartido).format('L');
+        }
+        else
+        {
+          return moment().format('L')
         }
       } 
       else 
@@ -35,30 +36,27 @@ export class UtilidadesService {
 //        window.alert('222222222');
         //7-2=5
 //          window.alert('33333333');
-          if (hoy===7)
+          if (hoy===7 && (hoy!=diaRequerido))
           {
-            //PROBADO
+            //PROBADO UN DIA DOMINGO, CON DIAREQUERIDO=3 O 6(SABADO)
             proximoPartido= moment().add(1, 'weeks').isoWeekday()-(hoy-diaRequerido);
 //            window.alert('proximoPartido-0='+ proximoPartido);
             return moment().day(proximoPartido).format('L');
           }
           else
           {
-//            window.alert('entrooooo');
-            proximoPartido= moment().add(1, 'weeks').isoWeekday()+(diaRequerido-hoy);
-//            window.alert('proximoPartido-1='+proximoPartido);
-            return moment().day(proximoPartido).format('L');
+            if (hoy!=diaRequerido)
+            {
+//              window.alert('entrooooo');
+              proximoPartido= moment().add(1, 'weeks').isoWeekday()+(diaRequerido-hoy);
+//              window.alert('proximoPartido-1='+proximoPartido);
+              return moment().day(proximoPartido).format('L');
+            }
+            else
+            {
+              return moment().format('L');
+            }
           }
-/*        
-        else
-        {
-//          window.alert('44444444');
-          proximoPartido= moment().add(1, 'weeks').isoWeekday() - (hoy-diaRequerido);
-          window.alert('proximoPartido-2='+proximoPartido);
-          return moment().add(1, 'weeks').day(proximoPartido).format('L');
-        }
-      }
-*/      
       }
   }
 }

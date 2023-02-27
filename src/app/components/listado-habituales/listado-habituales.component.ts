@@ -66,7 +66,7 @@ export class ListadoHabitualesComponent implements OnInit  {
   cargando:boolean=true;
 
   fecha: string='';
-  fecha_Bck: string='';
+  fecha_Bck!: string;
   linkGrupo!: string;
 
   faCopy= faCopy;

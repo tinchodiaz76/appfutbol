@@ -39,7 +39,7 @@ export class GrupoComponent implements OnInit {
 
   grabo=true;
   
-  fecha: string='';
+  fecha!: string;
 
   subscription: Subscription | undefined;
 
