@@ -323,6 +323,7 @@ export class ListadoHabitualesComponent implements OnInit  {
       else
       {
         this.jueganService.eliminarJugador(this.juegan[index].id).then(()=>{
+          this.showDiv=false;
           console.log('Documento eliminado exitósamente');
         }, (error) => {
           console.log(error);
