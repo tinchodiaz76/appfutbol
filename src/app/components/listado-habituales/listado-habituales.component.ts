@@ -214,54 +214,6 @@ export class ListadoHabitualesComponent implements OnInit  {
       
               this.showDiv=false;
 //              console.log('this.juegan='+ this.juegan.length);
-
-/*            
-              this.jueganService.getJugadores().subscribe((jugadoresSnapshot) => {
-              this.juegan=[];
-              this.noJuegan=[];
-
-              jugadoresSnapshot.forEach((catData: any) => {
-                //Si pertenece al grupo
-                if (catData.payload.doc.data().idGrupo== this.idGrupo)
-                {
-//                  console.log(catData.payload.doc.data());
-                  //Si juega
-                  if (catData.payload.doc.data().juega)
-                  {
-                    this.juegan.push({
-                      id: catData.payload.doc.id,
-                      idGrupo: catData.payload.doc.data().idGrupo,
-                      nombre: catData.payload.doc.data().nombre,
-                      juega: catData.payload.doc.data().juega,
-                      habitual: catData.payload.doc.data().habitual,
-                      activo: catData.payload.doc.data().activo,
-                      fechaActualizacion: catData.payload.doc.data().fechaActualizacion
-                    });
-                  }
-                  else
-                  {
-                    this.noJuegan.push({
-                      id: catData.payload.doc.id,
-                      idGrupo: catData.payload.doc.data().idGrupo,
-                      nombre: catData.payload.doc.data().nombre,
-                      juega: catData.payload.doc.data().juega,
-                      habitual: catData.payload.doc.data().habitual,
-                      activo: catData.payload.doc.data().activo,
-                      fechaActualizacion: catData.payload.doc.data().fechaActualizacion
-                    });
-                  }
-                }
-              });//Finalo el forEach
-
-              this.value=(this.precio/this.juegan.length).toFixed(2);
-
-              this.infoJugadores= true;
-              this.infoGrupo=true;
-              this.cargando=false;
-      
-              this.showDiv=false;
-//              console.log('this.juegan='+ this.juegan.length);
-*/
             });
           }
       }
