@@ -56,9 +56,9 @@
             </div>
 
             <div class="row" *ngIf="infoGrupo">
-                <div class="col-8">
+                <div class="col-9">
                         <input type="text" [(ngModel)]="linkGrupo" readonly
-                        style="height: 35px; width: 270px; background-color: lightgray;">
+                        style="height: 35px; background-color: lightgray;">
                         <button mat-raised-button 
                             matTooltip="Compartir por Whatsapp"
                             class="btn btn-primary" 
@@ -67,8 +67,8 @@
                             <fa-icon [icon]="faWhatsapp"></fa-icon>
                         </button>
                 </div>
-                <div class="col-4">
-                        <input type="text" class="form-control" value="V1.0"
+                <div class="col-3">
+                        <input type="text" class="form-control" value="v1.0"
                         id="version"  readonly style="text-align: right!important;"
                         >
                 </div>
