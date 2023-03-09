@@ -1,5 +1,6 @@
-import { Component, ComponentFactoryResolver, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 import { faPen, faPlus, faMagnifyingGlass, faPersonRunning, faTrash, faCopy } from '@fortawesome/free-solid-svg-icons';
 import { faWhatsapp} from '@fortawesome/free-brands-svg-icons'
 //Servicio
@@ -11,6 +12,7 @@ import { grupoModel } from 'src/app/models/grupo.model';
 //import { ClipboardService } from 'ngx-clipboard';
 import * as moment from 'moment';
 import { UtilidadesService } from 'src/app/services/utilidades.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-inicial',
@@ -37,12 +39,15 @@ export class InicialComponent implements OnInit {
   idGrupo: string='';
   jugador: any;
 
+  subscriptionGrupo: Subscription | undefined;
+  
   constructor(private router: Router,
               private gruposService: GruposService,
               private alertasService: AlertasService,
               private jueganService: JueganService,
               private grupoService: GruposService,
-              private utilidades: UtilidadesService) { }
+              private utilidades: UtilidadesService,
+              public _location: Location) { }
 
   ngOnInit(): void {
     this.codigoValido=false;
@@ -70,7 +75,7 @@ export class InicialComponent implements OnInit {
 
   validarCodigo()
   {
-    this.gruposService.getGrupo(this.codigo).subscribe((res:any)=>{
+    this.subscriptionGrupo= this.gruposService.getGrupo(this.codigo).subscribe((res:any)=>{
 //      console.log('res=', res.payload.data());
 //      console.log('res=', res);
 
@@ -108,7 +113,12 @@ export class InicialComponent implements OnInit {
           this.idGrupo= res.payload.id;
 
           this.grupoService.actualizarGrupo(this.idGrupo, this.grupo).then(()=>{
-//            this.alertasService.mostratSwettAlert('', '¡Se modifico el grupo!', 'success');
+//            window.alert('2');
+                            
+              this.router.navigateByUrl("/refresh", { skipLocationChange: true }).then(() => {
+                console.log(decodeURI(this._location.path()));
+                this.router.navigate([decodeURI(this._location.path())]);
+                });
           }).catch(error=>{
             console.log(error);
           });          

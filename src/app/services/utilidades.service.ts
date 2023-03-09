@@ -48,9 +48,10 @@ export class UtilidadesService {
             if (hoy!=diaRequerido)
             {
 //              window.alert('entrooooo');
+            //PROBADO UN DIA MARTES, CON DIAREQUERIDO=1(LUNES)
               proximoPartido= moment().add(1, 'weeks').isoWeekday()+(diaRequerido-hoy);
 //              window.alert('proximoPartido-1='+proximoPartido);
-              return moment().day(proximoPartido).format('L');
+              return moment().add(1, 'weeks').day(proximoPartido).format('L');
             }
             else
             {

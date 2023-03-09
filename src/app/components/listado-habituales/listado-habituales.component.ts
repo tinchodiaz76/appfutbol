@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { jugadorHabitualModel } from 'src/app/models/habituales.model';
 import { grupoModel } from 'src/app/models/grupo.model';
 import { UtilidadesService } from 'src/app/services/utilidades.service';
-
+import { Location } from '@angular/common';
 //Servicios
 import { JueganService } from 'src/app/services/juegan.service';
 import { GruposService } from 'src/app/services/grupos.service';
@@ -76,7 +76,6 @@ export class ListadoHabitualesComponent implements OnInit  {
   
   //subscription: Subscription | undefined;
   subscriptionGrupo: Subscription | undefined;
-  subscription: Subscription | undefined;
 
   constructor(private jueganService: JueganService,
               private router: Router,
@@ -85,6 +84,7 @@ export class ListadoHabitualesComponent implements OnInit  {
               private grupoService: GruposService,
               private alertasService:AlertasService,
               public dialog: MatDialog,
+              public _location: Location
               ) 
   {
   }
@@ -93,19 +93,24 @@ export class ListadoHabitualesComponent implements OnInit  {
   {
 //    this.juegan=[];
 //    this.noJuegan=[];
-    //tomo el idGrupo que viene en la URL
+    this.cargando= true;
+
+//    window.alert('ngOnInit');
     this.idGrupo= this.gruposService.obtengoIdGrupo(this.router.url)
 
     //Me fijo si el Grupo Existe
-    this.grupoService.getGrupo(this.idGrupo).subscribe((grupoSnapshot:any)=>{
+    this.subscriptionGrupo= this.grupoService.getGrupo(this.idGrupo).subscribe((grupoSnapshot:any)=>{
 
       if (grupoSnapshot.payload.data()==undefined)
       {
 //          editGrupoSubscribe.unsubscribe();
+          this.cargando= false;
           this.alertasService.mostratSwettAlert('','El codigo no existe', 'error');
       }
       else
-      {
+      { 
+//          window.alert('2');
+
           this.cantIntegrantes= grupoSnapshot.payload.data().cantIntegrantes;
           this.precio= grupoSnapshot.payload.data().precio;
 
@@ -149,7 +154,6 @@ export class ListadoHabitualesComponent implements OnInit  {
 
           if (moment(grupoSnapshot.payload.data().fechaProximoPartido).isBefore(moment().format('L')))
           {
-//            window.alert('222222');
             this.jueganService.falseJuega(grupoSnapshot.payload.id);
             //Debo cambiar la fechaProximoPartido, en la coleccion GRUPOS.
             this.grupo={
@@ -163,9 +167,20 @@ export class ListadoHabitualesComponent implements OnInit  {
                 juegaTorneo: grupoSnapshot.payload.data().juegaTorneo,
                 mail: grupoSnapshot.payload.data().mail
             };
+//            window.alert('this.idGrupo='+this.idGrupo);
+//            window.alert(this.utilidades.buscar(parseInt(grupoSnapshot.payload.data().dia)));
 
             this.grupoService.actualizarGrupo(this.idGrupo, this.grupo).then(()=>{
               console.log('Se actualizo el GRUPO exitosamente');
+              this.subscriptionGrupo?.unsubscribe();
+              
+              this.router.navigateByUrl("/refresh", { skipLocationChange: true }).then(() => {
+                console.log(decodeURI(this._location.path()));
+                this.router.navigate([decodeURI(this._location.path())]);
+                });
+
+              this.cargando=false;
+
             }).catch(error=>{
               console.log(error);
             }); 
@@ -205,6 +220,8 @@ export class ListadoHabitualesComponent implements OnInit  {
                     });
                   }
               });//Finalo el forEach
+              
+              this.cargando= false;
 
               this.value=(this.precio/this.juegan.length).toFixed(2);
 
@@ -393,12 +410,12 @@ export class ListadoHabitualesComponent implements OnInit  {
     this.router.navigate(['/']);
   }
 
-  
+/*
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
     this.juegan=[];
     this.subscription?.unsubscribe();
   }
-  
+*/
 }
