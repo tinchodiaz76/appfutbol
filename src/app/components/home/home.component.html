@@ -1,0 +1,88 @@
+<div class="container">
+    <div class="container bloqueodiv" *ngIf="showDiv">
+        <mat-progress-spinner [color]="color"
+            [mode]="mode" 
+        >
+        </mat-progress-spinner>
+    </div>
+
+
+    <div class="row">
+        <div class="col-12 text-center">
+            <p>Bievenido <strong> {{usuarioCreador}} </strong></p>
+        </div>
+    </div>
+
+    <div class="row" *ngIf="showDiv">
+        <div class="col-12 text-center">
+            <p>Aguarde por favor....</p>
+        </div>
+    </div>
+
+    <div class="row mt-3" *ngIf="!showDiv">
+        <div class="d-flex justify-content-center" *ngIf="creaGrupo">
+        <!--
+        <div class="col-12" style="align-items: center;" *ngIf="creaGrupo">
+        -->
+            <button mat-raised-button
+            matTooltip="Crear Grupo"
+            style="background-color: #2E86C1;float: right;"
+            (click)="crearGrupo()">
+            <fa-icon [icon]="faCirclePlus"></fa-icon>Crear Grupo
+            </button>
+        </div>
+    </div>
+    <div class="row mt-3" *ngIf="!showDiv">
+        <div class="d-flex justify-content-center" *ngIf="!creaGrupo && modificaGrupo">
+        <!--
+        <div class="col-12" style="align-items: text-center;margin-top: 15px;" *ngIf="!creaGrupo">
+        -->
+            <button mat-raised-button
+            matTooltip="Modificar el Grupo"
+            style="background-color: #2E86C1;float: right;"
+            (click)="editarGrupo()">
+            <fa-icon [icon]="faPenFancy"></fa-icon>Modificar Equipo
+            </button>
+        </div>
+    </div>
+
+    <div class="row mt-3" *ngIf="!showDiv">  
+        <div class="d-flex justify-content-around" *ngIf="equipos.length>0">
+            Selecciona el Grupo:
+            <select style="width:200px" class="form-select" [(ngModel)]="grupo" (change)="changeSelect()">
+                <option [value]="item.idGrupo" *ngFor="let item of equipos">{{item.nombre}}</option>
+            </select>
+
+            <button mat-raised-button *ngIf="anotarse"
+                matTooltip="Anotate para jugar"
+                style="background-color: #2E86C1;float: right;height: 50px;"
+                (click)="anotate()">
+                <fa-icon [icon]="faFutbol"></fa-icon>Anotate
+            </button>
+        </div>
+    </div>
+
+    <div class="row mt-3" *ngIf="compartirLink">
+        <button>
+                <p>¡Enviale este link a tus amigos!</p>
+
+                <button mat-raised-button 
+                    matTooltip="Compartir por Whatsapp"
+                    class="btn btn-primary" 
+                    style="background-color: #4300fb;"
+                    (click)="compartirWhatsapp()">
+                    <fa-icon [icon]="faWhatsapp"></fa-icon>
+                </button>
+        </button>
+    </div>
+
+    <hr *ngIf="!showDiv">
+    <div class="row" *ngIf="!showDiv">
+        <div class="col-md-12 text-center" style="margin-top: 8px;">
+        <button type="button" class="btn btn-outline-primary" (click)="logOut('google')">
+            SignOut 
+        </button>
+        </div>
+    </div>
+</div>
+

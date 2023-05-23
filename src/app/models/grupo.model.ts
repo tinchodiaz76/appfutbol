@@ -11,5 +11,6 @@ export interface grupoModel{
     fechaProximoPartido: string;
     juegaTorneo: boolean;
     mail: string;
+    emailCreador: string;
 }
 

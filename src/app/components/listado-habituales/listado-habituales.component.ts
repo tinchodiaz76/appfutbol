@@ -6,7 +6,7 @@ import { Location } from '@angular/common';
 //Servicios
 import { JueganService } from 'src/app/services/juegan.service';
 import { GruposService } from 'src/app/services/grupos.service';
-
+import { LoginService } from 'src/app/services/login.service';
 //Rutas
 import { Router } from '@angular/router';
 
@@ -77,6 +77,8 @@ export class ListadoHabitualesComponent implements OnInit  {
   //subscription: Subscription | undefined;
   subscriptionGrupo: Subscription | undefined;
 
+  readonly: boolean= false;
+
   constructor(private jueganService: JueganService,
               private router: Router,
               private gruposService: GruposService,
@@ -84,13 +86,17 @@ export class ListadoHabitualesComponent implements OnInit  {
               private grupoService: GruposService,
               private alertasService:AlertasService,
               public dialog: MatDialog,
-              public _location: Location
+              public _location: Location,
+              private loginService: LoginService
               ) 
   {
   }
 
   ngOnInit()
   {
+
+//    this.loginService.getUserLogin();
+
 //    this.juegan=[];
 //    this.noJuegan=[];
     this.cargando= true;
@@ -155,6 +161,7 @@ export class ListadoHabitualesComponent implements OnInit  {
           if (moment(grupoSnapshot.payload.data().fechaProximoPartido).isBefore(moment().format('L')))
           {
             this.jueganService.falseJuega(grupoSnapshot.payload.id);
+
             //Debo cambiar la fechaProximoPartido, en la coleccion GRUPOS.
             this.grupo={
                 nombre:grupoSnapshot.payload.data().nombre,
@@ -165,7 +172,8 @@ export class ListadoHabitualesComponent implements OnInit  {
                 precio: grupoSnapshot.payload.data().precio,
                 fechaProximoPartido: this.utilidades.buscar(parseInt(grupoSnapshot.payload.data().dia)),
                 juegaTorneo: grupoSnapshot.payload.data().juegaTorneo,
-                mail: grupoSnapshot.payload.data().mail
+                mail: grupoSnapshot.payload.data().mail,
+                emailCreador: grupoSnapshot.payload.data().emailCreador
             };
 //            window.alert('this.idGrupo='+this.idGrupo);
 //            window.alert(this.utilidades.buscar(parseInt(grupoSnapshot.payload.data().dia)));
@@ -193,19 +201,30 @@ export class ListadoHabitualesComponent implements OnInit  {
               this.noJuegan=[];
               jugadoresSnapshot.forEach((catData: any) => {
                 //Si pertenece al grupo
-//                  console.log(catData.payload.doc.data());
+                  console.log(catData.payload.doc.data());
                   //Si juega
+                  if (catData.payload.doc.data().email===this.gruposService.getValorLlave('parametros').email)
+                    this.readonly= false;
+                  else
+                    this.readonly= true;
+
+
                   if (catData.payload.doc.data().juega)
                   {
-                    this.juegan.push({
-                      id: catData.payload.doc.id,
-                      idGrupo: catData.payload.doc.data().idGrupo,
-                      nombre: catData.payload.doc.data().nombre,
-                      juega: catData.payload.doc.data().juega,
-                      habitual: catData.payload.doc.data().habitual,
-                      activo: catData.payload.doc.data().activo,
-                      fechaActualizacion: catData.payload.doc.data().fechaActualizacion
-                    });
+                   
+                    {
+                      this.juegan.push({
+                        id: catData.payload.doc.id,
+                        idGrupo: catData.payload.doc.data().idGrupo,
+                        nombre: catData.payload.doc.data().nombre,
+                        juega: catData.payload.doc.data().juega,
+                        habitual: catData.payload.doc.data().habitual,
+                        activo: catData.payload.doc.data().activo,
+                        email: catData.payload.doc.data().email,                        
+                        fechaActualizacion: catData.payload.doc.data().fechaActualizacion,
+                        readonly: this.readonly
+                      });
+                    };
                   }
                   else
                   {
@@ -216,7 +235,9 @@ export class ListadoHabitualesComponent implements OnInit  {
                       juega: catData.payload.doc.data().juega,
                       habitual: catData.payload.doc.data().habitual,
                       activo: catData.payload.doc.data().activo,
-                      fechaActualizacion: catData.payload.doc.data().fechaActualizacion
+                      email: catData.payload.doc.data().email,
+                      fechaActualizacion: catData.payload.doc.data().fechaActualizacion,
+                      readonly: this.readonly
                     });
                   }
               });//Finalo el forEach
@@ -252,6 +273,7 @@ export class ListadoHabitualesComponent implements OnInit  {
         juega: true,
         habitual: this.noJuegan[index].habitual,
         activo: this.noJuegan[index].activo,
+        email: this.noJuegan[index].email,
         fechaActualizacion: new Date()
       };
 
@@ -279,6 +301,7 @@ export class ListadoHabitualesComponent implements OnInit  {
           juega: false,
           habitual: this.juegan[index].habitual,
           activo: this.juegan[index].activo,
+          email: this.juegan[index].email,
           fechaActualizacion: new Date()
         };
       
@@ -311,7 +334,7 @@ export class ListadoHabitualesComponent implements OnInit  {
     });
   }
 
-  insertaJugador(idGrupo: string, nombre:string, juega: boolean, activo: boolean, habitual: boolean, 
+  insertaJugador(idGrupo: string, nombre:string, juega: boolean, activo: boolean, habitual: boolean, email: string,
     title: string, mensaje: string, icono: string
     )
   {
@@ -320,7 +343,8 @@ export class ListadoHabitualesComponent implements OnInit  {
       nombre, 
       juega, 
       activo,
-      habitual
+      habitual,
+      email
       };
       //    console.log('jugador=', this.jugador);
       this.jueganService.agregarJugador(this.jugador).then(()=>{
@@ -366,13 +390,15 @@ export class ListadoHabitualesComponent implements OnInit  {
                     //No quiere ser habitual, se suma para jugar este Sabado
                     {
                       this.insertaJugador(this.idGrupo, this.jueganService.castea(art.nombre), true,true,art.check,
-                        '¡Nos vemos el Sábado!','', 'success' );
+                                        this.gruposService.getValorLlave('parametros').email,
+                                        '¡Nos vemos el Sábado!','', 'success' );
                     }  
                     else
                     //Lo sumamos como habitual.
                     {
-                      this.insertaJugador(this.idGrupo, this.jueganService.castea(art.nombre), false, true,art.check,
-                          '¡Te sumaste a los de siempre!','', 'success' );
+                      this.insertaJugador(this.idGrupo, this.jueganService.castea(art.nombre), false, true, art.check,
+                                        this.gruposService.getValorLlave('parametros').email,
+                                        '¡Te sumaste a los de siempre!','', 'success' );
                       }
                   }
                   else
@@ -388,7 +414,8 @@ export class ListadoHabitualesComponent implements OnInit  {
                     {
                       //quiere ser habitual, pero le avisamo que lo esperamos la proxima
                       this.insertaJugador(this.idGrupo, this.jueganService.castea(art.nombre), false, true,art.check,
-                          '¡Te agregaste a los de siempre! <br> Te esperamos la próxima.','', 'info' );
+                                          this.gruposService.getValorLlave('parametros').email,
+                                          '¡Te agregaste a los de siempre! <br> Te esperamos la próxima.','', 'info' );
                     }
                   }
               }
@@ -401,13 +428,15 @@ export class ListadoHabitualesComponent implements OnInit  {
   }
 
   compartirWhatsapp() {
-    window.open("https://api.whatsapp.com/send?text=Ingresá aquí www.quienjuega.com.ar/grupo/"+ this.linkGrupo + " para sumarte");
+    window.open("https://api.whatsapp.com/send?text=Ingresá aquí https://www.quienjuega.com.ar/grupo/"+ this.linkGrupo + " para sumarte");
   }
 
   back(){
-    this.grupoService.removeCodigoGrupo();
-    this.gruposService.setCodigoGrupo(this.linkGrupo);
-    this.router.navigate(['/']);
+    //this.grupoService.removeCodigoGrupo();
+    this.grupoService.removeLlave('codigoGrupo');
+    //this.gruposService.setCodigoGrupo(this.linkGrupo);
+    this.gruposService.setLlave({codigoGrupo:this.linkGrupo});
+    this.router.navigate(['/home']);
   }
 
 /*

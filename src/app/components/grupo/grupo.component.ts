@@ -42,6 +42,7 @@ export class GrupoComponent implements OnInit {
   fecha!: string;
 
   subscription: Subscription | undefined;
+  emailCreador: string='';
 
   constructor(private grupoService: GruposService,
               private alertasService: AlertasService,
@@ -70,8 +71,11 @@ export class GrupoComponent implements OnInit {
 
     if (this.idGrupo!='grupo')
     {
-        this.grupoService.getGrupo(this.idGrupo).subscribe((res:any)=>{
+        let grupoService= this.grupoService.getGrupo(this.idGrupo).subscribe((res:any)=>{
 //          console.log('res=', res.payload.data());
+
+          this.emailCreador=res.payload.data().emailCreador;
+
           this.grupoForm.setValue({nombre: res.payload.data().nombre, 
                                   cantIntegrantes: res.payload.data().cantIntegrantes,
                                   dia:res.payload.data().dia, 
@@ -79,12 +83,18 @@ export class GrupoComponent implements OnInit {
                                   hora: res.payload.data().hora,
                                   precio: res.payload.data().precio, 
                                   mail:res.payload.data().mail, 
-                                  juegaTorneo: res.payload.data().juegaTorneo})
+                                  juegaTorneo: res.payload.data().juegaTorneo
+                                })
+          grupoService.unsubscribe();
+          this.linkGrupo=this.idGrupo;
+          this.puedeNavegar=true;
          });
         
     }
-
-    this.puedeNavegar=false;
+    else
+    {
+      this.puedeNavegar=false;
+    }
 
   }
 
@@ -96,8 +106,9 @@ export class GrupoComponent implements OnInit {
       {
         if (this.idGrupo=='grupo')
         {
-//          this.fecha= this.utilidades.fechaProximoDia(this.grupoForm.get('dia')?.value);          
           this.fecha= this.utilidades.buscar(this.grupoForm.get('dia')?.value);
+
+          this.emailCreador= this.grupoService.getValorLlave('parametros').email;
 
           //Es un grupo nuevo
           this.grupo={
@@ -110,7 +121,8 @@ export class GrupoComponent implements OnInit {
             precio: this.grupoForm.get('precio')?.value,
             fechaProximoPartido: this.fecha,
             juegaTorneo: this.grupoForm.get('juegaTorneo')?.value,
-            mail: this.grupoForm.get('mail')?.value
+            mail: this.grupoForm.get('mail')?.value,
+            emailCreador: this.emailCreador
           }
           
 //          console.log('this.grupo=', this.grupo);
@@ -130,8 +142,9 @@ export class GrupoComponent implements OnInit {
         }
         else
         {
-//          this.fecha= this.utilidades.fechaProximoDia(this.grupoForm.get('dia')?.value);
           this.fecha= this.utilidades.buscar(this.grupoForm.get('dia')?.value);
+          
+          this.emailCreador= this.grupoService.getValorLlave('parametros').email;
 
           this.grupo={
             nombre:this.jueganService.castea(this.grupoForm.get('nombre')?.value),
@@ -143,7 +156,8 @@ export class GrupoComponent implements OnInit {
             precio: this.grupoForm.get('precio')?.value,
             fechaProximoPartido: this.fecha,
             juegaTorneo: this.grupoForm.get('juegaTorneo')?.value,
-            mail: this.grupoForm.get('mail')?.value
+            mail: this.grupoForm.get('mail')?.value,
+            emailCreador: this.emailCreador
           }
 
           this.grupoService.actualizarGrupo(this.idGrupo, this.grupo).then(()=>{
@@ -172,16 +186,15 @@ export class GrupoComponent implements OnInit {
   }
 
   compartirWhatsapp() {
-
-    //window.open("https://web.whatsapp.com/send?text=quienJuega-El codigo del grupo es: "+ this.linkGrupo);
-    window.open("https://api.whatsapp.com/send?text=Ingresá aquí www.quienjuega.com.ar/grupo/"+ this.linkGrupo + " para sumarte");
-    //this.clipboardApi.copyFromContent(this.linkGrupo);
-    //this.alertasService.mostratSwettAlertToast('Link copiado','success');
+    window.open("https://api.whatsapp.com/send?text=Ingresá aquí https://www.quienjuega.com.ar/grupo/"+ this.linkGrupo + " para sumarte");
   }
 
   back()
   {
+    /*
     this.router.navigate(['/']);
+    */
+    this.router.navigate(['home']);
   }
 
 }

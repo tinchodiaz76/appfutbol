@@ -3,9 +3,10 @@ Para Firebase se instalo:
 
 	ng add @angular/fire
 	/*Seleccionar Firestore*/
+	/*Seleccionar Authentication*/
 	npm i firebase
 	
-Se instalaron las siguientes herramientas:
+//Se instalaron las siguientes herramientas:
 	npm i sweetalert2
 	ng add @angular/material
 	npm install moment --save 
@@ -13,9 +14,19 @@ Se instalaron las siguientes herramientas:
 	Para levantar la PWA localmente, ejecutar "http-server"
 	
 	npm install ngx-clipboard
-	
+//Iconos
 	npm install @fortawesome/angular-fontawesome@0.10.1
-	npm install @fortawesome/free-solid-svg-icons
+	npm i @fortawesome/fontawesome-common-types@6.2.1
+			npm i @fortawesome/fontawesome-svg-core@6.2.1
+			npm i @fortawesome/free-brands-svg-icons@6.2.1
+	npm i @fortawesome/free-regular-svg-icons@6.2.1
+			npm i @fortawesome/free-solid-svg-icons@6.2.1
+//AuthGuard	
+	ng g class auth/authGuard --skyp-tests
+//Bootstrap para modal
+	ng add @ng-bootstrap/ng-bootstrap
+	
+	
 	
 	 /*Se instala IONIC como global*/
 	 npm i -g @ionic/cli

@@ -22,17 +22,76 @@ export class JueganService {
     ) { }
 
   //Obtiene todos los jugadores
-  public getJugadores() {
+  getJugadores() {
     return this.firestore.collection('jugadores').snapshotChanges();
   }
 
+  getjugadorById(id: string):Observable<any>
+  {
+    return this.firestore.collection('users').doc(id).snapshotChanges();
+  }
 
+  //Se fija en jugadrobygrupos si tiene un grupo asocioado
+  getGruposPorJugador(idUser: string)
+  {
+    return this.firestore.collection('jugadorbygrupos', ref => (ref.where('idUser', '==', idUser))).snapshotChanges();
+  }
+
+  //Se fija si esta creado el usuario en USERS
+ getJugadorByMail(email: string):Observable<any>
+  {
+    return this.firestore.collection('users', ref => (ref.where('email', '==', email))).snapshotChanges();
+  }
+
+  //Trae los datos de jugadorbygrupos
+  getJugadorbyGrupo(idGrupo: string)
+  {
+    //return this.firestore.collection('jugadorbygrupos', ref=> ref.where('idGrupo', '==', idGrupo).where('idUser', '==', idUser)).snapshotChanges();
+    return this.firestore.collection('jugadorbygrupos', ref=> ref.where('idGrupo', '==', idGrupo)).snapshotChanges();
+  }
+
+  //Trae los datos de jugadorbygrupos
+  getJugadorbyAlias(idGrupo: string, alias:string)
+  {
+    return this.firestore.collection('jugadorbygrupos', ref=> ref.where('idGrupo', '==', idGrupo).where('alias', '==', alias)).snapshotChanges();
+  }  
+  
+  setJugadorbyGrupo(id: string, data:any) //: Promise<any>
+  {
+    return this.firestore.collection('jugadorbygrupos').doc(id).set(data);
+  }
+
+  addJugadorbyGrupo(jugador: any) : Promise<any>
+  {
+    return this.firestore.collection('jugadorbygrupos').add(jugador);
+  }
+
+  getJugadoresByGrupo(idGrupo: string)
+  {
+    return this.firestore.collection('jugadorbygrupos', ref => (ref.where('idGrupo', '==', idGrupo))).snapshotChanges();
+  }
+
+
+
+
+  //Me trae los jugadores de un grupo determinado
   getJugadoresByGroup(idGrupo: any):Observable<any>
   {
     return this.firestore.collection('jugadores', ref => ref.where('idGrupo', '==', idGrupo)).snapshotChanges();
 //    return this.firestore.collection('jugadores').doc(idGrupo).snapshotChanges();
   }
 
+  //Me trae los grupos a los cuales pertenece un jugador
+  getGruposbyJugador(idUser: string):Observable<any>
+  {
+    return this.firestore.collection('jugadorbygrupos', ref => ref.where('idUser', '==', idUser)).snapshotChanges();
+  }
+
+  getJugadorByGroup(idGrupo: any):Observable<any>
+  {
+    return this.firestore.collection('jugadores', ref => ref.where('idGrupo', '==', idGrupo)).snapshotChanges();
+//    return this.firestore.collection('jugadores').doc(idGrupo).snapshotChanges();
+  }
 
   agregarJugador(jugador: any) : Promise<any>
   {

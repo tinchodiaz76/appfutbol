@@ -144,16 +144,20 @@
                             color="primary"
                             style="background-color: #2E86C1;"
                             (click)="onSubmit()">
+                            Grabar
+<!--
                             <fa-icon [icon]="faFloppyDisk"></fa-icon>
+-->                            
                         </button>
 
                         <button mat-raised-button
                             matTooltip="Atras"
                             color="warn"
                             (click)="back()"
-                            style="background-color: #CD5C5C"
-                            >
-                            <fa-icon [icon]="faRightFromBracket"></fa-icon>
+                            style="background-color: #191d21"
+                            >Volver
+<!--                            <fa-icon [icon]="faRightFromBracket"></fa-icon>
+-->    
                         </button>
 
                         <button mat-raised-button *ngIf="puedeNavegar"
@@ -163,7 +167,7 @@
                              style="background-color: #3859F0;"
                             (click)="navegarGrupo()">
                             <fa-icon [icon]="faFutbol"></fa-icon>
-                            Armar Equipo</button>
+                            Anotate</button>
                     </div>
                 </div>
             </div>

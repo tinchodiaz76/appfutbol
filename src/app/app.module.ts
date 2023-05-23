@@ -5,7 +5,6 @@ import {HttpClientModule} from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ListadoHabitualesComponent } from './components/listado-habituales/listado-habituales.component';
 
 //Manejore de Formulario
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -24,6 +23,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSelectModule } from '@angular/material/select';
 //Para las BD
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
@@ -34,15 +34,22 @@ import { GrupoComponent } from './components/grupo/grupo.component';
 import { ClipboardModule } from 'ngx-clipboard';
 //Iconos de FontAwasome
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { InicialComponent } from './components/inicial/inicial.component';
+import { LoginComponent } from './components/login/login.component';
+import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
+import { provideAuth,getAuth } from '@angular/fire/auth';
+import { AuthGuard } from './services/auth/auth-guard';
+import { AnotarseComponent } from './components/anotarse/anotarse.component';
+import { HomeComponent } from './components/home/home.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ListadoHabitualesComponent,
     DialogoJugadorComponent,
     GrupoComponent,
-    InicialComponent
+    LoginComponent,
+    AnotarseComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -60,6 +67,7 @@ import { InicialComponent } from './components/inicial/inicial.component';
     MatCheckboxModule,
     MatFormFieldModule,
     MatTooltipModule,
+    MatSelectModule,
     ClipboardModule,
     FontAwesomeModule,
     AngularFireModule.initializeApp(environment.firebase),
@@ -69,9 +77,12 @@ import { InicialComponent } from './components/inicial/inicial.component';
       // Register the ServiceWorker as soon as the application is stable
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000'
-    })
+    }),
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideAuth(() => getAuth()),
+    NgbModule
   ],
-  providers: [],
+  providers: [AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

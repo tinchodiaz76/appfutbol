@@ -1,0 +1,19 @@
+.container{
+    /*padding-top: 220px;*/
+    padding-top: 10px;
+  }
+  
+.bloqueodiv {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center !important;
+    align-items: center !important;
+}
+  
+  
+.mat-progress-spinner circle, .mat-spinner circle {
+    stroke: blue !important; 
+}

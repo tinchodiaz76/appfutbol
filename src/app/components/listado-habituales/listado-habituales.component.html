@@ -113,7 +113,8 @@
                         ${{value}}
                     </td>
                     <td class="text-center">
-                        <button class="btn btn-danger" style="width: 50;float: right" (click)="actualizaJugador(false, i)">Me Bajo</button>
+                        <button class="btn btn-danger" style="width: 50;float: right" (click)="actualizaJugador(false, i)"
+                        [disabled]="listado.readonly" >Me Bajo</button>
                     </td>
                 </tr>
             </tbody>
@@ -139,7 +140,8 @@
                     {{listado.nombre}}          
                 </td>
                 <td class="text-center">
-                    <button *ngIf="listado.activo" class="btn btn-success" style="float: right;width: 84.02px;" (click)="actualizaJugador(true, i)" [disabled]="juegan.length==cantIntegrantes">Voy</button>
+                    <button *ngIf="listado.activo" class="btn btn-success" style="float: right;width: 84.02px;" (click)="actualizaJugador(true, i)" [disabled]="juegan.length==cantIntegrantes"
+                    [disabled]="listado.readonly">Voy</button>
                 </td>
             </tr>
             </tbody>

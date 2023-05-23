@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { grupoModel } from '../models/grupo.model';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -25,11 +25,37 @@ export class GruposService {
   {
     return this.firestore.collection('grupos').add(grupo);
   }
+  
+  getGrupoPorCreador(email: string):Observable<any>
+  {
+    return this.firestore.collection('grupos', ref => ref.where('emailCreador', '==', email)).snapshotChanges();
+  }
+  
+  
 
+
+  getGrupo(idGrupo: string):Observable<any>
+  {
+    return this.firestore.collection('grupos').doc(idGrupo).snapshotChanges();
+/*       
+    .pipe(map((actions:any) => {
+    return actions.map((action:any) => {
+      const data = action.payload.doc.data();
+      const _id = action.payload.doc.id;
+
+      console.log(_id);
+      console.log(data);
+      return { _id, ...data };
+    })[0];
+    }));
+    */
+  }
+/*
   getGrupo(idrupo: string):Observable<any>
   {
-    return this.firestore.collection('grupos').doc(idrupo).snapshotChanges();
+    return this.firestore.collection('jugadores', ref => ref.where('idGrupo', '==', idrupo)).snapshotChanges()
   }
+*/
 
   actualizarGrupo(id: string, data:any) //: Promise<any>
   {
@@ -38,19 +64,47 @@ export class GruposService {
     return this.firestore.collection('grupos').doc(id).set(data)
   }
 
-  removeCodigoGrupo(){
-    localStorage.removeItem('codigoGrupo');
+  //setLlave(llave :string, valor: any){
+  setLlave(valor :any)
+  {
+    let v_obj: any={};
+    
+    v_obj= this.getValorLlave('parametros');
+    
+    console.log(v_obj);
+
+    if ( Object.keys(v_obj).length === 0)
+    {
+      localStorage.setItem('parametros',JSON.stringify(valor));
+    }
+    else
+    {
+      console.log(v_obj);
+      
+      v_obj= JSON.stringify(v_obj); 
+      console.log(v_obj)
+      
+      v_obj = v_obj.substring(0, v_obj.length - 1);
+      console.log(v_obj)
+
+      v_obj=v_obj + ',' + JSON.stringify(valor).slice(1, -1) +'}';
+      console.log(v_obj)
+
+      v_obj= JSON.parse (v_obj)
+      console.log(v_obj)
+      
+      localStorage.setItem('parametros',JSON.stringify(v_obj));
+      
+    }
   }
 
-  setCodigoGrupo(codigoGrupo :any){
-    localStorage.setItem('codigoGrupo',JSON.stringify(codigoGrupo));
+  removeLlave(llave :string){
+    localStorage.removeItem(llave);
   }
-  
-  getCodigoGrupo()
+
+  getValorLlave(llave :string)
   {
-    let codigoGrupo= JSON.parse(localStorage.getItem('codigoGrupo') || '{}');
-    //console.log('usuario=', usuario);
-    //console.log('JSON.parse(usuario)=', JSON.parse(usuario));
+    let codigoGrupo= JSON.parse(localStorage.getItem(llave) || '{}');
     return (codigoGrupo);
   }
 }

@@ -1,14 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ListadoHabitualesComponent } from './components/listado-habituales/listado-habituales.component';
 import { GrupoComponent } from './components/grupo/grupo.component';
-import { InicialComponent } from './components/inicial/inicial.component';
+import { LoginComponent } from './components/login/login.component';
+import { AuthGuard } from './services/auth/auth-guard';
+import { AnotarseComponent } from './components/anotarse/anotarse.component';
+import { HomeComponent } from './components/home/home.component';
 
 const routes: Routes = [
-  {path: '', component:InicialComponent},
+  {path: '', component:LoginComponent},
+  {path: 'home', component: HomeComponent},
   {path: 'grupo', component: GrupoComponent},
-  {path: 'grupo/edit/:id', component:GrupoComponent },
-  {path: 'grupo/:id', component:ListadoHabitualesComponent },
+  {path: 'grupo/edit/:id', component:GrupoComponent, canActivate:[AuthGuard],},
+  {path: 'grupo/:id', component:AnotarseComponent, canActivate:[AuthGuard],},
   {path: '**', pathMatch:'full', redirectTo:''}
 ];
 

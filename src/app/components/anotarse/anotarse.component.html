@@ -1,0 +1,129 @@
+
+<ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h2 class="modal-title" id="modal-basic-title"><strong>Los que juegan...</strong></h2>
+    </div>
+    <div class="modal-body">
+        <div class="row animate__animated animate__fadeIn">
+    
+            <table class="table table-striped" *ngIf="juegan.length > 0">
+                <thead>
+                    <tr>
+                        <th class="text-center" scope="col">Nombre</th>
+                        <th class="text-center" scope="col">Pagás</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let listado of juegan; let i = index">
+                        <td class="text-center">
+                            {{listado.alias}}          
+                        </td>
+                        <td class="text-center">
+                            ${{value}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="c('Save click')">Cerrar</button>
+    </div>
+</ng-template>
+
+<div class="row">
+    <div class="col-12 text-center">
+        <p>Bievenido <strong> {{nombreCreador}} </strong></p>
+    </div>
+</div>
+
+<div class="row" *ngIf="showDivCarga">
+    <div class="col-12 text-center">
+        <p>Aguarde por favor....</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="container bloqueodiv" *ngIf="showDivCarga">
+        <mat-progress-spinner [color]="color"
+            [mode]="mode" 
+        >
+        </mat-progress-spinner>
+    </div>
+
+    <div class="row mt-3" *ngIf="!showDivCarga">
+        <div class="d-flex justify-content-around">
+            <h1>{{nombreGrupo}}</h1>
+        </div>
+        <div class="d-flex justify-content-around">
+            <p>Se juega....</p>
+        </div>
+        <div class="d-flex justify-content-around">
+            <p>En {{direccionGrupo}}</p>
+        </div>
+        <div class="d-flex justify-content-around">
+            <p>el dia {{diaGrupo}} a las {{hora}}hs.</p>
+        </div>
+        <div class="d-flex justify-content-around">
+            <p>Sale ${{precio}}.</p>
+        </div>
+        <div class="d-flex justify-content-around">
+            <p>Por ahora somos <strong>{{cantJuegan}}</strong>.</p>
+        </div>
+    </div>
+
+
+    <div class="row mt-5" *ngIf="!showDivCarga">
+        <div class="d-flex justify-content-center">
+            <h1>Confirmá</h1>
+        </div>
+    </div>
+
+    <div class="row mt-3" *ngIf="!showDivCarga">
+        <div class="d-flex justify-content-around">
+
+                <button mat-raised-button [disabled]="voy"
+                matTooltip="Voy a Jugar"
+                style="background-color: #2E86C1;"
+                (click)="cambio(true)">
+                Voy
+                </button>
+
+                
+                <button mat-raised-button
+                [disabled]="noHayJugadores"
+                matTooltip="Ver integrantes"
+                style="background-color: #AF7AC5;"
+                (click)="verIntegrantes(content)">
+                Jugadores
+                </button>
+
+                <button mat-raised-button 
+                matTooltip="Compartir por Whatsapp"
+                class="btn btn-primary" 
+                style="background-color: #4300fb;"
+                (click)="compartirWhatsapp()">
+                <fa-icon [icon]="faWhatsapp"></fa-icon>
+                </button>
+                        
+
+                <button mat-raised-button [disabled]="noVoy"
+                matTooltip="No voy a Jugar"
+                style="background-color: #e84330;"
+                (click)="cambio(false)">
+                No voy
+                </button>
+        </div>
+    </div>
+
+    <!--#CD5C5C;"-->
+    <div class="row mt-5" *ngIf="!showDivCarga">
+        <div class="d-flex justify-content-around">
+            <button mat-raised-button
+                matTooltip="Salir"
+                style="float: right;background-color:#191d21" 
+                (click)="back()">Volver
+                <fa-icon [icon]="faRightFromBracket"></fa-icon>
+            </button>
+    </div>
+</div>

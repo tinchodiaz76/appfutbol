@@ -7,6 +7,9 @@ export interface jugadorHabitualModel{
     juega: boolean;
     habitual: boolean;
     activo: boolean;
+    email: string;
 //    fechaCreacion: Date;
     fechaActualizacion: Date;
+    readonly: boolean;
+
 }
