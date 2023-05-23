@@ -25,7 +25,8 @@ Para Firebase se instalo:
 	ng g class auth/authGuard --skyp-tests
 //Bootstrap para modal
 	ng add @ng-bootstrap/ng-bootstrap
-	
+//Token de GIT
+	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
 	
 	
 	 /*Se instala IONIC como global*/

@@ -85,115 +85,6 @@ export class AnotarseComponent implements OnInit {
     Promise.all([this.getDatosGrupo(), this.jugadorbyGrupos()]).then(values => {
       this.showDivCarga= false;
     });
-
-/*    
-    //Busco los datos del GRUPO
-    let datosGrupo= this.grupoService.getGrupo(this.idGrupo).subscribe((res:any)=>{
-      //          console.log('res=', res.payload.data());
-      
-      this.nombreGrupo= res.payload.data().nombre;
-      this.direccionGrupo= res.payload.data().direccion;
-      this.cantIntegrantes= res.payload.data().cantIntegrantes;
-
-      this.diaGrupo= this.dia[(res.payload.data().dia-1)];
-      this.hora= res.payload.data().hora;
-      this.precio= res.payload.data().precio;
-
-      console.log(this.nombreGrupo);
-      console.log(this.direccionGrupo);
-      console.log(this.diaGrupo);
-      
-      datosGrupo.unsubscribe();
-    });
-*/
-
-/*
-    //Traigo la los jugadores existentes en el GRUPO de JUGADORBYGRUPO
-    let jugadoresPorGrupo= this.jueganService.getJugadoresByGrupo(this.partir[2]).subscribe((cantSnapshot) => {
-      if (cantSnapshot.length>0)
-      {
-        cantSnapshot.forEach((catData: any) => {
-          if (catData.payload.doc.data().juega)
-          {
-            this.cantJuegan= this.cantJuegan+1;
-
-            this.juegan.push({
-              alias: catData.payload.doc.data().alias
-            });
-          };
-
-          if (catData.payload.doc.data().idUser===this.uid)
-          {
-            if (catData.payload.doc.data().juega)
-            {
-              this.voy=true;
-              this.noVoy=false;
-            }
-            else
-            {
-              this.voy=false;
-              this.noVoy=true;
-            }
-          }
-
-
-        });
-
-        if (this.juegan.length>0)
-          this.noHayJugadores= false;
-        else
-          this.noHayJugadores= true;
-      }
-      else
-      {
-        this.voy=false
-        this.noVoy=false;
-      }
-      
-      if (this.cantJuegan>0)
-        this.value=(this.precio/this.cantJuegan).toFixed(2);
-      else
-        this.value='0';
-
-      if (this.cantJuegan===10)
-      {
-        this.voy=true;
-        this.noVoy=true;
-      }
-      jugadoresPorGrupo.unsubscribe();
-    });
-*/
-/*
-    let grupoDeUnJugador= this.jueganService.getJugadorbyGrupo(this.partir[2]).subscribe((gruposSnapshot) => {
-      if (gruposSnapshot.length>0)
-      {
-          gruposSnapshot.forEach((catData: any) => {
-            console.log(catData.payload.doc.data());
-
-            if (catData.payload.doc.data().idUser===this.uid)
-            {
-              if (catData.payload.doc.data().juega)
-              {
-                this.voy=true;
-                this.noVoy=false;
-              }
-              else
-              {
-                this.voy=false;
-                this.noVoy=true;
-              }
-            }
-          });
-      }
-      else
-      {
-        this.voy=false
-        this.noVoy=false;
-      }
-
-      grupoDeUnJugador.unsubscribe();
-    });
-*/    
   }
 
   getDatosGrupo(): Promise<any>
@@ -223,6 +114,7 @@ export class AnotarseComponent implements OnInit {
 
   jugadorbyGrupos(): Promise<any>
   {
+
     return new Promise((resolve)=>{
     //Traigo la los jugadores existentes en el GRUPO de JUGADORBYGRUPO
     let jugadoresPorGrupo= this.jueganService.getJugadoresByGrupo(this.partir[2]).subscribe((cantSnapshot) => {
@@ -264,6 +156,7 @@ export class AnotarseComponent implements OnInit {
       {
         this.voy=false
         this.noVoy=false;
+        this.noHayJugadores= true;
       }
       
       if (this.cantJuegan>0)
@@ -508,7 +401,7 @@ export class AnotarseComponent implements OnInit {
 
   
   compartirWhatsapp() {
-    window.open("https://api.whatsapp.com/send?text=Ingresá aquí https://www.quienjuega.com.ar/grupo/" + this.partir[2]+ " para sumarte");
+    window.open("https://api.whatsapp.com/send?text=Ingresá aquí https://www.quienjuega.com.ar/grupo/"+ this.partir[2] + " para sumarte");
   }
 
   refresh()
