@@ -160,7 +160,7 @@ export class GrupoComponent implements OnInit {
           }
 
           this.grupoService.setGrupo(this.idGrupo, this.grupo).then(()=>{
-            this.alertasService.mostratSwettAlert('', '¡Se modifico el grupo!', 'success');
+            this.alertasService.mostratSwettAlert('', '¡Se modificó el grupo!', 'success');
           }).catch(error=>{
             console.log(error);
           });
