@@ -28,7 +28,7 @@ Para Firebase se instalo:
 	ng add @ng-bootstrap/ng-bootstrap
 	
 //Token de GIT
-	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
+	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
 //Se instalo para la PWA:
 	ng add @angular/pwa@13 --project quienJuega
 

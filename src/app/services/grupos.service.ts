@@ -12,7 +12,7 @@ export class GruposService {
   constructor( private firestore: AngularFirestore
   ) { }
 
-  obtengoIdGrupo(ruta: string): string
+  getIdGrupo(ruta: string): string
   {
     this.grupo= ruta.split("/");
     /*return(parseInt(this.grupo[this.grupo.length-1]));*/
@@ -20,7 +20,7 @@ export class GruposService {
     return this.grupo[this.grupo.length-1];
   }
 
-  agregarGrupo(grupo: any) : Promise<any>
+  addGrupo(grupo: any) : Promise<any>
   {
     return this.firestore.collection('grupos').add(grupo);
   }
@@ -29,9 +29,6 @@ export class GruposService {
   {
     return this.firestore.collection('grupos', ref => ref.where('emailCreador', '==', email)).snapshotChanges();
   }
-  
-  
-
 
   getGrupo(idGrupo: string):Observable<any>
   {
@@ -39,7 +36,7 @@ export class GruposService {
   }
 
 
-  actualizarGrupo(id: string, data:any) //: Promise<any>
+  setGrupo(id: string, data:any) //: Promise<any>
   {
     //return this.firestore.collection('grupos').doc(id).update(data);
     //return this.firestore.collection('jugadores', ref => ref.where('idGrupo', '==', idGrupo)).snapshotChanges();

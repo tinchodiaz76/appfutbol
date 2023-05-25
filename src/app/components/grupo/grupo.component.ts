@@ -66,7 +66,7 @@ export class GrupoComponent implements OnInit {
 
 //    console.log(this.router.url);
 
-    this.idGrupo= this.grupoService.obtengoIdGrupo(this.router.url);
+    this.idGrupo= this.grupoService.getIdGrupo(this.router.url);
 
     if (this.idGrupo!='grupo')
     {
@@ -125,7 +125,7 @@ export class GrupoComponent implements OnInit {
           }
           
 //          console.log('this.grupo=', this.grupo);
-          this.grupoService.agregarGrupo(this.grupo).then((res:any)=>{
+          this.grupoService.addGrupo(this.grupo).then((res:any)=>{
             this.alertasService.mostratSwettAlert('','¡Grupo creado!','success');
         
             this.idGrupo= res.id;
@@ -159,7 +159,7 @@ export class GrupoComponent implements OnInit {
             emailCreador: this.emailCreador
           }
 
-          this.grupoService.actualizarGrupo(this.idGrupo, this.grupo).then(()=>{
+          this.grupoService.setGrupo(this.idGrupo, this.grupo).then(()=>{
             this.alertasService.mostratSwettAlert('', '¡Se modifico el grupo!', 'success');
           }).catch(error=>{
             console.log(error);

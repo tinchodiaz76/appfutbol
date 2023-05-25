@@ -175,7 +175,7 @@ export class AnotarseComponent implements OnInit {
                 emailCreador: this.emailCreadorGrupo
               };
 
-              this.grupoService.actualizarGrupo(this.idGrupo, this.grupo).then(()=>{
+              this.grupoService.setGrupo(this.idGrupo, this.grupo).then(()=>{
                 //Pongo todos los jugadores de JUGADORBYGRUPOS en juega=false                
                 this.jueganService.falseJuega(this.idGrupo);
               });

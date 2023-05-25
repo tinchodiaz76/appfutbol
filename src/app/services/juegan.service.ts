@@ -23,11 +23,12 @@ export class JueganService {
     private utilidadesService: UtilidadesService
     ) { }
 
+/*
   //Obtiene todos los jugadores
   getJugadores() {
     return this.firestore.collection('jugadores').snapshotChanges();
   }
-
+*/
   getjugadorById(id: string):Observable<any>
   {
     return this.firestore.collection('users').doc(id).snapshotChanges();
@@ -73,41 +74,10 @@ export class JueganService {
     return this.firestore.collection('jugadorbygrupos', ref => (ref.where('idGrupo', '==', idGrupo))).snapshotChanges();
   }
 
-
-
-
-  //Me trae los jugadores de un grupo determinado
-  getJugadoresByGroup(idGrupo: any):Observable<any>
-  {
-    return this.firestore.collection('jugadores', ref => ref.where('idGrupo', '==', idGrupo)).snapshotChanges();
-//    return this.firestore.collection('jugadores').doc(idGrupo).snapshotChanges();
-  }
-
-  //Me trae los grupos a los cuales pertenece un jugador
+    //Me trae los grupos a los cuales pertenece un jugador
   getGruposbyJugador(idUser: string):Observable<any>
-  {
-    return this.firestore.collection('jugadorbygrupos', ref => ref.where('idUser', '==', idUser)).snapshotChanges();
-  }
-
-  getJugadorByGroup(idGrupo: any):Observable<any>
-  {
-    return this.firestore.collection('jugadores', ref => ref.where('idGrupo', '==', idGrupo)).snapshotChanges();
-//    return this.firestore.collection('jugadores').doc(idGrupo).snapshotChanges();
-  }
-
-  agregarJugador(jugador: any) : Promise<any>
-  {
-    return this.firestore.collection('jugadores').add(jugador);
-  }
-
-  eliminarJugador(id:string) //:Promise<any>
-  {
-    return this.firestore.collection('jugadores').doc(id).delete();
-  }
-
-  actualizarJugador(id: string, data:any) //: Promise<any>
-  {
-    return this.firestore.collection('jugadores').doc(id).set(data);
+    {
+      return this.firestore.collection('jugadorbygrupos', ref => ref.where('idUser', '==', idUser)).snapshotChanges();
   }
 
   castea(nombre:string) : string
