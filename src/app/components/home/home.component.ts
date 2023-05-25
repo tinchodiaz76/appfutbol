@@ -13,6 +13,7 @@ import { faWhatsapp} from '@fortawesome/free-brands-svg-icons'
 //Spinner
 import {ThemePalette} from '@angular/material/core';
 import {ProgressSpinnerMode} from '@angular/material/progress-spinner';
+import { AngularFireMessaging } from '@angular/fire/compat/messaging';
 
 @Component({
   selector: 'app-home',
@@ -48,8 +49,11 @@ export class HomeComponent implements OnInit {
               private loginService: LoginService,
               private jueganService: JueganService,
               private grupoService: GruposService,
-              private alertasService: AlertasService
-             ) { }
+              private alertasService: AlertasService,
+              private afMessaging: AngularFireMessaging
+             ) 
+  { 
+  }
 
   
   ngOnInit(): void 
@@ -68,12 +72,12 @@ export class HomeComponent implements OnInit {
     //Verifica si existe en USERS
     let jugador= this.jueganService.getJugadorByMail(this.emailCreador).subscribe((gruposSnapshot) => {
 
-      console.log('gruposSnapshot=', gruposSnapshot);
+//      console.log('gruposSnapshot=', gruposSnapshot);
 
       gruposSnapshot.forEach((catData: any) => {
         //Si pertenece al grupo
-        console.log(catData.payload.doc.data());
-        console.log(catData.payload.doc.id);
+//        console.log(catData.payload.doc.data());
+//        console.log(catData.payload.doc.id);
 
         this.grupoService.setLlave({uid: catData.payload.doc.id});
 
@@ -86,6 +90,44 @@ export class HomeComponent implements OnInit {
       jugador.unsubscribe();
     });
   }
+
+  async AceptarMensajesPush()
+  {
+    this.afMessaging.requestPermission
+      .subscribe(async () => {
+//        console.log('Adentro'); //message.innerHTML = "Notifications allowed";
+
+        this.afMessaging.getToken.subscribe ((currentToken) => {
+          window.alert(currentToken);
+          if (currentToken) {
+            // Send the token to your server and update the UI if necessary
+            console.log(currentToken);
+            window.alert(currentToken);
+            // ...
+          } else {
+            // Show permission request UI
+            console.log('No registration token available. Request permission to generate one.');
+            // ...
+          }
+        });
+    });
+
+    
+ 
+/*   
+    this.afMessaging.requestPermission
+//        .pipe(mergeMapTo(this.afMessaging.tokenChanges))
+        .subscribe(
+        ()=>{ console.log('Permision granted');
+              this.afMessaging.getToken.subscribe((token)=>{
+                console.log(token);
+              })
+            },
+        (error)=>{console.error(error)}
+    );
+*/
+  }
+
 
   jugadorbyGrupos() :Promise<any>
   {
@@ -115,7 +157,7 @@ export class HomeComponent implements OnInit {
     this.equipos=[];
       //Se fija si el usuario logueado tiene un grupo creado.
       let subscription = this.gruposService.getGrupoPorCreador(email).subscribe((res:any)=>{
-        console.log('res=', res);
+//        console.log('res=', res);
 
         if (res.length>0)
         {

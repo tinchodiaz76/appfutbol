@@ -58,14 +58,12 @@ export class LoginService {
             let claves = Object.keys(user); // claves = ["nombre", "color", "macho", "edad"]
             for(let i=0; i< claves.length; i++){
               let clave = claves[i];
-              console.log(clave)
-              console.log(user.displayName);
-              console.log(user.uid);
+//              console.log(clave)
+//              console.log(user.displayName);
+//              console.log(user.uid);
             }
-
-
-            console.log(user.displayName);
-            console.log(user.email);
+//            console.log(user.displayName);
+//            console.log(user.email);
 
             this.subscription = this.getValidateUser(user.email).subscribe((res:any)=>{
               if (res.length==0)
@@ -97,15 +95,15 @@ export class LoginService {
                 this.grupoService.setLlave({email: user.email});
                 this.grupoService.setLlave({nombre: user.displayName});
                 
-                console.log(res[0].payload.doc.id);
+//                console.log(res[0].payload.doc.id);
                 this.grupoService.setLlave({uid: res[0].payload.doc.id});
 
                 if (this.activatedRoute.snapshot.queryParams['returnUrl'])
                 {
                   partir= this.activatedRoute.snapshot.queryParams['returnUrl'].split('/')
 
-                  console.log(partir[1]);
-                  console.log(partir[2]);
+//                  console.log(partir[1]);
+//                  console.log(partir[2]);
           
                   this.router.navigate(['/grupo', partir[2]]);
                 }
@@ -134,31 +132,7 @@ export class LoginService {
     const uid= this.grupoService.getValorLlave('parametros').uid;
     return uid !== null && uid!=undefined ? true : false;
   }
-/*
-  getUserLogin() 
-  {
-    const auth= getAuth();
-    
-    onAuthStateChanged(auth, (user)=>{
-      console.log('user='+ user);
-      console.log('user='+ user?.uid);
-      if (user)
-      {
-//      console.log(user);
-        console.log('user.uid=' +user.uid);
-        //const usuario= user.uid;
-//        return user;
-      }
-      else
-      {
-        //No inicio sesion
-        console.log('LogOut GMAIL');
-//        return false;
-        //this.router.navigate(['']);
-      }
-    })
-  }
-*/
+
   logout() {
     const auth = getAuth();
   

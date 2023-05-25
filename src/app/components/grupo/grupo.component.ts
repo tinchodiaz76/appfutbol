@@ -9,11 +9,11 @@ import { Router } from '@angular/router';
 import { JueganService } from 'src/app/services/juegan.service';
 //Copy
 import { ClipboardService } from 'ngx-clipboard';
-//FontAwasome
+//Iconos
 import { faCopy, faFloppyDisk, faFutbol, faSquareCaretLeft, faRightFromBracket} from '@fortawesome/free-solid-svg-icons';
 import { faWhatsapp} from '@fortawesome/free-brands-svg-icons'
+////Servicio con varias utilidades
 import { UtilidadesService } from 'src/app/services/utilidades.service';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-grupo',
@@ -41,7 +41,6 @@ export class GrupoComponent implements OnInit {
   
   fecha!: string;
 
-  subscription: Subscription | undefined;
   emailCreador: string='';
 
   constructor(private grupoService: GruposService,
@@ -161,7 +160,6 @@ export class GrupoComponent implements OnInit {
           }
 
           this.grupoService.actualizarGrupo(this.idGrupo, this.grupo).then(()=>{
-            console.log('Se actualizo el GRUPO');
             this.alertasService.mostratSwettAlert('', '¡Se modifico el grupo!', 'success');
           }).catch(error=>{
             console.log(error);

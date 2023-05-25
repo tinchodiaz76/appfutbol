@@ -21,7 +21,7 @@ export class AuthGuard implements CanActivate {
         {
             this.alertaService.mostratSwettAlert('Atencion', 'No estas logueado!', 'error');
 
-            console.log('returnUrl:state.url=', state.url);
+//            console.log('returnUrl:state.url=', state.url);
             return this.router.navigate(['/'],{queryParams:{returnUrl:state.url}}).then(() => false);
         }
         else

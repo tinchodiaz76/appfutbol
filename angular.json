@@ -27,7 +27,9 @@
               "src/assets",
               "src/manifest.webmanifest",
               "src/manifest.webmanifest",
-              "src/manifest.webmanifest"
+              "src/manifest.webmanifest",
+              "src/firebase-messaging-sw.js",
+              "src/manifest.json"
             ],
             "scripts": [],
             "styles": [
@@ -100,7 +102,9 @@
               "src/assets",
               "src/manifest.webmanifest",
               "src/manifest.webmanifest",
-              "src/manifest.webmanifest"
+              "src/manifest.webmanifest",
+              "src/firebase-messaging-sw.js",
+              "src/manifest.json"
             ],
             "scripts": [],
             "styles": [

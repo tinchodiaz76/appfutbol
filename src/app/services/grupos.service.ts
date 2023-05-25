@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { grupoModel } from '../models/grupo.model';
-import { Observable, map } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -37,25 +36,8 @@ export class GruposService {
   getGrupo(idGrupo: string):Observable<any>
   {
     return this.firestore.collection('grupos').doc(idGrupo).snapshotChanges();
-/*       
-    .pipe(map((actions:any) => {
-    return actions.map((action:any) => {
-      const data = action.payload.doc.data();
-      const _id = action.payload.doc.id;
+  }
 
-      console.log(_id);
-      console.log(data);
-      return { _id, ...data };
-    })[0];
-    }));
-    */
-  }
-/*
-  getGrupo(idrupo: string):Observable<any>
-  {
-    return this.firestore.collection('jugadores', ref => ref.where('idGrupo', '==', idrupo)).snapshotChanges()
-  }
-*/
 
   actualizarGrupo(id: string, data:any) //: Promise<any>
   {
@@ -79,19 +61,19 @@ export class GruposService {
     }
     else
     {
-      console.log(v_obj);
+//      console.log(v_obj);
       
       v_obj= JSON.stringify(v_obj); 
-      console.log(v_obj)
+//      console.log(v_obj)
       
       v_obj = v_obj.substring(0, v_obj.length - 1);
-      console.log(v_obj)
+//      console.log(v_obj)
 
       v_obj=v_obj + ',' + JSON.stringify(valor).slice(1, -1) +'}';
-      console.log(v_obj)
+//      console.log(v_obj)
 
       v_obj= JSON.parse (v_obj)
-      console.log(v_obj)
+//      console.log(v_obj)
       
       localStorage.setItem('parametros',JSON.stringify(v_obj));
       

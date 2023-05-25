@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { jugadorHabitualModel } from '../models/habituales.model';
-import { Observable, Subscription} from 'rxjs';
+import { Observable} from 'rxjs';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Router } from '@angular/router';
+import { UtilidadesService } from './utilidades.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,10 +17,10 @@ export class JueganService {
   nombre: string='';
   firebase: any;
   jugador: any;
-  subscription: Subscription | undefined;
-
+  
   constructor(
-    private firestore: AngularFirestore
+    private firestore: AngularFirestore,
+    private utilidadesService: UtilidadesService
     ) { }
 
   //Obtiene todos los jugadores
@@ -105,10 +107,6 @@ export class JueganService {
 
   actualizarJugador(id: string, data:any) //: Promise<any>
   {
-//    console.log('data.nombre=' + data.nombre);
-//    console.log('data.juega=' + data.juega);
-
-    //return this.firestore.collection('jugadores').doc(id).update(data);
     return this.firestore.collection('jugadores').doc(id).set(data);
   }
 
@@ -135,46 +133,37 @@ export class JueganService {
 
   falseJuega(idGrupo: string)
   {
-    //Paso el campo juega a false, si el jugador no fue modificado 
-    //let mensaje = new Promise((resolve, reject) => {  
       console.log('falseJuega-Inicio');
-      this.subscription = this.getJugadoresByGroup(idGrupo).subscribe((res:any)=>{
-//      console.log('getJugadoresByGroup--->res=', res);
-        res.forEach((element:any) => {
-          if (element.payload.doc.data().juega)
-          {
+      let subscription = this.getJugadoresByGrupo(idGrupo).subscribe((res:any)=>{
 
-            if (!element.payload.doc.data().habitual)
-            {
-              this.eliminarJugador(element.payload.doc.id).then(()=>{
-                console.log('Documento eliminado exitósamente');
-              }, (error) => {
-                console.log(error);
-              });
-            }
-            else
+        if (res.length>0)
+        {
+          res.forEach((catData: any) => {
+//            console.log('getJugadoresByGroup--->res.id=', catData.payload.doc.id);
+//            console.log('getJugadoresByGroup--->res.alias=', catData.payload.doc.data().alias);
+//            console.log('getJugadoresByGroup--->res.juega=', catData.payload.doc.data().juega);
+
+            if (catData.payload.doc.data().juega)
             {
               this.jugador={
-                        idGrupo:element.payload.doc.data().idGrupo,
-                        nombre: element.payload.doc.data().nombre,
-                        juega: false,
-                        habitual: element.payload.doc.data().habitual,
-                        activo: element.payload.doc.data().activo,
-                        fechaActualizacion: new Date()
-                      }
+                            idGrupo:catData.payload.doc.data().idGrupo,
+                            idUser:catData.payload.doc.data().idUser,
+                            alias: catData.payload.doc.data().alias,
+                            juega: false,
+                            habitual: catData.payload.doc.data().habitual,
+                            activo: catData.payload.doc.data().activo
+                      };
 
-              this.actualizarJugador(element.payload.doc.id , this.jugador).then(()=>{
-                  console.log('Documento actualizado exitósamente-1');
+              this.setJugadorbyGrupo(catData.payload.doc.id,this.jugador).then(()=>{
+                  this.utilidadesService.refreshRoute(idGrupo);                 
                 },(error)=>{
                   console.log(error);
                 });
             }
-          }
-        }); //forEach
-        this.subscription?.unsubscribe();
+          });
+        }
+        subscription.unsubscribe();
       });
       console.log('falseJuega-Fin');
-      //resolve('1'); 
-    //});
-  }
+    }
 }

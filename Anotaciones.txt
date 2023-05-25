@@ -1,10 +1,11 @@
 
 Para Firebase se instalo:
 
-	ng add @angular/fire
+	ng add @angular/fire@7.5.0
 	/*Seleccionar Firestore*/
 	/*Seleccionar Authentication*/
 	npm i firebase
+
 	
 //Se instalaron las siguientes herramientas:
 	npm i sweetalert2
@@ -25,9 +26,15 @@ Para Firebase se instalo:
 	ng g class auth/authGuard --skyp-tests
 //Bootstrap para modal
 	ng add @ng-bootstrap/ng-bootstrap
+	
 //Token de GIT
 	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
+//Se instalo para la PWA:
+	ng add @angular/pwa@13 --project quienJuega
+
+	ng buid --prod
 	
+git push -u origin main	
 	
 	 /*Se instala IONIC como global*/
 	 npm i -g @ionic/cli
@@ -48,14 +55,6 @@ Para Firebase se instalo:
 	 ionic cap build
 
 	             "ngswConfigPath": "ngsw-config.json"
-
-	 
-Se instalo para la PWA:
-	ng add @angular/pwa@13 --project quienJuega
-
-	ng buid --prod
-	
-git push -u origin main
 	
 Servidores DNS de 000webhost:
 -----------------------------
@@ -67,6 +66,3 @@ Como no te dan el SSL, cree una cuenta en cloudflare
 Sus DNS son 
 connie.ns.cloudflare.com y randall.ns.cloudflare.com
 
-
-Token o Clave de GIT
-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

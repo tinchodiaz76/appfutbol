@@ -1,19 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { GruposService } from 'src/app/services/grupos.service';
-import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { JueganService } from 'src/app/services/juegan.service';
 import { AlertasService } from 'src/app/services/alertas.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogoJugadorComponent } from '../dialogo-jugador/dialogo-jugador.component';
-//Icono Whatsapp
+//Iconos
+import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { faWhatsapp} from '@fortawesome/free-brands-svg-icons'
-import { Time } from '@angular/common';
+import { faUserCheck } from '@fortawesome/free-solid-svg-icons';
+import { faHandPointUp, faHandPointDown } from '@fortawesome/free-solid-svg-icons';
+//Servicio con varias utilidades
 import { UtilidadesService } from 'src/app/services/utilidades.service';
+//Para usar el modal
 import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 //Spinner
 import {ThemePalette} from '@angular/material/core';
 import {ProgressSpinnerMode} from '@angular/material/progress-spinner';
+//para manejar la fecha
+import * as moment from 'moment';
+import { grupoModel } from 'src/app/models/grupo.model';
 
 @Component({
   selector: 'app-anotarse',
@@ -29,6 +35,11 @@ export class AnotarseComponent implements OnInit {
   emailCreador: string='';
   faRightFromBracket= faRightFromBracket;
   faWhatsapp= faWhatsapp;
+  faHandPointUp= faHandPointUp;
+  faHandPointDown= faHandPointDown;
+
+//  faHandBackFist= faHandBackFist
+  faUserCheck= faUserCheck
   jugador: any;
 
   voy :boolean=false;
@@ -37,10 +48,17 @@ export class AnotarseComponent implements OnInit {
   idGrupo: string='';
   nombreCreador: string='';
   nombreGrupo :string='';
+//  fechaCreacion: Date | undefined;
   direccionGrupo :string='';
-  diaGrupo :string='';
-  hora: Time | undefined;
-  precio: number=0;
+  diaGrupo :number=0; //string='';
+  horaGrupo: any;
+  precioGrupo: number=0;
+  juegaTorneoGrupo: boolean=false;
+  mailGrupo: string='';
+  emailCreadorGrupo: string='';
+
+  grupo!: grupoModel;
+  
   dia: any=['Lunes','Martes','Miercoles','Jueves', 'Viernes', 'Sabado', 'Domingo']
   objeto: any=[];
   showDivCarga: boolean=false;
@@ -60,6 +78,8 @@ export class AnotarseComponent implements OnInit {
   //Spinner
   color: ThemePalette = 'primary';
   mode: ProgressSpinnerMode = 'indeterminate';
+  //Fecha ärtido
+  fechaPartido: Date | undefined;
 
   constructor(private gruposService: GruposService,
             private router: Router,
@@ -97,17 +117,23 @@ export class AnotarseComponent implements OnInit {
         this.nombreGrupo= res.payload.data().nombre;
         this.direccionGrupo= res.payload.data().direccion;
         this.cantIntegrantes= res.payload.data().cantIntegrantes;
-
-        this.diaGrupo= this.dia[(res.payload.data().dia-1)];
-        this.hora= res.payload.data().hora;
-        this.precio= res.payload.data().precio;
-
-        console.log(this.nombreGrupo);
-        console.log(this.direccionGrupo);
-        console.log(this.diaGrupo);
+        //this.dia muestar el dia de la semana
+        this.dia= this.dia[(res.payload.data().dia-1)]; 
+        //this.diaGrupo Alamacena en numero de dia que me viene de la BD
+        this.diaGrupo=res.payload.data().dia;
+        this.horaGrupo= res.payload.data().hora;
+        this.precioGrupo= res.payload.data().precio;
+        this.juegaTorneoGrupo= res.payload.data().juegaTorneo;
+        this.mailGrupo= res.payload.data().mail;
+        this.emailCreadorGrupo= res.payload.data().emailCreador;
+//        console.log(this.nombreGrupo);
+//        console.log(this.direccionGrupo);
+//        console.log(this.diaGrupo);
         
         datosGrupo.unsubscribe();
         resolve(true);  
+
+        this.fechaPartido= res.payload.data().fechaProximoPartido;
       });
     });
   };
@@ -117,7 +143,7 @@ export class AnotarseComponent implements OnInit {
 
     return new Promise((resolve)=>{
     //Traigo la los jugadores existentes en el GRUPO de JUGADORBYGRUPO
-    let jugadoresPorGrupo= this.jueganService.getJugadoresByGrupo(this.partir[2]).subscribe((cantSnapshot) => {
+    let jugadoresPorGrupo= this.jueganService.getJugadoresByGrupo(this.idGrupo).subscribe((cantSnapshot) => {
       if (cantSnapshot.length>0)
       {
         cantSnapshot.forEach((catData: any) => {
@@ -132,6 +158,28 @@ export class AnotarseComponent implements OnInit {
 
           if (catData.payload.doc.data().idUser===this.uid)
           {
+            if (moment(this.fechaPartido).isBefore(moment().format('L')))
+            {
+              //Camio fechaProximoPartido de GRUPOS
+              this.grupo={
+                nombre:this.nombreGrupo,
+                cantIntegrantes: this.cantIntegrantes,
+                //fechaCreacion: new Date(),
+                dia: this.diaGrupo,
+                direccion: this.direccionGrupo,
+                hora: this.horaGrupo,
+                precio: this.precioGrupo,
+                fechaProximoPartido: this.utilidadesService.buscar(this.diaGrupo),
+                juegaTorneo: this.juegaTorneoGrupo,
+                mail: this.mailGrupo,
+                emailCreador: this.emailCreadorGrupo
+              };
+
+              this.grupoService.actualizarGrupo(this.idGrupo, this.grupo).then(()=>{
+                //Pongo todos los jugadores de JUGADORBYGRUPOS en juega=false                
+                this.jueganService.falseJuega(this.idGrupo);
+              });
+            }
             if (catData.payload.doc.data().juega)
             {
               this.voy=true;
@@ -160,7 +208,7 @@ export class AnotarseComponent implements OnInit {
       }
       
       if (this.cantJuegan>0)
-        this.value=(this.precio/this.cantJuegan).toFixed(2);
+        this.value=(this.precioGrupo/this.cantJuegan).toFixed(2);
       else
         this.value='0';
 
@@ -187,9 +235,8 @@ export class AnotarseComponent implements OnInit {
     let idUser: string='';
     this.emailCreador= this.grupoService.getValorLlave('email');
     partir= this.router.url.split('/');
-
-    let grupoDeUnJugador= this.jueganService.getJugadorbyGrupo(this.partir[2]).subscribe(async (gruposSnapshot) => {
-      console.log('gruposSnapshot=', gruposSnapshot.length);
+///1
+    let grupoDeUnJugador= this.jueganService.getJugadorbyGrupo(this.idGrupo).subscribe(async (gruposSnapshot) => {
       if (gruposSnapshot.length>0)
       {
           //si ya existe un registro en JUGADORBYGRUPO para el idGrupo
@@ -208,25 +255,29 @@ export class AnotarseComponent implements OnInit {
 
           if (!coincidencia)
           {
-            this.abrirDialogo(this.nombreCreador, estado, this.partir[2], 'insert','');
+///2            
+            this.abrirDialogo(this.nombreCreador, estado, this.idGrupo, 'insert','');
           }
           else
           {
             if (estado)
             {
               //Revisar que no haya un alias igual en el idGrupo=partir[2]
-              let pepe= await this.aliasDuplicado(this.partir[2], vAlias, idUser);
+///3              
+              let pepe= await this.aliasDuplicado(this.idGrupo, vAlias, idUser);
               if (pepe)
               {
                 this.alertasService.mostratSwettAlert('¡Ya existe un Jugador con ese nombre!', '', 'error');
-                this.abrirDialogo(vAlias, estado, this.partir[2], 'update', id);
+///4                
+                this.abrirDialogo(vAlias, estado, this.idGrupo, 'update', id);
               }
               else
               {
                 this.objeto={
                   activo: true, 
                   habitual: true,
-                  idGrupo: this.partir[2],
+///5                  
+                  idGrupo: this.idGrupo,
                   idUser: this.uid,
                   juega: estado,
                   alias:vAlias
@@ -240,7 +291,8 @@ export class AnotarseComponent implements OnInit {
               this.objeto={
                 activo: true, 
                 habitual: true,
-                idGrupo: this.partir[2],
+///6                
+                idGrupo: this.idGrupo,
                 idUser: this.uid,
                 juega: estado,
                 alias:vAlias
@@ -253,7 +305,8 @@ export class AnotarseComponent implements OnInit {
       else
       {
         //No existe un registro en JUGADORBYGRUPO para el idGrupo
-        this.abrirDialogo(this.nombreCreador,estado, this.partir[2],'insert', '');
+///7
+        this.abrirDialogo(this.nombreCreador,estado, this.idGrupo,'insert', '');
       }
       grupoDeUnJugador.unsubscribe();
     });
@@ -306,9 +359,6 @@ export class AnotarseComponent implements OnInit {
     });
 
     dialogo1.afterClosed().subscribe(art => {
-      
-
-      console.log('art.nombre=', art.nombre);
 
           if (art.nombre!='' || art=='undefined')
           //Controlo que haya ingresado un nomnbre
@@ -346,7 +396,7 @@ export class AnotarseComponent implements OnInit {
                           this.alertasService.mostratSwettAlert('Excelente', 'Te sumaste '+ this.jueganService.castea(art.nombre) +'!', 'success')
 
                           //Refresco la ruta
-                        this.refresh();
+                          this.utilidadesService.refreshRoute(idGrupo);
                       }).catch(error=>{
                       console.log(error);
                       });
@@ -376,7 +426,7 @@ export class AnotarseComponent implements OnInit {
         this.alertasService.mostratSwettAlert('Excelente', 'Te sumaste '+ objeto.alias +'!', 'success');
   
         //Refresco la ruta
-        this.refresh();
+        this.utilidadesService.refreshRoute(this.idGrupo);
       }, (error) => {
         console.log(error);
       });
@@ -388,7 +438,7 @@ export class AnotarseComponent implements OnInit {
           this.alertasService.mostratSwettAlert('Ufa', 'Te bajaste '+ objeto.alias +'!', 'success');
 
           //Refresco la ruta
-          this.refresh();
+          this.utilidadesService.refreshRoute(this.idGrupo);
         }, (error) => {
           console.log(error);
         });
@@ -401,13 +451,8 @@ export class AnotarseComponent implements OnInit {
 
   
   compartirWhatsapp() {
-    window.open("https://api.whatsapp.com/send?text=Ingresá aquí https://www.quienjuega.com.ar/grupo/"+ this.partir[2] + " para sumarte");
-  }
-
-  refresh()
-  {
-    this.router.navigateByUrl('/RefrshComponent', {skipLocationChange: true})
-    .then(()=> this.router.navigate(['grupo', this.idGrupo]));
+///8    
+    window.open("https://api.whatsapp.com/send?text=Ingresá aquí https://www.quienjuega.com.ar/grupo/"+ this.idGrupo + " para sumarte");
   }
 
   verIntegrantes(content: any) {

@@ -1,4 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 import * as moment from 'moment';
 
 
@@ -8,7 +9,7 @@ import * as moment from 'moment';
 export class UtilidadesService {
   fecha: string='';
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   buscar(dia: number)
   {
@@ -61,6 +62,10 @@ export class UtilidadesService {
           }
       }
   }
-
-
+  
+  refreshRoute(idGrupo: string)
+  {
+  this.router.navigateByUrl('/RefrshComponent', {skipLocationChange: true})
+  .then(()=> this.router.navigate(['grupo', idGrupo]));
+  }
 }
