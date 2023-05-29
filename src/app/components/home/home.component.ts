@@ -128,21 +128,6 @@ export class HomeComponent implements OnInit {
         });
 */        
     });
-
-    
- 
-/*   
-    this.afMessaging.requestPermission
-//        .pipe(mergeMapTo(this.afMessaging.tokenChanges))
-        .subscribe(
-        ()=>{ console.log('Permision granted');
-              this.afMessaging.getToken.subscribe((token)=>{
-                console.log(token);
-              })
-            },
-        (error)=>{console.error(error)}
-    );
-*/
   }
 
 
@@ -243,10 +228,13 @@ export class HomeComponent implements OnInit {
 
   anotate()
   {
-    if (this.grupo!='' || this.grupo!=undefined)
-      this.router.navigate(['/grupo', this.grupo]);
-    else
+    if (this.grupo==='')
       this.alertasService.mostratSwettAlert('', 'Debe seleccionar un Grupo!', 'error');
+    else
+    {
+      if (this.grupo!='' || this.grupo!=undefined)
+        this.router.navigate(['/grupo', this.grupo]);
+    }
   }
 
   changeSelect()
