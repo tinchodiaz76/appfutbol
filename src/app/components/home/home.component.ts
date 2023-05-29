@@ -95,10 +95,26 @@ export class HomeComponent implements OnInit {
   {
     this.afMessaging.requestPermission
       .subscribe(async () => {
+          window.alert('11111');
 //        console.log('Adentro'); //message.innerHTML = "Notifications allowed";
+        this.afMessaging.requestToken.subscribe((currentToken:any)=>{
+          window.alert('currentToken=' + currentToken);
 
+          if (currentToken) {
+            // Send the token to your server and update the UI if necessary
+            console.log(currentToken);
+            window.alert(currentToken);
+            // ...
+          } else {
+            // Show permission request UI
+            console.log('No registration token available. Request permission to generate one.');
+            // ...
+          }
+        })
+/*        
         this.afMessaging.getToken.subscribe ((currentToken) => {
-          window.alert(currentToken);
+          window.alert('currentToken=' + currentToken);
+
           if (currentToken) {
             // Send the token to your server and update the UI if necessary
             console.log(currentToken);
@@ -110,6 +126,7 @@ export class HomeComponent implements OnInit {
             // ...
           }
         });
+*/        
     });
 
     
