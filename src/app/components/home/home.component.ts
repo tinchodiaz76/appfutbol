@@ -59,8 +59,8 @@ export class HomeComponent implements OnInit {
              ) 
   { 
         
-    notificacion.requestPermission().then(token=>{
-      console.log(token);
+    notificacion.requestPermission().then(tokenDevice=>{
+      console.log(tokenDevice);
 
       this.uid= this.gruposService.getValorLlave('parametros').uid;
 
@@ -71,7 +71,7 @@ export class HomeComponent implements OnInit {
               this.user={
                 email:res.payload.data().email,
                 nombre:res.payload.data().nombre,
-                token: token
+                tokenDevice: tokenDevice
               };
 
               this.jueganService.setJugadorbyId(res.payload.id,this.user).then(()=>{
@@ -149,22 +149,6 @@ export class HomeComponent implements OnInit {
             // ...
           }
         })
-/*        
-        this.afMessaging.getToken.subscribe ((currentToken) => {
-          window.alert('currentToken=' + currentToken);
-
-          if (currentToken) {
-            // Send the token to your server and update the UI if necessary
-            console.log(currentToken);
-            window.alert(currentToken);
-            // ...
-          } else {
-            // Show permission request UI
-            console.log('No registration token available. Request permission to generate one.');
-            // ...
-          }
-        });
-*/        
     });
   }
 
@@ -264,6 +248,10 @@ export class HomeComponent implements OnInit {
     this.router.navigateByUrl('grupo/edit/' + this.idGrupo);
   }
 
+  mensajeGrupo()
+  {
+    this.router.navigateByUrl('grupo/' + this.idGrupo + '/mensaje');   
+  }
   crearGrupo()
   {
     this.router.navigate(['grupo']);

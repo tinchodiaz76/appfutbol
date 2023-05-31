@@ -47,6 +47,20 @@
         </div>
     </div>
 
+    <div class="row mt-3" *ngIf="!showDiv">
+        <div class="d-flex justify-content-center" *ngIf="!creaGrupo && modificaGrupo">
+        <!--
+        <div class="col-12" style="align-items: text-center;margin-top: 15px;" *ngIf="!creaGrupo">
+        -->
+            <button mat-raised-button
+            matTooltip="Enviar Mensaje al Grupo"
+            style="background-color: #2E86C1;float: right;"
+            (click)="mensajeGrupo()">
+            <fa-icon [icon]="faPenFancy"></fa-icon>Enviar Mensaje al Grupo
+            </button>
+        </div>
+    </div>
+
     <div class="row mt-3" *ngIf="!showDiv">  
         <div class="d-flex justify-content-around" *ngIf="equipos.length>0">
             Selecciona el Grupo:

@@ -23,12 +23,6 @@ export class JueganService {
     private utilidadesService: UtilidadesService
     ) { }
 
-/*
-  //Obtiene todos los jugadores
-  getJugadores() {
-    return this.firestore.collection('jugadores').snapshotChanges();
-  }
-*/
   getUserById(id: string):Observable<any>
   {
     return this.firestore.collection('users').doc(id).snapshotChanges();
@@ -37,11 +31,6 @@ export class JueganService {
   setJugadorbyId(id: string, data:any) //: Promise<any>
   {
     return this.firestore.collection('users').doc(id).set(data);
-  }
-  
-  getjugadorById(id: string):Observable<any>
-  {
-    return this.firestore.collection('users').doc(id).snapshotChanges();
   }
 
   //Se fija en jugadrobygrupos si tiene un grupo asocioado

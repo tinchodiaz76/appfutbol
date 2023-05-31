@@ -1,0 +1,32 @@
+<div class="position-absolute top-50 start-50 translate-middle">
+
+    <form>
+        <div class="form-group">
+          <label for="exampleFormControlTextarea1">Mensaje</label>
+          <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+        </div>
+
+
+        <div class="form-group row mt-3">
+            <div class="col-6">
+                <button mat-raised-button
+                    matTooltip="Grabar"
+                    color="primary"
+                    style="background-color: #2E86C1;"
+                    (click)="enviarMensaje()">
+                    Enviar
+                    <fa-icon [icon]="faPaperPlane"></fa-icon>
+                </button>
+            </div>
+            <div class="col-6">
+                <button mat-raised-button
+                    matTooltip="Atras"
+                    color="warn"
+                    (click)="back()"
+                    style="background-color: #191d21">Volver
+                    <fa-icon [icon]="faRightFromBracket"></fa-icon>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

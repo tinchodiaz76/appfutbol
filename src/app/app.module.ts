@@ -42,6 +42,7 @@ import { AnotarseComponent } from './components/anotarse/anotarse.component';
 import { HomeComponent } from './components/home/home.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AngularFireMessagingModule } from '@angular/fire/compat/messaging';
+import { EnviarMensajePushComponent } from './components/enviar-mensaje-push/enviar-mensaje-push.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { AngularFireMessagingModule } from '@angular/fire/compat/messaging';
     GrupoComponent,
     LoginComponent,
     AnotarseComponent,
-    HomeComponent
+    HomeComponent,
+    EnviarMensajePushComponent
   ],
   imports: [
     BrowserModule,

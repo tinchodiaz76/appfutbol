@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
@@ -8,8 +9,10 @@ import * as moment from 'moment';
 })
 export class UtilidadesService {
   fecha: string='';
+  url: string='https://www.quienjuega.com.ar/';
 
-  constructor(private router: Router) { }
+  constructor(private router: Router,
+              private http: HttpClient) { }
 
   buscar(dia: number)
   {
@@ -67,5 +70,9 @@ export class UtilidadesService {
   {
   this.router.navigateByUrl('/RefrshComponent', {skipLocationChange: true})
   .then(()=> this.router.navigate(['grupo', idGrupo]));
+  }
+
+  invocaPhp(deviceToken: string, mensaje: string) {
+    return this.http.get(`${this.url}notificaciones.php?deviceToken=${deviceToken}&mensaje=${mensaje}`)
   }
 }
