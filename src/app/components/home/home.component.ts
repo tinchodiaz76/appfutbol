@@ -14,12 +14,14 @@ import { faWhatsapp} from '@fortawesome/free-brands-svg-icons'
 import {ThemePalette} from '@angular/material/core';
 import {ProgressSpinnerMode} from '@angular/material/progress-spinner';
 import { AngularFireMessaging } from '@angular/fire/compat/messaging';
+import { PushNotificationsService } from 'src/app/services/push-notifications.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
+
 export class HomeComponent implements OnInit {
   faCirclePlus= faCirclePlus;
   faPenFancy= faPenFancy;
@@ -41,7 +43,9 @@ export class HomeComponent implements OnInit {
   //Spinner
   color: ThemePalette = 'primary';
   mode: ProgressSpinnerMode = 'indeterminate';
-
+  user: any;
+  messageReceived ='';
+  bodyReceived='';
 
   constructor(private router: Router,
               private gruposService: GruposService,
@@ -50,14 +54,48 @@ export class HomeComponent implements OnInit {
               private jueganService: JueganService,
               private grupoService: GruposService,
               private alertasService: AlertasService,
-              private afMessaging: AngularFireMessaging
+              private afMessaging: AngularFireMessaging,
+              private notificacion: PushNotificationsService
              ) 
   { 
+        
+    notificacion.requestPermission().then(token=>{
+      console.log(token);
+
+      this.uid= this.gruposService.getValorLlave('parametros').uid;
+
+      console.log('this.uid=', this.uid);
+
+      let gruposByUsuario= this.jueganService.getUserById(this.uid).subscribe((res) => {
+            
+              this.user={
+                email:res.payload.data().email,
+                nombre:res.payload.data().nombre,
+                token: token
+              };
+
+              this.jueganService.setJugadorbyId(res.payload.id,this.user).then(()=>{
+                console.log('Se modifico Users');
+                },(error)=>{
+                  console.log(error);
+              });
+      gruposByUsuario.unsubscribe();
+      });
+    });
   }
 
   
   ngOnInit(): void 
   {
+    this.notificacion.receiveMessage().subscribe((payload)=>{
+      console.log(payload);
+
+      this.messageReceived = payload.notification.title!;
+      console.log('title ', this.messageReceived);
+      this.bodyReceived = payload.notification.body!;
+      console.log('body ', this.bodyReceived);
+    });
+
     this.showDiv= true;
 
     this.equipos=[];
@@ -202,14 +240,19 @@ export class HomeComponent implements OnInit {
         //Obtengo los datos del grupo.
         //Entra por doc(idGrupo).
         let getGrupo= this.gruposService.getGrupo(catData.payload.doc.data().idGrupo).subscribe(res=>{
-            console.log(res.payload.data()['nombre']);
+          if (res.payload.data()!=undefined)
+          {
+//              console.log(res.payload.data());
 
-            obj= {nombre:res.payload.data()['nombre'], idGrupo: catData.payload.doc.data().idGrupo};
+            if (res.payload.data().nombre!==undefined)
+            {
+              obj= {nombre:res.payload.data().nombre, idGrupo: catData.payload.doc.data().idGrupo};
 
-            console.log(obj);
-            this.equipos.push(obj); //this.equipo, es el que lista el equipo en el select
-
-            getGrupo.unsubscribe();
+//            console.log(obj);
+              this.equipos.push(obj); //this.equipo, es el que lista el equipo en el select
+            }
+          }
+          getGrupo.unsubscribe();
         });
      });
      grupoDeUnJugador.unsubscribe();
@@ -228,7 +271,8 @@ export class HomeComponent implements OnInit {
 
   anotate()
   {
-    if (this.grupo==='')
+    console.log(this.grupo);
+    if (this.grupo==='' || this.grupo==='null') 
       this.alertasService.mostratSwettAlert('', 'Debe seleccionar un Grupo!', 'error');
     else
     {

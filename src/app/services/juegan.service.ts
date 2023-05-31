@@ -29,6 +29,16 @@ export class JueganService {
     return this.firestore.collection('jugadores').snapshotChanges();
   }
 */
+  getUserById(id: string):Observable<any>
+  {
+    return this.firestore.collection('users').doc(id).snapshotChanges();
+  }
+
+  setJugadorbyId(id: string, data:any) //: Promise<any>
+  {
+    return this.firestore.collection('users').doc(id).set(data);
+  }
+  
   getjugadorById(id: string):Observable<any>
   {
     return this.firestore.collection('users').doc(id).snapshotChanges();
