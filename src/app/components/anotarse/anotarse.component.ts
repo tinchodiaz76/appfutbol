@@ -215,7 +215,7 @@ export class AnotarseComponent implements OnInit {
       if (this.cantJuegan===10)
       {
         this.voy=true;
-        this.noVoy=true;
+        this.noVoy=false;
       }
       jugadoresPorGrupo.unsubscribe();
       resolve(true);
