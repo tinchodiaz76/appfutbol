@@ -16,7 +16,7 @@
 
         <div class="error"
             *ngIf="mensajeForm.get('mensaje')?.hasError('minLength') && mensajeForm.get('mensaje')?.touched">
-            El mensaje al equipo requiere como minimo 5 caracteres
+            El mensaje al equipo requiere como mínimo 5 caracteres
         </div>
 
         <div class="form-group row mt-3">
@@ -28,7 +28,7 @@
                     [disabled]="mensajeForm.invalid"
                     (click)="enviarMensaje()">
                     Enviar
-                    <fa-icon [icon]="faPaperPlane"></fa-icon>
+                    <fa-icon [icon]="faShareFromSquare"></fa-icon>
                 </button>
             </div>
             <div class="col-6">

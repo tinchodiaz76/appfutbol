@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 //Parametros de URL
 import { Router, ActivatedRoute, Params  } from '@angular/router';
 //Icono de fontawesome
-import { faCirclePlus, faFutbol, faPenFancy } from '@fortawesome/free-solid-svg-icons';
+import { faCirclePlus, faFutbol, faPenFancy, faShareFromSquare } from '@fortawesome/free-solid-svg-icons';
 //Servicio de grupo
 import { GruposService } from 'src/app/services/grupos.service';
 import { LoginService } from 'src/app/services/login.service';
@@ -26,6 +26,7 @@ export class HomeComponent implements OnInit {
   faCirclePlus= faCirclePlus;
   faPenFancy= faPenFancy;
   faFutbol= faFutbol;
+  faShareFromSquare= faShareFromSquare;
     
   emailCreador: string='';
   usuarioCreador: string='';

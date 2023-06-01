@@ -154,15 +154,16 @@
                             [disabled]="grupoForm.invalid"
                              style="background-color: #3859F0;"
                             (click)="navegarGrupo()">
-                            <fa-icon [icon]="faFutbol"></fa-icon>
                             Anotate
+                            <fa-icon [icon]="faFutbol"></fa-icon>
                         </button>
                         
                         <button mat-raised-button
                             matTooltip="Atras"
                             color="warn"
                             (click)="back()"
-                            style="background-color: #191d21">Volver
+                            style="background-color: #191d21">
+                            Volver
                             <fa-icon [icon]="faRightFromBracket"></fa-icon>
                         </button>
                     </div>
@@ -172,8 +173,8 @@
     </form>
 
     <div  *ngIf="puedeNavegar" class="form-group mt-2">
-        <p>¡Enviale este link a tus amigos!</p>
-
+        <strong>¡Enviale este link a tus amigos!</strong>
+        <br>
         <input type="text" [(ngModel)]="linkGrupo" readonly #formInputText
         style="height: 35px; width: 270px; background-color: lightgray;">
         <button mat-raised-button 

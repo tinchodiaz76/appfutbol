@@ -1,7 +1,7 @@
 import { ElementSchemaRegistry } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { faRightFromBracket, faPaperPlane} from '@fortawesome/free-solid-svg-icons';
+import { faRightFromBracket, faPaperPlane, faShareFromSquare} from '@fortawesome/free-solid-svg-icons';
 import { AlertasService } from 'src/app/services/alertas.service';
 import { JueganService } from 'src/app/services/juegan.service';
 //Servicio para la comunicacion con PHP
@@ -16,7 +16,9 @@ import { FormControl, FormGroup, Validators} from '@angular/forms';
 export class EnviarMensajePushComponent implements OnInit {
   mensajeForm!: FormGroup;
   faRightFromBracket= faRightFromBracket;
-  faPaperPlane= faPaperPlane
+  faPaperPlane= faPaperPlane;
+  faShareFromSquare= faShareFromSquare;
+
   partir: any=[];
   idGrupo: string='';
 
