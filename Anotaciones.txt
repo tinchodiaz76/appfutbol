@@ -24,17 +24,32 @@ Para Firebase se instalo:
 			npm i @fortawesome/free-solid-svg-icons@6.2.1
 //AuthGuard	
 	ng g class auth/authGuard --skyp-tests
-//Bootstrap para modal
+
+	//Bootstrap para modal
 	ng add @ng-bootstrap/ng-bootstrap
 	
+// GIT 
+git push -u origin main	
+
 //Token de GIT
 	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
+
 //Se instalo para la PWA:
 	ng add @angular/pwa@13 --project quienJuega
 
 	ng buid --prod
 	
-git push -u origin main	
+Para poder enviar las notificaciones desde el PHP (notificaciones_curl.php) ,
+debo habilitar el cloding message en Firebase, para esto hacemos lo siguiente:
+	-Descripcion General
+	-Configuracion del Proyecto
+	-CLoud Messaging
+	-Habilitar el API de CLoud Messaging(heredada)
+	-Y tomar la clave del servidor "AAAAPwLzhZM:APA91bGTt7C7EKNg0FhsNnZ45ixgzWsTkU8uEpMbJHTuogn1rdYx1WZHALpKrxFK2Uife5fxOQHL4FUiA9-EQ0nLsY6j2qezWnWLetTWRnsbU-JMbyOonnc3H_pZh1mdoW3IzFgQyA7_"
+	-Y el ID de remitente "270632453523".
+	
+	
+AAAAPwLzhZM:APA91bGTt7C7EKNg0FhsNnZ45ixgzWsTkU8uEpMbJHTuogn1rdYx1WZHALpKrxFK2Uife5fxOQHL4FUiA9-EQ0nLsY6j2qezWnWLetTWRnsbU-JMbyOonnc3H_pZh1mdoW3IzFgQyA7_
 	
 	 /*Se instala IONIC como global*/
 	 npm i -g @ionic/cli

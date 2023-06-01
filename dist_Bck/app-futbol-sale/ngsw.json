@@ -1,0 +1,93 @@
+{
+  "configVersion": 1,
+  "timestamp": 1685401475339,
+  "index": "/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/558.d3fb2e55b361cb07.js",
+        "/favicon.ico",
+        "/firebase-messaging-sw.js",
+        "/index.html",
+        "/main.8ddd6ca6af3dc26d.js",
+        "/manifest.webmanifest",
+        "/polyfills.873e2242ed974129.js",
+        "/runtime.b6b5972fb8a1b446.js",
+        "/styles.27288f4b01fc004e.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/assets/icons/android-chrome-192x192.png",
+        "/assets/icons/android-chrome-512x512.png",
+        "/assets/icons/apple-touch-icon.png",
+        "/assets/icons/icon-128x128.png",
+        "/assets/icons/icon-144x144.png",
+        "/assets/icons/icon-152x152.png",
+        "/assets/icons/icon-192x192.png",
+        "/assets/icons/icon-384x384.png",
+        "/assets/icons/icon-512x512.png",
+        "/assets/icons/icon-72x72.png",
+        "/assets/icons/icon-96x96.png",
+        "/assets/images/goldblack-soccer-ball-goal-net-260nw-1437301649.webp"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [],
+  "hashTable": {
+    "/558.d3fb2e55b361cb07.js": "1ce463ded62c4a4634bcbf1b7530737546786d1b",
+    "/assets/icons/android-chrome-192x192.png": "444cc3f73959026a0210daa6f2d2eea287fe52d4",
+    "/assets/icons/android-chrome-512x512.png": "e38c39ada634c9bb0b81c6bea6e177ccd47050d1",
+    "/assets/icons/apple-touch-icon.png": "38e41e9f29eb6f1d4ca65e6131abcc12764c6f6e",
+    "/assets/icons/icon-128x128.png": "dae3b6ed49bdaf4327b92531d4b5b4a5d30c7532",
+    "/assets/icons/icon-144x144.png": "b0bd89982e08f9bd2b642928f5391915b74799a7",
+    "/assets/icons/icon-152x152.png": "7479a9477815dfd9668d60f8b3b2fba709b91310",
+    "/assets/icons/icon-192x192.png": "1abd80d431a237a853ce38147d8c63752f10933b",
+    "/assets/icons/icon-384x384.png": "329749cd6393768d3131ed6304c136b1ca05f2fd",
+    "/assets/icons/icon-512x512.png": "559d9c4318b45a1f2b10596bbb4c960fe521dbcc",
+    "/assets/icons/icon-72x72.png": "c457e56089a36952cd67156f9996bc4ce54a5ed9",
+    "/assets/icons/icon-96x96.png": "3914125a4b445bf111c5627875fc190f560daa41",
+    "/assets/images/goldblack-soccer-ball-goal-net-260nw-1437301649.webp": "6b7cfa41170c0491197cd0731f78e8df22dee631",
+    "/favicon.ico": "208306f31f722109c783f9a3bc4436aacd6bffd1",
+    "/firebase-messaging-sw.js": "c643d0d771c67750392b3f4238c2ec627adca8bc",
+    "/index.html": "b980bf2db4ba5d5fa81e3e76e0119cacb5fa4e53",
+    "/main.8ddd6ca6af3dc26d.js": "f443516cfdc1085ad8a533a619b7f4aa27bbcd0e",
+    "/manifest.webmanifest": "91d9a77edaf3c65729bfdcd630a2ca945e131be6",
+    "/polyfills.873e2242ed974129.js": "c0a9462ec4f0b2cdd5d802fb1c1bc00fdefc27a3",
+    "/runtime.b6b5972fb8a1b446.js": "495e16fb9d06bbd74779e32f5e4d3484f7b7130a",
+    "/styles.27288f4b01fc004e.css": "38ab9666fb641267432c5b8cfa0543b7508c09ae"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ],
+  "navigationRequestStrategy": "performance"
+}
