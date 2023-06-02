@@ -212,7 +212,7 @@ export class AnotarseComponent implements OnInit {
       else
         this.value='0';
 
-      if (this.cantJuegan===10)
+      if (this.cantJuegan===this.cantIntegrantes)
       {
         this.voy=true;
         this.noVoy=false;
