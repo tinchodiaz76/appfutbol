@@ -58,6 +58,8 @@ export class EnviarMensajePushComponent implements OnInit {
                 {
                   this.utilidadesService.invocaPhp(res.payload.data().tokenDevice, this.mensajeForm.get('mensaje')?.value).subscribe((datos:any)=>{
                     this.alertasService.mostratSwettAlert('','Mensaje Enviado!','success');
+                    this.mensajeForm.setValue({mensaje:''});
+
 /*                                        
                     if (datos['resultado']=='OK') {
                       
