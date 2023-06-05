@@ -2,12 +2,17 @@
 <div class="position-absolute top-50 start-50 translate-middle">
 
     <form novalidate  [formGroup]="mensajeForm">
+        <div>
+            <p>Nuevo2</p>
+        </div>
         <div class="form-group">
           <label for="exampleFormControlTextarea1">Mensaje</label>
           <br>
           <strong>Minimo de 5 caracteres</strong>
           <textarea class="form-control" formControlName="mensaje" id="exampleFormControlTextarea1" rows="3"></textarea>
         </div>
+
+
 
         <div class="error"
             *ngIf="mensajeForm.get('mensaje')?.hasError('required') && mensajeForm.get('mensaje')?.touched">

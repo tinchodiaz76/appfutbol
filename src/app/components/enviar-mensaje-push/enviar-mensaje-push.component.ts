@@ -57,17 +57,19 @@ export class EnviarMensajePushComponent implements OnInit {
                 if (res.payload.data().tokenDevice)
                 {
                   this.utilidadesService.invocaPhp(res.payload.data().tokenDevice, this.mensajeForm.get('mensaje')?.value).subscribe((datos:any)=>{
-                    this.alertasService.mostratSwettAlert('','Mensaje Enviado!','success');
-                    this.mensajeForm.setValue({mensaje:''});
-
-/*                                        
-                    if (datos['resultado']=='OK') {
-                      
-
-                      //alert(datos['mensaje']);
-                      //this.recuperarTodos();
-                    }                    
-*/                    
+                    console.log(datos);
+                    console.log(datos.status);
+                    console.log(datos.error);
+                    if (datos.status==true)
+                    {
+                      this.alertasService.mostratSwettAlert('','Mensaje Enviado!','success');
+                      this.mensajeForm.setValue({mensaje:''});
+                    }
+                    else
+                    {
+                      this.alertasService.mostratSwettAlert('','Error al enviar el mensaje '+ datos.error ,'error');
+                      this.mensajeForm.setValue({mensaje:''});
+                    }
                   });
                 }
               usuario.unsubscribe();
