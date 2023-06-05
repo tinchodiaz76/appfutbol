@@ -60,14 +60,14 @@ export class EnviarMensajePushComponent implements OnInit {
                     console.log(datos);
                     console.log(datos.status);
                     console.log(datos.error);
-                    if (datos.status==true)
+                    if (datos.status==='true')
                     {
                       this.alertasService.mostratSwettAlert('','Mensaje Enviado!','success');
                       this.mensajeForm.setValue({mensaje:''});
                     }
                     else
                     {
-                      this.alertasService.mostratSwettAlert('','Error al enviar el mensaje '+ datos.error ,'error');
+                      this.alertasService.mostratSwettAlert('','Error al enviar el mensaje, '+ datos.error ,'error');
                       this.mensajeForm.setValue({mensaje:''});
                     }
                   });
